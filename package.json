@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/wolfram77/web-foodsql/issues"
   },
-  "homepage": "https://github.com/wolfram77/web-foodsql#readme"
+  "homepage": "https://github.com/wolfram77/web-foodsql#readme",
+  "dependencies": {
+    "express": "^4.15.4"
+  }
 }
