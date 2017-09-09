@@ -4,6 +4,7 @@
   "description": "A new way to understand food through queries.",
   "main": "index.js",
   "scripts": {
+    "start": "node ./",
     "test": "exit"
   },
   "repository": {
