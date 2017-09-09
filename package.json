@@ -1,0 +1,23 @@
+{
+  "name": "foodsql",
+  "version": "0.0.0",
+  "description": "A new way to understand food through queries.",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wolfram77/web-foodsql.git"
+  },
+  "keywords": [
+    "food",
+    "sql"
+  ],
+  "author": "wolfram77@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wolfram77/web-foodsql/issues"
+  },
+  "homepage": "https://github.com/wolfram77/web-foodsql#readme"
+}
