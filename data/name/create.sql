@@ -1,0 +1,10 @@
+CREATE TABLE "name" (
+  "id"    TEXT NOT NULL,
+  "value" TEXT NOT NULL,
+  PRIMARY KEY ("id"),
+  CHECK ("id"<>'' AND "value"<>''),
+  FOREIGN KEY ("value") REFERENCES "type" ("id")
+);
+CREATE INDEX IF NOT EXISTS "idx_name_value"
+ON "name" ("value");
+/* INSERT DEFAULT DATA HERE */
