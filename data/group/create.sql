@@ -48,9 +48,18 @@ CREATE OR REPLACE FUNCTION "group_insert" (
   IN "id"    TEXT,
   IN "value" TEXT
 ) AS $$
+DECLARE
+  "vals" TEXT[];
+  "val"  TEXT;
+  "part" TEXT;
 BEGIN
-
+  "vals" := string_to_array("value", ',');
+  FOREACH "val" IN ARRAY "vals"
+  LOOP
+    "part" := btrim("val", '* ');
+    INSERT INTO "group_part" VALUES ("id", "part");
+  END LOOP;
 END;
-$$ LANGUAGE SQL;
+$$ LANGUAGE plpgsql;
 
 /* INSERT DEFAULT DATA HERE */
