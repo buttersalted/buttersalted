@@ -1,4 +1,4 @@
-CREATE TABLE "type" (
+CREATE TABLE IF NOT EXISTS "type" (
   "id"    TEXT NOT NULL,
   "value" TEXT NOT NULL,
   PRIMARY KEY ("id"),
@@ -6,4 +6,5 @@ CREATE TABLE "type" (
 );
 CREATE INDEX IF NOT EXISTS "idx_type_value"
 ON "type" ("value");
+
 /* INSERT DEFAULT DATA HERE */
