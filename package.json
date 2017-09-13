@@ -1,6 +1,6 @@
 {
   "name": "foodsql",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A new way to understand food through queries.",
   "main": "index.js",
   "scripts": {
