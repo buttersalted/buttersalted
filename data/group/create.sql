@@ -44,4 +44,13 @@ ON "group_heir" ("id");
 CREATE INDEX IF NOT EXISTS "idx_group_heir_value"
 ON "group_heir" ("value");
 
+CREATE OR REPLACE FUNCTION "group_insert" (
+  IN "id"    TEXT,
+  IN "value" TEXT
+) AS $$
+BEGIN
+
+END;
+$$ LANGUAGE SQL;
+
 /* INSERT DEFAULT DATA HERE */
