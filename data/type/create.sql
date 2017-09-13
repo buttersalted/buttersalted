@@ -1,7 +1,8 @@
 CREATE TABLE "type" (
-  "id"    TEXT,
-  "value" TEXT,
-  PRIMARY KEY ("id")
+  "id"    TEXT NOT NULL,
+  "value" TEXT NOT NULL,
+  PRIMARY KEY ("id"),
+  CHECK ("id"<>'' AND "value"<>'')
 );
 CREATE INDEX IF NOT EXISTS "idx_type_value"
 ON "type" ("value");
