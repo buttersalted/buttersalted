@@ -1,4 +1,4 @@
-CREATE TABLE "name" (
+CREATE TABLE IF NOT EXISTS "name" (
   "id"    TEXT NOT NULL,
   "value" TEXT NOT NULL,
   PRIMARY KEY ("id"),
@@ -7,4 +7,5 @@ CREATE TABLE "name" (
 );
 CREATE INDEX IF NOT EXISTS "idx_name_value"
 ON "name" ("value");
+
 /* INSERT DEFAULT DATA HERE */
