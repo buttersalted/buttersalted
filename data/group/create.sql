@@ -8,8 +8,10 @@ CREATE TABLE IF NOT EXISTS "group" (
 CREATE TABLE IF NOT EXISTS "group_part" (
   "id"    TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  FOREIGN KEY "id" REFERENCES "group" ("id"),
+  FOREIGN KEY "id" REFERENCES "group" ("id")
+  ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY "value" REFERENCES "group" ("id")
+  ON DELETE NO ACTION ON UPDATE CASCADE
 )
 CREATE INDEX IF NOT EXISTS "idx_group_part_id"
 ON "group_part" ("id");
@@ -19,8 +21,10 @@ ON "group_part" ("value");
 CREATE TABLE IF NOT EXISTS "group_child" (
   "id"    TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  FOREIGN KEY "id" REFERENCES "group" ("id"),
+  FOREIGN KEY "id" REFERENCES "group" ("id")
+  ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY "value" REFERENCES "group" ("id")
+  ON DELETE NO ACTION ON UPDATE CASCADE
 )
 CREATE INDEX IF NOT EXISTS "idx_group_child_id"
 ON "group_child" ("id");
@@ -30,8 +34,10 @@ ON "group_child" ("value");
 CREATE TABLE IF NOT EXISTS "group_heir" (
   "id"    TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  FOREIGN KEY "id" REFERENCES "group" ("id"),
+  FOREIGN KEY "id" REFERENCES "group" ("id")
+  ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY "value" REFERENCES "group" ("value")
+  ON DELETE NO ACTION ON UPDATE CASCADE
 );
 CREATE INDEX IF NOT EXISTS "idx_group_heir_id"
 ON "group_heir" ("id");
