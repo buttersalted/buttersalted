@@ -10,7 +10,7 @@ const SQL_INSERTONE = _read('insertone.sql');
 const SQL_UPSERTONE = _read('upsertone.sql');
 const SQL_DELETEONE = _read('deleteone.sql');
 
-const $ = function TypeName(db) {
+const $ = function NameData(db) {
   this._db = db;
   this._map = new Map();
 };
