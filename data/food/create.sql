@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS "food" (
   "id" INT NOT NULL,
   PRIMARY KEY ("id"),
-  CHECK ("id"<>'')
+  CHECK ("id" <> '')
 );
 
 /* INSERT DEFAULT DATA HERE */

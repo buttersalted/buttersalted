@@ -3,5 +3,5 @@ CREATE TABLE IF NOT EXISTS "group" (
   "value" TEXT NOT NULL,
   "query" TEXT NOT NULL,
   PRIMARY KEY ("field", "value"),
-  CHECK ("field"<>'' AND "value"<>'' AND "query"<>'')
+  CHECK ("field" <> '' AND "value" <> '' AND "query" <> '')
 );

@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS "name" (
   "id"    TEXT NOT NULL,
   "value" TEXT NOT NULL,
   PRIMARY KEY ("id"),
-  CHECK ("id"<>'' AND "value"<>''),
+  CHECK ("id" <> '' AND "value" <> ''),
   FOREIGN KEY ("value") REFERENCES "type" ("id")
   ON DELETE NO ACTION ON UPDATE CASCADE
 );
