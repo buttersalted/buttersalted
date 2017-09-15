@@ -1,1 +1,1 @@
-DELETE FROM "type" WHERE "id"=$1
+DELETE FROM "type" WHERE "id"=$1;
