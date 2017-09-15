@@ -1,1 +1,4 @@
-DELETE FROM "group" WHERE "field"=$1 AND "value"=$2
+BEGIN;
+SELECT group_unexecuteone($1);
+SELECT group_deleteone($1);
+COMMIT;
