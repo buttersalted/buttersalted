@@ -9,6 +9,7 @@ const SQL_UPDATE = _read('update.sql');
 const SQL_INSERTONE = _read('insertone.sql');
 const SQL_UPSERTONE = _read('upsertone.sql');
 const SQL_DELETEONE = _read('deleteone.sql');
+const SQL_PENDINGINSERT = 'SELECT food_pending_insert()';
 
 const $ = function FoodData(db) {
   this._db = db;
@@ -46,6 +47,10 @@ _.updateOne = function(a) {
 
 _.deleteOne = function(a) {
   return this._db.query(SQL_DELETEONE, [a.id]);
+};
+
+_.pendingInsert = function() {
+  return this._db.query(SQL_PENDINGINSERT);
 };
 
 _.setup = function() {
