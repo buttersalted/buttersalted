@@ -24,14 +24,15 @@ _.create = function() {
 
 _.select = function(a, l) {
   const p = [], w = _format(a, '"%k" LIKE $%i', ' AND ', p, 1);
-  const q = SQL_SELECT+(q? ' WHERE '+q : '')+(l!=null? 'LIMIT '+l : '');
+  const q = SQL_SELECT+(w? ' WHERE '+w : '')+(l!=null? ' LIMIT '+l : '');
   return this._db.query(q, p);
 };
 
 _.update = function(a, b) {
-  const p = [], q = _format(a, '"%k" LIKE $%i', ' AND ', p, 1);
+  const p = [], w = _format(a, '"%k" LIKE $%i', ' AND ', p, 1);
   const s = _format(b, '"%k"=$%i', ' AND ', p, p.length+1);
-  return this._db.query(SQL_UPDATE+(s? ' SET '+s : '')+(q? ' WHERE '+q : ''));
+  const q = SQL_UPDATE+(s? ' SET '+s : '')+(q? ' WHERE '+q : '');
+  return this._db.query(q, p);
 };
 
 _.selectOne = function(a) {

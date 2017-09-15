@@ -1,1 +1,1 @@
-DELETE FROM "name" WHERE "id"=$1
+DELETE FROM "name" WHERE "id"=$1;
