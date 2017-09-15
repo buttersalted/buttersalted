@@ -6,10 +6,10 @@ CREATE TABLE IF NOT EXISTS "group" (
   PRIMARY KEY ("id"),
   UNIQUE ("key", "tag"),
   CHECK (
-    "id" <> '' AND
-    ("key" = NULL OR "key" <> '') AND
-    "key" NOT LIKE '%_tags' AND
-    ("tag" = NULL OR "tag" <> '') AND
+    "id"<>'' AND
+    ("key"=NULL OR "key"<>'') AND
+    ("tag"=NULL OR "tag"<>'') AND
+    "key" NOT LIKE '#%' AND
     "value" NOT LIKE '%;%' AND
     lower("value") LIKE 'select %' AND
     lower("value") NOT LIKE '% into %'
