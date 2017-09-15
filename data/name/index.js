@@ -22,9 +22,10 @@ _.create = function() {
   return this._db.query(SQL_CREATE);
 };
 
-_.select = function(a) {
-  const p = [], q = _format(a, '"%k" LIKE $%i', ' AND ', p, 1);
-  return this._db.query(SQL_SELECT+(q? ' WHERE '+q : ''), p);
+_.select = function(a, l) {
+  const p = [], w = _format(a, '"%k" LIKE $%i', ' AND ', p, 1);
+  const q = SQL_SELECT+(q? ' WHERE '+q : '')+(l!=null? 'LIMIT '+l : '');
+  return this._db.query(q, p);
 };
 
 _.update = function(a, b) {
