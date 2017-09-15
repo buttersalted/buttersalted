@@ -1,2 +1,2 @@
-INSERT INTO "group" VALUES ($1, $2)
-ON CONFLICT ("id") DO UPDATE SET "value"=$2
+INSERT INTO "group" VALUES ($1, $2, $3)
+ON CONFLICT ("field", "value") DO UPDATE SET "query"=$3

@@ -1,1 +1,1 @@
-DELETE FROM "group" WHERE "id"=$1
+DELETE FROM "group" WHERE "field"=$1 AND "value"=$2

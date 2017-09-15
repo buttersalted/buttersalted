@@ -1,1 +1,1 @@
-INSERT INTO "group" VALUES ($1, $2)
+INSERT INTO "group" VALUES ($1, $2, $3)
