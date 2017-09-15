@@ -10,9 +10,8 @@ const SQL_INSERTONE = _read('insertone.sql');
 const SQL_UPSERTONE = _read('upsertone.sql');
 const SQL_DELETEONE = _read('deleteone.sql');
 
-const $ = function NameData(db) {
+const $ = function FoodData(db) {
   this._db = db;
-  this._map = new Map();
 };
 module.exports = $;
 
@@ -34,28 +33,19 @@ _.update = function(a, b) {
 };
 
 _.selectOne = function(a) {
-  return {'id': a.id, 'value': this._map.get(a.id)};
+  return this.select({'id': a.id});
 };
 
 _.insertOne = function(a) {
-  return this._db.query(SQL_INSERTONE, [a.id, a.value]).then((ans) => {
-    this._map.set(a.id, a.value);
-    return ans;
-  });
+  return this._db.query(SQL_INSERTONE, [a]);
 };
 
-_.upsertOne = function(a) {
-  return this._db.query(SQL_UPSERTONE, [a.id, a.value]).then((ans) => {
-    this._map.set(a.id, a.value);
-    return ans;
-  });
+_.updateOne = function(a) {
+  return this.update({'id': a.id}, a);
 };
 
 _.deleteOne = function(a) {
-  return this._db.query(SQL_DELETEONE, [a.id]).then((ans) => {
-    this._map.delete(a.id);
-    return ans;
-  });
+  return this._db.query(SQL_DELETEONE, [a.id]);
 };
 
 _.setup = function() {
