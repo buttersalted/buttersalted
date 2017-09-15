@@ -49,10 +49,5 @@ _.deleteOne = function(a) {
 };
 
 _.setup = function() {
-  return this.create().then(() => {
-    return this.select({});
-  }).then((ans) => {
-    for(var i=0, I=ans.rowCount, R=ans.rows; i<I; i++)
-      this._map.set(R[i].id, R[i].value);
-  });
+  return this.create();
 };
