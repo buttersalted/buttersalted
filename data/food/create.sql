@@ -1,43 +1,52 @@
 CREATE TABLE IF NOT EXISTS "food" (
   "id" INT NOT NULL,
-  PRIMARY KEY ("id"),
-  CHECK ("id"<>'')
+  PRIMARY KEY ("id")
 );
 
 CREATE TABLE IF NOT EXISTS "food_pending" (
   "value" TEXT NOT NULL,
   CHECK ("value"<>'')
-)
+);
 
 CREATE OR REPLACE FUNCTION "food_insertone" (
-  IN _val TEXT
-) AS $$
-DECLARE
-  _out JSON;
+  IN _a JSON
+) RETURNS VOID AS $$
 BEGIN
-  DELETE FROM "food_pending" WHERE "value"=_val;
-  _out := json_populate_record(NULL::"food", _val::JSON);
-  IF row_to_json(_out) @> _val::JSON THEN
-    INSERT INTO "food" SELECT * FROM _out;
+  IF row_to_json(json_populate_record(NULL::"food", _a))::JSONB @> _a::JSONB THEN
+    INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _a);
+    DELETE FROM "food_pending" WHERE "value"=_a::TEXT;
   ELSE
-    INSERT INTO "food_pending" VALUES(_val);
+    RAISE EXCEPTION 'Bad row: %', _a::TEXT;
   END IF;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION "food_pending_insert" (
-) AS $$
+CREATE OR REPLACE FUNCTION "food_deleteone" (
+  IN _a JSON
+) RETURNS VOID AS $$
 DECLARE
-  _val JSON;
-  _out JSON;
+  _id INT;
 BEGIN
-  FOR _val IN SELECT "value" FROM "food_pending" LOOP
-    _out := json_populate_record(NULL::"food", _val);
-    IF row_to_json(_out) @> _val THEN
-      DELETE FROM "food_pending" WHERE "value"=_val;
-      INSERT INTO "food" SELECT * FROM _out;
+  SELECT "id" INTO _id FROM json_populate_record(NULL::"food", _a);
+  DELETE FROM "food" WHERE "id"=_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "food_pendinginsert" (
+) RETURN VOID AS $$
+DECLARE
+  _value TEXT;
+BEGIN
+  FOR _value IN SELECT "value" FROM "food_pending" LOOP
+    PERFORM food_insertone(_value::JSON);
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
-/* INSERT DEFAULT DATA HERE */
+CREATE OR REPLACE FUNCTION "food_pendingdeleteone" (
+  IN _value TEXT
+) RETURNS VOID AS $$
+BEGIN
+  DELETE FROM "food_pending" WHERE "value"=_value;
+END;
+$$ LANGUAGE plpgsql;
