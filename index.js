@@ -1,8 +1,9 @@
 'use strict';
-const pg = require('pg');
 const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
+const pg = require('pg');
+const pgconfig = require('pg-connection-string');
 const FoodData = require('./data/food');
 const GroupData = require('./data/group');
 const NameData = require('./data/name');
