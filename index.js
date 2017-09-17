@@ -18,6 +18,10 @@ const group = new GroupData(dbpool);
 const name = new NameData(dbpool);
 const type = new TypeData(dbpool);
 server.listen(E.PORT||80);
+food.setup();
+group.setup();
+name.setup();
+type.setup();
 
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
