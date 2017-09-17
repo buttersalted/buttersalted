@@ -1,13 +1,12 @@
 'use strict';
 const fs = require('fs');
-const lo = require('lodash');
 const _format = require('object-format');
 
 const _read = (p) => fs.readFileSync(__dirname+'/'+p);
 const SQL_CREATE = _read('create.sql');
-const SQL_SELECT = _read('select.sql');
-const SQL_INSERTONE = _read('insertone.sql');
-const SQL_DELETEONE = _read('deleteone.sql');
+const SQL_SELECT = 'SELECT * FROM "group"';
+const SQL_INSERTONE = 'SELECT group_insertone($1)';
+const SQL_DELETEONE = 'SELECT group_deleteone($1)';
 
 const $ = function NameData(db) {
   this._db = db;
@@ -22,7 +21,7 @@ _.create = function() {
 
 _.select = function(a, l) {
   const p = [], w = _format(a, '"%k" LIKE $%i', ' AND ', p, 1);
-  const q = SQL_SELECT+(q? ' WHERE '+q : '')+(l!=null? 'LIMIT '+l : '');
+  const q = SQL_SELECT+(w? ' WHERE '+w : '')+(l!=null? 'LIMIT '+l : '');
   return this._db.query(q, p);
 };
 
@@ -39,17 +38,17 @@ _.selectOne = function(a) {
 };
 
 _.insertOne = function(a) {
-  return this._db.query(SQL_INSERTONE, [a.id, a.key, a.tag, a.value]);
+  return this._db.query(SQL_INSERTONE, [a]);
 };
 
 _.upsertOne = function(a) {
   return this.selectOne(a).then((ans) => {
     return this.deleteOne(a).then(() => ans);
-  }).then((ans) => this.insertOne(lo.assign(ans, a)));
+  }).then((ans) => this.insertOne(Object.assign(ans, a)));
 };
 
 _.deleteOne = function(a) {
-  return this._db.query(SQL_DELETEONE, [a.id]);
+  return this._db.query(SQL_DELETEONE, [a]);
 };
 
 _.setup = function() {

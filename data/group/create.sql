@@ -17,92 +17,111 @@ CREATE TABLE IF NOT EXISTS "group" (
 );
 
 CREATE OR REPLACE FUNCTION "group_appendtag" (
-  IN _tags TEXT[],
-  IN _tag  TEXT
+  IN _dst TEXT[],
+  IN _val TEXT
 ) RETURNS TEXT[] AS $$
 DECLARE
-  _a TEXT[];
+  _z TEXT[];
 BEGIN
-  SELECT array_agg(DISTINCT a) INTO _a FROM (
-    SELECT unnest(array_append(_tags, _tag)) AS a ORDER BY a
-  );
-  RETURN _a;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION "group_insertone" (
-  IN _id    TEXT,
-  IN _key   TEXT,
-  IN _tag   TEXT,
-  IN _value TEXT,
-) AS $$
-BEGIN
-  INSERT INTO "group" VALUES (_id, _key, _tag, _value);
-  EXECUTE 'CREATE OR REPLACE VIEW '||quote_ident(_id)||' AS '||_value;
-  SELECT "id" FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
-  IF NOT FOUND AND _key<>NULL THEN
-    ALTER TABLE "food" ADD COLUMN IF NOT EXISTS
-    quote_ident(_key) TEXT;
-    ALTER TABLE "food" ADD COLUMN IF NOT EXISTS
-    quote_ident(_key||'_tags') TEXT[];
-    CREATE INDEX IF NOT EXISTS quote_ident('idx_food_'||_key)
-    ON "food" (quote_ident(_key));
-    CREATE INDEX IF NOT EXISTS quote_ident('idx_food_'||_key||'_tags')
-    ON "food" (quote_ident(_key||'_tags'));
-  END IF;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION "group_deleteone" (
-  IN _id TEXT
-) AS $$
-BEGIN
-  SELECT "id" FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
-  IF NOT FOUND AND _key<>NULL THEN
-    ALTER TABLE "food" DROP COLUMN IF EXISTS
-    quote_ident(_key);
-    ALTER TABLE "food" DROP COLUMN IF EXISTS
-    quote_ident(_key||'_tags');
-  END IF;
-  EXECUTE 'DROP VIEW IF EXISTS '||quote_ident(_id)||' RESTRICT';
-  DELETE FROM "group" WHERE "id"=_id;
+  SELECT array_agg(DISTINCT a) INTO _z FROM
+  (SELECT unnest(array_append(_dst, _val)) AS a ORDER BY a);
+  RETURN _z;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "group_executeone" (
-  IN _id TEXT
-) AS $$
+  IN _a JSON
+) RETURNS VOID AS $$
 DECLARE
-  _key TEXT;
-  _tag TEXT;
+  _id   TEXT;
+  _key  TEXT;
+  _tag  TEXT;
+  _tkey TEXT;
 BEGIN
-  SELECT "key", "tag" FROM "group" WHERE "id"=_id;
-  IF _key<>NULL THEN
-    UPDATE quote_ident(_id) SET
-    quote_ident(_key)=
-    array_to_string(group_appendtag(quote_ident(_key||'_tags'), _tag)) AND
-    quote_ident(_key||'_tags')=
-    group_appendtag(quote_ident(_key||'_tags'), _tag)
-    WHERE NOT quote_ident(_key||'_tags') @> ARRAY[_tag];
+  SELECT "id" INTO _id FROM json_populate_record(NULL::"group", _a);
+  SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
+  IF _key<>NULL AND _tag<>NULL THEN
+    _tkey := quote_ident('#'||_key);
+    _tag := quote_literal(_tag);
+    _key := quote_ident(_key);
+    _id := quote_ident(_id);
+    EXECUTE 'UPDATE "food" SET '||
+    _key||'=array_to_string(group_appendtag('||_tkey||','||_tag||')) AND '||
+    _tkey||'=group_appendtag('||_tkey||','||_tag||') '||
+    'WHERE NOT '||_tkey||' @> ARRAY['||_tag||']';
   END IF;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "group_unexecuteone" (
-  IN _id TEXT
-) AS $$
+  IN _a JSON
+) RETURNS VOID AS $$
 DECLARE
-  _key TEXT;
-  _tag TEXT;
+  _id   TEXT;
+  _key  TEXT;
+  _tag  TEXT;
+  _tkey TEXT;
 BEGIN
-SELECT "key", "tag" FROM "group" WHERE "id"=_id;
-IF _key<>NULL THEN
-  UPDATE quote_ident(_id) SET
-  quote_ident(_key)=
-  array_to_string(array_remove(quote_ident(_key||'_tags'), _tag)) AND
-  quote_ident(_key||'_tags')=
-  array_remove(quote_ident(_key||'_tags'), _tag)
-  WHERE quote_ident(_key||'_tags') @> ARRAY[_tag];
+SELECT "id" INTO _id FROM json_populate_record(NULL::"group", _a);
+SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
+IF _key<>NULL AND _tag<>NULL THEN
+  _tkey := quote_ident('#'||_key);
+  _tag := quote_literal(_tag);
+  _key := quote_ident(_key);
+  _id := quote_ident(_id);
+  EXECUTE 'UPDATE "food" SET'||
+  _key||'=array_to_string(array_remove('||_tkey||','||_tag||')) AND '||
+  _tkey||'=array_remove('||_tkey||','||_tag||') '||
+  'WHERE '||_tkey||' @> ARRAY['||_tag||']';
 END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "group_insertone" (
+  IN _a JSON
+) RETURNS VOID AS $$
+DECLARE
+  _id    TEXT;
+  _key   TEXT;
+  _value TEXT;
+  _oid   TEXT;
+BEGIN
+  SELECT "id", "key", "value" INTO _id, _key, _value FROM
+  json_populate_record(NULL::"group", _a);
+  INSERT INTO "group" SELECT FROM json_populate_record(NULL::"group", _a);
+  EXECUTE 'CREATE OR REPLACE VIEW '||quote_ident(_id)||' AS '||_value;
+  SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
+  IF _oid<>NULL AND _key<>NULL THEN
+    EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS'||
+    quote_ident(_key)||' TEXT';
+    EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS'||
+    quote_ident('#'||_key)||' TEXT[]';
+    EXECUTE 'CREATE INDEX IF NOT EXISTS '||quote_ident('idx_food_'||_key)||
+    'ON "food" ('||quote_ident(_key)||')';
+    EXECUTE 'CREATE INDEX IF NOT EXISTS '||quote_ident('idx_food_#'||_key)||
+    'ON "food" USING gin('||quote_ident('#'||_key)||')';
+  END IF;
+  PERFORM group_executeone(_a);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "group_deleteone" (
+  IN _a JSON
+) RETURNS VOID AS $$
+DECLARE
+  _id  TEXT;
+  _key TEXT;
+  _oid TEXT;
+BEGIN
+  SELECT "id", "key" INTO _id, _key FROM
+  json_populate_record(NULL::"group", _a);
+  PERFORM group_unexecuteone(_a);
+  SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
+  IF _oid<>NULL AND _key<>NULL THEN
+    EXECUTE 'ALTER TABLE "food" DROP COLUMN IF EXISTS '||quote_ident(_key);
+    EXECUTE 'ALTER TABLE "food" DROP COLUMN IF EXISTS '||quote_ident('#'||_key);
+  END IF;
+  EXECUTE 'DROP VIEW IF EXISTS '||quote_ident(_id)||' RESTRICT';
+  DELETE FROM "group" WHERE "id"=_id;
 END;
 $$ LANGUAGE plpgsql;
