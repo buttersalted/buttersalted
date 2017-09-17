@@ -4,11 +4,11 @@ const _format = require('object-format');
 
 const _read = (p) => fs.readFileSync(__dirname+'/'+p);
 const SQL_CREATE = _read('create.sql');
-const SQL_SELECT = _read('select.sql');
-const SQL_UPDATE = _read('update.sql');
-const SQL_INSERTONE = _read('insertone.sql');
-const SQL_UPSERTONE = _read('upsertone.sql');
-const SQL_DELETEONE = _read('deleteone.sql');
+const SQL_SELECT = 'SELECT * FROM "type"';
+const SQL_UPDATE = 'UPDATE "type"';
+const SQL_INSERTONE = 'SELECT type_insertone($1)';
+const SQL_UPSERTONE = 'SELECT type_upsertone($1)';
+const SQL_DELETEONE = 'SELECT type_deleteone($1)';
 
 const $ = function TypeData(db) {
   this._db = db;
@@ -40,21 +40,21 @@ _.selectOne = function(a) {
 };
 
 _.insertOne = function(a) {
-  return this._db.query(SQL_INSERTONE, [a.id, a.value]).then((ans) => {
+  return this._db.query(SQL_INSERTONE, [a]).then((ans) => {
     this._map.set(a.id, a.value);
     return ans;
   });
 };
 
 _.upsertOne = function(a) {
-  return this._db.query(SQL_UPSERTONE, [a.id, a.value]).then((ans) => {
+  return this._db.query(SQL_UPSERTONE, [a]).then((ans) => {
     this._map.set(a.id, a.value);
     return ans;
   });
 };
 
 _.deleteOne = function(a) {
-  return this._db.query(SQL_DELETEONE, [a.id]).then((ans) => {
+  return this._db.query(SQL_DELETEONE, [a]).then((ans) => {
     this._map.delete(a.id);
     return ans;
   });
