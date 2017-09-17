@@ -10,7 +10,6 @@ const SQL_INSERTONE = 'SELECT food_insertone($1)';
 const SQL_DELETEONE = 'SELECT food_deleteone($1)';
 const SQL_PENDINGINSERT = 'SELECT food_pendinginsert()';
 const SQL_PENDINGDELETEONE = 'SELECT food_pendingdeleteone($1)';
-const SQL_UPSERTONE = _read('upsertone.sql');
 
 const $ = function FoodData(db) {
   this._db = db;
