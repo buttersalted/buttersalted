@@ -2,7 +2,7 @@
 const fs = require('fs');
 const _format = require('object-format');
 
-const _read = (p) => fs.readFileSync(__dirname+'/'+p);
+const _read = (p) => fs.readFileSync(__dirname+'/'+p, 'utf8');
 const SQL_CREATE = _read('create.sql');
 const SQL_SELECT = 'SELECT * FROM "type"';
 const SQL_UPDATE = 'UPDATE "type"';
