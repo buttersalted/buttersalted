@@ -24,7 +24,7 @@ DECLARE
   _z TEXT[];
 BEGIN
   SELECT array_agg(DISTINCT a) INTO _z FROM
-  (SELECT unnest(array_append(_dst, _val)) AS a ORDER BY a);
+  (SELECT unnest(array_append(_dst, _val)) AS a ORDER BY a) AS "val";
   RETURN _z;
 END;
 $$ LANGUAGE plpgsql;
