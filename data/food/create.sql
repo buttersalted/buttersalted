@@ -33,7 +33,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "food_pendinginsert" (
-) RETURN VOID AS $$
+) RETURNS VOID AS $$
 DECLARE
   _value TEXT;
 BEGIN
