@@ -11,6 +11,6 @@ module.exports = function(src) {
   x.get('/:id/execute', (req, res) => src.executeOne(req.body).then((ans) => res.send(1)));
   x.get('/:id/unexecute', (req, res) => src.unexecuteOne(req.body).then((ans) => res.send(1)));
   x.get('/pending', (req, res) => src.pendingInsert(req.body).then((ans) => res.send(1)));
-  x.delete('/pending/:id', (req, res) => src.pendingDeleteOne(req.body).then(ans) => res.send(1));
+  x.delete('/pending/:id', (req, res) => src.pendingDeleteOne(req.body).then((ans) => res.send(1)));
   return x;
 };
