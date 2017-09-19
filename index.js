@@ -12,6 +12,7 @@ const FoodJson = require('./json/food');
 const GroupJson = require('./json/group');
 const NameJson = require('./json/name');
 const TypeJson = require('./json/type');
+const Sql = require('./sql');
 
 const E = process.env;
 const X = express();
@@ -25,6 +26,7 @@ const jfood = new FoodJson(dfood);
 const jgroup = new GroupJson(dgroup);
 const jname = new NameJson(dname);
 const jtype = new TypeJson(dtype);
+const sql = new Sql(dbpool);
 server.listen(E.PORT||80);
 dtype.setup();
 dname.setup();
@@ -41,8 +43,9 @@ X.use('/json/type', jtype);
 X.use('/json/name', jname);
 X.use('/json/group', jgroup);
 X.use('/json/food', jfood);
+X.use('/sql', sql);
 X.use((err, req, res, next) => {
-  res.status(500).send(err.message);
+  res.status(400).send(err.message);
   console.error(err);
 });
 X.use((req, res) => {
