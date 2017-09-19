@@ -36,8 +36,7 @@ dfood.setup();
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
 X.use((req, res, next) => {
-  console.log(req.body, req.query, req.params);
-  req.body = Object.assign(req.body, req.query, req.params);
+  req.body = Object.assign(req.body, req.query);
   next();
 });
 X.use('/json/type', jtype);
