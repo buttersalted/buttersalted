@@ -53,3 +53,13 @@ X.use((err, req, res, next) => {
 });
 // product
 // ingredient
+/*
+- RAW THINGS LOOK GOOD
+- WRITE MORE, IN ONE PAGE
+- MORE UNITS
+- TRANSFORMATIONS
+- EVEN MORE TOOLS
+- MORE DATABASE
+- USE LIMITS
+- FACE THE ROOKIES
+*/
