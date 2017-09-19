@@ -37,6 +37,8 @@ X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
 X.use((req, res, next) => {
   req.body = Object.assign(req.body, req.query, req.params);
+  console.log('use');
+  console.log(req.body);
   next();
 });
 X.use('/json/type', jtype);
