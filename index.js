@@ -44,12 +44,12 @@ X.use('/json/name', jname);
 X.use('/json/group', jgroup);
 X.use('/json/food', jfood);
 X.use('/sql', sql);
+X.use('/', (req, res) => {
+  res.send('Haaarrry Ppottterrr ...');
+});
 X.use((err, req, res, next) => {
   res.status(400).send(err.message);
   console.error(err);
-});
-X.use((req, res) => {
-  res.send('Haaarrry Ppottterrr ...');
 });
 // product
 // ingredient
