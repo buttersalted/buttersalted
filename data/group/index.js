@@ -7,6 +7,8 @@ const SQL_CREATE = _read('create.sql');
 const SQL_SELECT = 'SELECT * FROM "group"';
 const SQL_INSERTONE = 'SELECT group_insertone($1)';
 const SQL_DELETEONE = 'SELECT group_deleteone($1)';
+const SQL_EXECUTEONE = 'SELECT group_executeone($1)';
+const SQL_UNEXECUTEONE = 'SELECT group_unexecuteone($1)';
 
 const $ = function NameData(db) {
   this._db = db;
@@ -49,6 +51,14 @@ _.upsertOne = function(a) {
 
 _.deleteOne = function(a) {
   return this._db.query(SQL_DELETEONE, [a]);
+};
+
+_.executeOne = function(a) {
+  return this._db.query(SQL_EXECUTEONE, [a]);
+};
+
+_.unexecuteOne = function(a) {
+  return this._db.query(SQL_UNEXECUTEONE, [a]);
 };
 
 _.setup = function() {
