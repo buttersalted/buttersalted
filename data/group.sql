@@ -109,8 +109,7 @@ BEGIN
   SELECT "id", "key", "value" INTO _id, _key, _value FROM
   json_populate_record(NULL::"group", _a);
   -- 2. insert record into table
-  INSERT INTO "group" SELECT FROM json_populate_record(NULL::"group", _a);
-  DELETE FROM "showdown";
+  INSERT INTO "group" SELECT * FROM json_populate_record(NULL::"group", _a);
   -- 3. create view (id) using value
   EXECUTE 'CREATE OR REPLACE VIEW '||quote_ident(_id)||' AS '||_value;
   -- 4. any other group with same key?
