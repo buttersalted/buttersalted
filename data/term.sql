@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS "term" (
   "id"    TEXT NOT NULL,
   "value" TEXT NOT NULL,
   PRIMARY KEY ("id"),
-  CHECK ("id"<>'' AND "value"<>'')
+  CHECK ("id"<>'' AND "value"<>''),
 -- 2. prevent "type" delete and cascade update
   FOREIGN KEY ("value") REFERENCES "type" ("id")
   ON DELETE NO ACTION ON UPDATE CASCADE
