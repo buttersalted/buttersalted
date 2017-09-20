@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS "term" (
   PRIMARY KEY ("id"),
   CHECK ("id"<>'' AND "value"<>'')
 -- 2. prevent "type" delete and cascade update
---  FOREIGN KEY ("value") REFERENCES "type" ("id")
---  ON DELETE NO ACTION ON UPDATE CASCADE
+  FOREIGN KEY ("value") REFERENCES "type" ("id")
+  ON DELETE NO ACTION ON UPDATE CASCADE
 );
 -- 3. create index for value (for sonic speeds)
 CREATE INDEX IF NOT EXISTS "idx_term_value"
