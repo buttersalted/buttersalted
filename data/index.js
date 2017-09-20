@@ -4,7 +4,8 @@ stream.is = require('is-stream');
 stream.toString = require('stream-string');
 const _format = require('object-format');
 
-const $ = function TypeData(db, opt) {
+const $ = function TypeData(id, db, opt) {
+  this._id = id;
   this._db = db;
   this._opt = opt;
 };
