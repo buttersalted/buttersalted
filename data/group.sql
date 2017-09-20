@@ -112,9 +112,9 @@ BEGIN
   INSERT INTO "group" SELECT * FROM json_populate_record(NULL::"group", _a);
   -- 3. create view (id) using value
   EXECUTE 'CREATE OR REPLACE VIEW '||quote_ident(_id)||' AS '||_value;
-  -- 4. any other group with same key?
+  -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
-  IF _oid<>NULL AND _key<>NULL THEN
+  IF _key<>NULL AND _oid=NULL THEN
   -- 5. add columns key, #key
     EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS'||
     quote_ident(_key)||' TEXT';
@@ -145,9 +145,9 @@ BEGIN
   json_populate_record(NULL::"group", _a);
   -- 2. remove tag from key
   PERFORM group_unexecuteone(_a);
-  -- 3. is there any other group with same key?
+  -- 3. is this the last group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
-  IF _oid<>NULL AND _key<>NULL THEN
+  IF _key<>NULL AND _oid=NULL THEN
   -- 4. drop columns key, #key (indexes dropped too)
     EXECUTE 'ALTER TABLE "food" DROP COLUMN IF EXISTS '||quote_ident(_key);
     EXECUTE 'ALTER TABLE "food" DROP COLUMN IF EXISTS '||quote_ident('#'||_key);
