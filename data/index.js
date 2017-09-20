@@ -2,7 +2,7 @@
 const stream = require('stream');
 stream.is = require('is-stream');
 stream.toString = require('stream-string');
-const _format = require('object-format');
+const format = require('object-format');
 
 const $ = function DbTable(id, db, opt) {
   this._id = id;
@@ -15,7 +15,7 @@ const _ = $.prototype;
 
 _.select = function(a, l) {
   // 1. lets get the select conditions (where, like)
-  const p = [], w = _format(a, '"%k" LIKE $%i', ' AND ', p, 1);
+  const p = [], w = format(a, '"%k" LIKE $%i', ' AND ', p, 1);
   const q = (w? ' WHERE '+w : '')+(l!=null? ' LIMIT '+l : '');
   // 2. execute the query (if its still valid)
   return this._db.query(`SELECT * FROM "${this._id}"`+q, p);
@@ -23,8 +23,8 @@ _.select = function(a, l) {
 
 _.update = function(a, b) {
   // 1. prepare the update conditions (where, set)
-  const p = [], w = _format(a, '"%k" LIKE $%i', ' AND ', p, 1);
-  const s = _format(b, '"%k"=$%i', ' AND ', p, p.length+1);
+  const p = [], w = format(a, '"%k" LIKE $%i', ' AND ', p, 1);
+  const s = format(b, '"%k"=$%i', ' AND ', p, p.length+1);
   const q = (s? ' SET '+s : '')+(w? ' WHERE '+w : '');
   // 2. query to run (and possible do some valid update)
   return this._db.query(`UPDATE "${this._id}"`+q, p);
@@ -66,8 +66,10 @@ _.deleteOne = function(a) {
 };
 
 _.call = function(fn, args) {
-  // 1. make a function call with arguments (for those extra secretives)
-  return this._db.query(`SELECT ${this._id}_${fn}()`, args||[]);
+  // 1. generate argument list
+  const a = format(args||[], '$%i', ',', 1);
+  // 2. make a function call with arguments (for those extra secretives)
+  return this._db.query(`SELECT ${this._id}_${fn}(${a})`, args||[]);
 };
 
 _.setup = function() {
