@@ -39,6 +39,7 @@ _.selectOne = function(a) {
 
 _.insertOne = function(a) {
   // 1. insert new row into the table
+  console.log(a);
   return this._db.query(`SELECT ${this._id}_insertone($1)`, [a]).then((ans) => {
   // 2. if map exists, then add it there too
     if(this._map) this._map.set(a.id, a);

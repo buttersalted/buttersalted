@@ -24,12 +24,12 @@ const dfood = new FoodData(dbpool);
 const dgroup = new GroupData(dbpool);
 // const dname = new NameData(dbpool);
 // const dtype = new TypeData(dbpool);
-const dname = new DbTable('name', dbpool, {
-  'setup': fs.createReadStream(__dirname+'/data/name.sql', 'utf8'),
-  'map': true
-});
 const dtype = new DbTable('type', dbpool, {
   'setup': fs.createReadStream(__dirname+'/data/type.sql', 'utf8'),
+  'map': true
+});
+const dname = new DbTable('name', dbpool, {
+  'setup': fs.createReadStream(__dirname+'/data/name.sql', 'utf8'),
   'map': true
 });
 const jfood = new FoodJson(dfood);
