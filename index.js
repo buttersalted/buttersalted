@@ -39,7 +39,7 @@ const jtype = new TypeJson(dtype);
 const sql = new Sql(dbpool);
 server.listen(E.PORT||80);
 dtype.setup();
-dname.setup();
+dterm.setup();
 dgroup.setup();
 dfood.setup();
 
