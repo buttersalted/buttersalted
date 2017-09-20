@@ -39,7 +39,6 @@ _.selectOne = function(a) {
 
 _.insertOne = function(a) {
   // 1. insert new row into the table
-  console.log(a);
   return this._db.query(`SELECT ${this._id}_insertone($1)`, [a]).then((ans) => {
   // 2. if map exists, then add it there too
     if(this._map) this._map.set(a.id, a);
@@ -77,10 +76,7 @@ _.setup = function() {
   // 2. run the setup commands (just crash if its garbage $)
   }).then((ans) => {
     return this._db.query(ans);
-  // 3. create tables and some things i know nothing about
-  }).then((ans) => {
-    return this.call('create');
-  // 4. get a map if its required (opt.map = true)
+  // 3. get a map if its required (opt.map = true)
   }).then((ans) => {
     return !this._opt.map? ans : this.select({}).then((ans) => {
       const map = this._map = new Map();

@@ -1,18 +1,13 @@
-CREATE OR REPLACE FUNCTION "type_create" (
-) RETURNS VOID AS $$
-BEGIN
-  -- 1. create table to store data types
-  CREATE TABLE IF NOT EXISTS "type" (
-    "id"    TEXT NOT NULL,
-    "value" TEXT NOT NULL,
-    PRIMARY KEY ("id"),
-    CHECK ("id"<>'' AND "value"<>'')
-  );
-  -- 2. create index for value (faster search i hope)
-  CREATE INDEX IF NOT EXISTS "idx_type_value"
-  ON "type" ("value");
-END;
-$$ LANGUAGE plpgsql;
+-- 1. create table to store data types
+CREATE TABLE IF NOT EXISTS "type" (
+  "id"    TEXT NOT NULL,
+  "value" TEXT NOT NULL,
+  PRIMARY KEY ("id"),
+  CHECK ("id"<>'' AND "value"<>'')
+);
+-- 2. create index for value (faster search i hope)
+CREATE INDEX IF NOT EXISTS "idx_type_value"
+ON "type" ("value");
 
 
 CREATE OR REPLACE FUNCTION "type_insertone" (
