@@ -8,7 +8,7 @@ CREATE OR REPLACE FUNCTION "food_insertone" (
   IN _a JSON
 ) RETURNS VOID AS $$
 BEGIN
-  RAISE EXCEPTION row_to_json(json_populate_record(NULL::"food", _a))::TEXT;
+  RAISE EXCEPTION 'row: %', row_to_json(json_populate_record(NULL::"food", _a))::TEXT;
   IF row_to_json(json_populate_record(NULL::"food", _a))::JSONB @> _a::JSONB THEN
     INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _a);
   ELSE
