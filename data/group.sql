@@ -114,7 +114,7 @@ BEGIN
   EXECUTE 'CREATE OR REPLACE VIEW '||quote_ident(_id)||' AS '||_value;
   -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
-  IF _out=NULL THEN
+  IF _oid=NULL THEN
     EXECUTE '_oid=NULL';
   ELSE
     EXECUTE '_oid='||_oid;
