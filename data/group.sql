@@ -19,21 +19,12 @@ CREATE TABLE IF NOT EXISTS "group" (
 );
 
 
-CREATE OR REPLACE FUNCTION "group_appendtag" (
-  IN _dst TEXT[],
-  IN _val TEXT
-) RETURNS TEXT[] AS $$
-DECLARE
-  _z TEXT[];
-BEGIN
-  -- 2. convert distinct rows into array
-  SELECT array_agg(DISTINCT a) INTO _z FROM
-  -- 1. get dst appended with val as rows
-  (SELECT unnest(array_append(_dst, _val)) AS a ORDER BY a) AS "val";
-  -- 3. return array
-  RETURN _z;
-END;
-$$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION "array_sort" (ANYARRAY)
+RETURNS ANYARRAY AS $$
+  SELECT array(SELECT $1[i] FROM
+  generate_series(array_lower($1,1), array_upper($1,1)) g(i)
+  ORDER BY 1)
+$$ LANGUAGE SQL STRICT IMMUTABLE;
 
 
 CREATE OR REPLACE FUNCTION "group_executeone" (
@@ -58,8 +49,8 @@ BEGIN
     _id := quote_ident(_id);
   -- 5. update food to add the tag to key, #key (if not exists)
     EXECUTE 'UPDATE "food" SET '||
-    _key||'=array_to_string(group_appendtag('||_hkey||','||_tag||')) AND '||
-    _hkey||'=group_appendtag('||_hkey||','||_tag||') '||
+    _key||'=array_to_string(array_sort(array_append('||_hkey||','||_tag||')),'||quote_literal(', ')||') '||
+    _hkey||'=array_sort(array_append('||_hkey||','||_tag||')) '||
     'WHERE NOT '||_hkey||' @> ARRAY['||_tag||']';
   END IF;
 END;
@@ -88,7 +79,7 @@ BEGIN
     _id := quote_ident(_id);
   -- 5. update food to remove the tag from key, #key (if exists)
     EXECUTE 'UPDATE "food" SET '||
-    _key||'=array_to_string(array_remove('||_hkey||','||_tag||')) AND '||
+    _key||'=array_to_string(array_remove('||_hkey||','||_tag||'),'||quote_literal(', ')||') '||
     _hkey||'=array_remove('||_hkey||','||_tag||') '||
     'WHERE '||_hkey||' @> ARRAY['||_tag||']';
   END IF;
