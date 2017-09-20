@@ -1,4 +1,5 @@
 'use strict';
+const fs = require('fs');
 const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -24,7 +25,7 @@ const dgroup = new GroupData(dbpool);
 const dname = new NameData(dbpool);
 // const dtype = new TypeData(dbpool);
 const dtype = new DbTable('type', dbpool, {
-  'setup': fs.createReadStream(__dirname+'/data/type.sql'),
+  'setup': fs.createReadStream(__dirname+'/data/type.sql', 'utf8'),
   'map': true
 });
 const jfood = new FoodJson(dfood);
