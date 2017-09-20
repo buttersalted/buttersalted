@@ -4,10 +4,10 @@ stream.is = require('is-stream');
 stream.toString = require('stream-string');
 const _format = require('object-format');
 
-const $ = function TypeData(id, db, opt) {
+const $ = function DbTable(id, db, opt) {
   this._id = id;
   this._db = db;
-  this._opt = opt;
+  this._opt = opt||{};
 };
 module.exports = $;
 
@@ -71,7 +71,7 @@ _.call = function(fn, args) {
 
 _.setup = function() {
   // 1. get setup sql command (opt.setup = string/stream)
-  return Promise.resolve(this._opt.setup).then((ans) => {
+  return Promise.resolve(this._opt.setup||'').then((ans) => {
     return stream.is(ans)? stream.toString(ans) : ans;
   // 2. run the setup commands (just crash if its garbage $)
   }).then((ans) => {
