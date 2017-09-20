@@ -7,12 +7,12 @@ const pg = require('pg');
 const pgconfig = require('pg-connection-string');
 const FoodData = require('./data/food');
 const GroupData = require('./data/group');
-// const NameData = require('./data/name');
+// const TermData = require('./data/term');
 // const TypeData = require('./data/type');
 const DbTable = require('./data');
 const FoodJson = require('./json/food');
 const GroupJson = require('./json/group');
-const NameJson = require('./json/name');
+const TermJson = require('./json/term');
 const TypeJson = require('./json/type');
 const Sql = require('./sql');
 
@@ -22,19 +22,19 @@ const server = http.createServer(X);
 const dbpool = new pg.Pool(pgconfig(E.DATABASE_URL));
 const dfood = new FoodData(dbpool);
 const dgroup = new GroupData(dbpool);
-// const dname = new NameData(dbpool);
+// const dname = new TermData(dbpool);
 // const dtype = new TypeData(dbpool);
 const dtype = new DbTable('type', dbpool, {
   'setup': fs.createReadStream(__dirname+'/data/type.sql', 'utf8'),
   'map': true
 });
-const dname = new DbTable('name', dbpool, {
-  'setup': fs.createReadStream(__dirname+'/data/name.sql', 'utf8'),
+const dname = new DbTable('term', dbpool, {
+  'setup': fs.createReadStream(__dirname+'/data/term.sql', 'utf8'),
   'map': true
 });
 const jfood = new FoodJson(dfood);
 const jgroup = new GroupJson(dgroup);
-const jname = new NameJson(dname);
+const jterm = new TermJson(dterm);
 const jtype = new TypeJson(dtype);
 const sql = new Sql(dbpool);
 server.listen(E.PORT||80);
@@ -50,7 +50,7 @@ X.use((req, res, next) => {
   next();
 });
 X.use('/json/type', jtype);
-X.use('/json/name', jname);
+X.use('/json/term', jterm);
 X.use('/json/group', jgroup);
 X.use('/json/food', jfood);
 X.use('/sql', sql);
