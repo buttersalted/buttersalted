@@ -7,10 +7,11 @@ CREATE TABLE IF NOT EXISTS "food" (
 CREATE OR REPLACE FUNCTION "food_insertone" (
   IN _a JSON
 ) RETURNS VOID AS $$
+DECLARE
+  _row JSON;
 BEGIN
-  RAISE EXCEPTION 'inp: %', _a::TEXT;
-  RAISE EXCEPTION 'row: %', row_to_json(json_populate_record(NULL::"food", _a))::TEXT;
-  IF row_to_json(json_populate_record(NULL::"food", _a))::JSONB @> _a::JSONB THEN
+  _row := row_to_json(json_populate_record(NULL::"food", _a));
+  IF row_to_json(json_object_keys(_row))::JSONB @> row_to_json(json_object_keys(_a))::JSONB THEN
     INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _a);
   ELSE
     RAISE EXCEPTION 'Bad row: %', _a::TEXT;
