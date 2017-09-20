@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS "term" (
   ON DELETE NO ACTION ON UPDATE CASCADE
 );
 -- 3. create index for value (for sonic speeds)
-CREATE INDEX IF NOT EXISTS "idx_term_value"
+CREATE INDEX IF NOT EXISTS "term_value_idx"
 ON "term" ("value");
 
 

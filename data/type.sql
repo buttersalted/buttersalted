@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS "type" (
   CHECK ("id"<>'' AND "value"<>'')
 );
 -- 2. create index for value (faster search i hope)
-CREATE INDEX IF NOT EXISTS "idx_type_value"
+CREATE INDEX IF NOT EXISTS "type_value_idx"
 ON "type" ("value");
 
 
