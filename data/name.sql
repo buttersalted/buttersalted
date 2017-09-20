@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS "name" (
   PRIMARY KEY ("id"),
   CHECK ("id"<>'' AND "value"<>''),
 -- 2. prevent "type" delete and cascade update
-  FOREIGN KEY ("value") REFERENCES "type" ("id")
-  ON DELETE NO ACTION ON UPDATE CASCADE
+--  FOREIGN KEY ("value") REFERENCES "type" ("id")
+--  ON DELETE NO ACTION ON UPDATE CASCADE
 );
 -- 3. create index for value (for sonic speeds)
 CREATE INDEX IF NOT EXISTS "idx_name_value"
@@ -22,6 +22,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 CREATE OR REPLACE FUNCTION "name_upsertone" (
   IN _a JSON
 ) RETURNS VOID AS $$
@@ -31,6 +32,7 @@ BEGIN
   ON CONFLICT DO UPDATE SET "value"=_a->>'value';
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION "name_deleteone" (
   IN _a JSON
