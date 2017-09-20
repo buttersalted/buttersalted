@@ -7,7 +7,7 @@ const pg = require('pg');
 const pgconfig = require('pg-connection-string');
 const FoodData = require('./data/food');
 const GroupData = require('./data/group');
-const NameData = require('./data/name');
+// const NameData = require('./data/name');
 // const TypeData = require('./data/type');
 const DbTable = require('./data');
 const FoodJson = require('./json/food');
@@ -22,8 +22,12 @@ const server = http.createServer(X);
 const dbpool = new pg.Pool(pgconfig(E.DATABASE_URL));
 const dfood = new FoodData(dbpool);
 const dgroup = new GroupData(dbpool);
-const dname = new NameData(dbpool);
+// const dname = new NameData(dbpool);
 // const dtype = new TypeData(dbpool);
+const dname = new DbTable('name', dbpool, {
+  'setup': fs.createReadStream(__dirname+'/data/name.sql', 'utf8'),
+  'map': true
+});
 const dtype = new DbTable('type', dbpool, {
   'setup': fs.createReadStream(__dirname+'/data/type.sql', 'utf8'),
   'map': true
