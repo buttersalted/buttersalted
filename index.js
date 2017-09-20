@@ -45,10 +45,6 @@ dfood.setup();
 
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
-X.use((req, res, next) => {
-  req.body = Object.assign(req.body, req.query);
-  next();
-});
 X.use('/json/type', jtype);
 X.use('/json/term', jterm);
 X.use('/json/group', jgroup);
