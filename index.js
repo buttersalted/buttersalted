@@ -28,7 +28,7 @@ const dtype = new DbTable('type', dbpool, {
   'setup': fs.createReadStream(__dirname+'/data/type.sql', 'utf8'),
   'map': true
 });
-const dname = new DbTable('term', dbpool, {
+const dterm = new DbTable('term', dbpool, {
   'setup': fs.createReadStream(__dirname+'/data/term.sql', 'utf8'),
   'map': true
 });
