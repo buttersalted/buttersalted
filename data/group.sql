@@ -87,7 +87,7 @@ BEGIN
     _key := quote_ident(_key);
     _id := quote_ident(_id);
   -- 5. update food to remove the tag from key, #key (if exists)
-    EXECUTE 'UPDATE "food" SET'||
+    EXECUTE 'UPDATE "food" SET '||
     _key||'=array_to_string(array_remove('||_hkey||','||_tag||')) AND '||
     _hkey||'=array_remove('||_hkey||','||_tag||') '||
     'WHERE '||_hkey||' @> ARRAY['||_tag||']';
@@ -116,15 +116,15 @@ BEGIN
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
   -- 5. add columns key, #key
-    EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS'||
+    EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS '||
     quote_ident(_key)||' TEXT';
-    EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS'||
+    EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS '||
     quote_ident('#'||_key)||' TEXT[]';
   -- 6. add indexes for key, #key
     EXECUTE 'CREATE INDEX IF NOT EXISTS '||quote_ident('idx_food_'||_key)||
-    'ON "food" ('||quote_ident(_key)||')';
+    ' ON "food" ('||quote_ident(_key)||')';
     EXECUTE 'CREATE INDEX IF NOT EXISTS '||quote_ident('idx_food_#'||_key)||
-    'ON "food" USING gin ('||quote_ident('#'||_key)||')';
+    ' ON "food" USING gin ('||quote_ident('#'||_key)||')';
   END IF;
   -- 7. add tag to key
   PERFORM group_executeone(_a);
