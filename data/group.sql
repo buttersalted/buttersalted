@@ -115,9 +115,9 @@ BEGIN
   -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _out=NULL THEN
-    EXECUTE '_oid=NULL'
+    EXECUTE '_oid=NULL';
   ELSE
-    EXECUTE '_oid='||_oid
+    EXECUTE '_oid='||_oid;
   END IF;
   IF _key<>NULL AND _oid=NULL THEN
   -- 5. add columns key, #key
