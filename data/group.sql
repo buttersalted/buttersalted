@@ -114,6 +114,7 @@ BEGIN
   EXECUTE 'CREATE OR REPLACE VIEW '||quote_ident(_id)||' AS '||_value;
   -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
+  EXECUTE '_key='||_key||', _oid='||_oid;
   IF _key<>NULL AND _oid=NULL THEN
   -- 5. add columns key, #key
     EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS'||
