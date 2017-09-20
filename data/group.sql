@@ -49,7 +49,7 @@ BEGIN
     _id := quote_ident(_id);
   -- 5. update food to add the tag to key, #key (if not exists)
     EXECUTE 'UPDATE "food" SET '||
-    _key||'=array_to_string(array_sort(array_append('||_hkey||','||_tag||')),'||quote_literal(', ')||') '||
+    _key||'=array_to_string(array_sort(array_append('||_hkey||','||_tag||')),'||quote_literal(', ')||'), '||
     _hkey||'=array_sort(array_append('||_hkey||','||_tag||')) '||
     'WHERE NOT '||_hkey||' @> ARRAY['||_tag||']';
   END IF;
@@ -79,7 +79,7 @@ BEGIN
     _id := quote_ident(_id);
   -- 5. update food to remove the tag from key, #key (if exists)
     EXECUTE 'UPDATE "food" SET '||
-    _key||'=array_to_string(array_remove('||_hkey||','||_tag||'),'||quote_literal(', ')||') '||
+    _key||'=array_to_string(array_remove('||_hkey||','||_tag||'),'||quote_literal(', ')||'), '||
     _hkey||'=array_remove('||_hkey||','||_tag||') '||
     'WHERE '||_hkey||' @> ARRAY['||_tag||']';
   END IF;
