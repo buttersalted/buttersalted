@@ -50,7 +50,7 @@ BEGIN
   -- 2. get key, tag from group row
   SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
   -- 3. are key and tag known?
-  IF _key<>NULL AND _tag<>NULL THEN
+  IF _key IS NOT NULL AND _tag IS NOT NULL THEN
   -- 4. generate quoted id, key, tag, #key
     _hkey := quote_ident('#'||_key);
     _tag := quote_literal(_tag);
@@ -80,7 +80,7 @@ BEGIN
   -- 2. get key, tag from group row
   SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
   -- 3. are key and tag are known?
-  IF _key<>NULL AND _tag<>NULL THEN
+  IF _key IS NOT NULL AND _tag IS NOT NULL THEN
   -- 4. generate quoted id, key, tag, and #key
     _hkey := quote_ident('#'||_key);
     _tag := quote_literal(_tag);
@@ -114,12 +114,7 @@ BEGIN
   EXECUTE 'CREATE OR REPLACE VIEW '||quote_ident(_id)||' AS '||_value;
   -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
-  IF _oid=NULL THEN
-    EXECUTE '_oid=NULL';
-  ELSE
-    EXECUTE '_oid='||_oid;
-  END IF;
-  IF _key<>NULL AND _oid=NULL THEN
+  IF _key IS NOT NULL AND _oid IS NULL THEN
   -- 5. add columns key, #key
     EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS'||
     quote_ident(_key)||' TEXT';
@@ -152,7 +147,7 @@ BEGIN
   PERFORM group_unexecuteone(_a);
   -- 3. is this the last group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
-  IF _key<>NULL AND _oid=NULL THEN
+  IF _key IS NOT NULL AND _oid IS NULL THEN
   -- 4. drop columns key, #key (indexes dropped too)
     EXECUTE 'ALTER TABLE "food" DROP COLUMN IF EXISTS '||quote_ident(_key);
     EXECUTE 'ALTER TABLE "food" DROP COLUMN IF EXISTS '||quote_ident('#'||_key);
