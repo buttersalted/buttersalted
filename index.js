@@ -7,10 +7,6 @@ const pg = require('pg');
 const pgconfig = require('pg-connection-string');
 const Data = require('./data');
 const Json = require('./json');
-const FoodJson = require('./json/food');
-const GroupJson = require('./json/group');
-const TermJson = require('./json/term');
-const TypeJson = require('./json/type');
 const Sql = require('./sql');
 
 const E = process.env;
