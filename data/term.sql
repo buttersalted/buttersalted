@@ -42,3 +42,9 @@ BEGIN
   ON CONFLICT ("id") DO UPDATE SET "value"=_a->>'value';
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "term_selectone" (JSON)
+RETURNS "term" AS $$
+  SELECT * FROM "term" WHERE "id"=$1->>'id';
+$$ LANGUAGE SQL;
