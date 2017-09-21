@@ -19,8 +19,8 @@ DECLARE
   _index TEXT;
 BEGIN
   -- 1. get id, value, index from input (and set proper case)
-  SELECT "id", upper("value"), coalesce("index", '') INTO _id, _value, _index
-  FROM json_populate_record(NULL::"type", _a);
+  SELECT "id", upper("value") INTO _id, _value, FROM json_populate_record(NULL::"type", _a);
+  _index = coalesce(_a->>'index', '');
   -- 2. add column id to food table with index (if its a column)
   IF _value<>'TABLE' THEN
     EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s', _id, _value);
