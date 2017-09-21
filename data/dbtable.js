@@ -34,7 +34,7 @@ _.selectOne = function(a) {
   // 1. if map we have, get from it using "id"
   if(this._map) return this._map.get(a.id);
   // 2. instead of direct code, lets call a function
-  return this._db.query(`SELECT ${this._id}_selectone($1)`, [a]);
+  return this._db.query(`SELECT * FROM ${this._id}_selectone($1) t`, [a]);
 };
 
 _.insertOne = function(a) {
