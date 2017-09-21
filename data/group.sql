@@ -118,3 +118,9 @@ BEGIN
   DELETE FROM "group" WHERE "id"=_id;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
+RETURNS TABLE AS $$
+  SELECT * FROM "group" WHERE "id"=($1)->>'id'
+$$ LANGUAGE SQL;
