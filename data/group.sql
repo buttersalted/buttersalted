@@ -122,5 +122,5 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
 RETURNS "group" AS $$
-  SELECT * FROM "group" WHERE "id"=($1)->>'id';
+  SELECT * FROM "group" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
