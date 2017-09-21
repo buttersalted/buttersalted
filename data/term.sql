@@ -46,5 +46,6 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "term_selectone" (JSON)
 RETURNS "term" AS $$
+  -- 1. select with id (thanks postgresql docs)
   SELECT * FROM "term" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;

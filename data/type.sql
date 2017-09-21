@@ -57,5 +57,6 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "type_selectone" (JSON)
 RETURNS "type" AS $$
+  -- 1. select with id (use return as table)
   SELECT * FROM "type" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;

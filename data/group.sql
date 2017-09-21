@@ -23,12 +23,11 @@ CREATE OR REPLACE FUNCTION "group_executeone" (
   IN _a JSON
 ) RETURNS VOID AS $$
 DECLARE
-  _id   TEXT;
+-- 1. get id from input
+  _id   TEXT := _a->>'id';
   _key  TEXT;
   _tag  TEXT;
 BEGIN
-  -- 1. get id from input
-  SELECT "id" INTO _id FROM json_populate_record(NULL::"group", _a);
   -- 2. get key, tag from group row
   SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
   -- 3. are key and tag known?
@@ -46,12 +45,11 @@ CREATE OR REPLACE FUNCTION "group_unexecuteone" (
   IN _a JSON
 ) RETURNS VOID AS $$
 DECLARE
-  _id   TEXT;
+-- 1. get id from input
+  _id   TEXT := _a->>'id';
   _key  TEXT;
   _tag  TEXT;
 BEGIN
-  -- 1. get id from input
-  SELECT "id" INTO _id FROM json_populate_record(NULL::"group", _a);
   -- 2. get key, tag from group row
   SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
   -- 3. are key and tag are known?
@@ -69,14 +67,12 @@ CREATE OR REPLACE FUNCTION "group_insertone" (
   IN _a JSON
 ) RETURNS VOID AS $$
 DECLARE
-  _id    TEXT;
-  _key   TEXT;
-  _value TEXT;
+-- 1. get id, key, value from input
+  _id    TEXT := _a->>'id';
+  _key   TEXT := _a->>'key';
+  _value TEXT := _a->>'value';
   _oid   TEXT;
 BEGIN
-  -- 1. get id, key, value from input
-  SELECT "id", "key", "value" INTO _id, _key, _value
-  FROM json_populate_record(NULL::"group", _a);
   -- 2. insert record into table
   INSERT INTO "group" SELECT * FROM json_populate_record(NULL::"group", _a);
   -- 3. create view (id) using value
@@ -100,13 +96,11 @@ CREATE OR REPLACE FUNCTION "group_deleteone" (
   IN _a JSON
 ) RETURNS VOID AS $$
 DECLARE
-  _id  TEXT;
-  _key TEXT;
+-- 1. get id, key from input
+  _id  TEXT := _a->>'id';
+  _key TEXT := _a->>'key';
   _oid TEXT;
 BEGIN
-  -- 1. get id, key from input
-  SELECT "id", "key" INTO _id, _key
-  FROM json_populate_record(NULL::"group", _a);
   -- 2. remove tag from key
   PERFORM group_unexecuteone(_a);
   -- 3. is this the last group with that key?
@@ -126,5 +120,6 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
 RETURNS "group" AS $$
+  -- 1. select with id (field testing valuable)
   SELECT * FROM "group" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
