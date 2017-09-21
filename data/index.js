@@ -22,19 +22,24 @@ const $ = function Data(db) {
     'setup': rstream('type.sql'),
     'map': true
   });
+  // 5. junkyard wars between functions
+  this.utility = new DbTable('utility', db, {
+    'setup': rstream('utility.sql')
+  });
 };
 module.exports = $;
 
 const _ = $.prototype;
 
 _.setup = function() {
-  return Promise.all([
-  // 1. setup food, group, type concurrently
+  // 1. setup utility functions
+  return this.utility.setup().then(() => (
+  // 3. setup type (dependencies first)
+    this.type.setup()
+  )).then(Promise.all([
+    // 2. setup food, group, term concurrently
     this.food.setup(),
     this.group.setup(),
-    this.type.setup().then(() => (
-  // 2. setup term after type (dependencies first)
-      this.term.setup()
-    ))
-  ]);
+    this.term.setup()
+  ]));
 };

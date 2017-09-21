@@ -11,7 +11,7 @@ DECLARE
   _row JSON;
 BEGIN
   _row := row_to_json(json_populate_record(NULL::"food", _a));
-  IF array(json_object_keys(_row)) @> array(json_object_keys(_a)) THEN
+  IF json_keys(_row) @> json_keys(_a) THEN
     INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _a);
   ELSE
     RAISE EXCEPTION 'Bad row: %', _a::TEXT;

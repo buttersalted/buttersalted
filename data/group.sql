@@ -19,15 +19,6 @@ CREATE TABLE IF NOT EXISTS "group" (
 );
 
 
-CREATE OR REPLACE FUNCTION "array_sort" (ANYARRAY)
-RETURNS ANYARRAY AS $$
-  -- 1. stealthily taken from postgresql mailing list
-  SELECT array(SELECT $1[i] FROM
-  generate_series(array_lower($1,1), array_upper($1,1)) g(i)
-  ORDER BY 1)
-$$ LANGUAGE SQL STRICT IMMUTABLE;
-
-
 CREATE OR REPLACE FUNCTION "group_executeone" (
   IN _a JSON
 ) RETURNS VOID AS $$
