@@ -5,7 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const pg = require('pg');
 const pgconfig = require('pg-connection-string');
-const DbTable = require('./data');
+const Data = require('./data');
 const FoodJson = require('./json/food');
 const GroupJson = require('./json/group');
 const TermJson = require('./json/term');
@@ -16,34 +16,14 @@ const E = process.env;
 const X = express();
 const server = http.createServer(X);
 const dbpool = new pg.Pool(pgconfig(E.DATABASE_URL));
-// const dfood = new FoodData(dbpool);
-// const dgroup = new GroupData(dbpool);
-// const dname = new TermData(dbpool);
-// const dtype = new TypeData(dbpool);
-const dtype = new DbTable('type', dbpool, {
-  'setup': fs.createReadStream(__dirname+'/data/type.sql', 'utf8'),
-  'map': true
-});
-const dterm = new DbTable('term', dbpool, {
-  'setup': fs.createReadStream(__dirname+'/data/term.sql', 'utf8'),
-  'map': true
-});
-const dgroup = new DbTable('group', dbpool, {
-  'setup': fs.createReadStream(__dirname+'/data/group.sql', 'utf8')
-});
-const dfood = new DbTable('food', dbpool, {
-  'setup': fs.createReadStream(__dirname+'/data/food.sql', 'utf8')
-});
-const jfood = new FoodJson(dfood);
-const jgroup = new GroupJson(dgroup);
-const jterm = new TermJson(dterm);
-const jtype = new TypeJson(dtype);
+const data = new Data(dbpool);
+const jfood = new FoodJson(data.food);
+const jgroup = new GroupJson(data.group);
+const jterm = new TermJson(data.term);
+const jtype = new TypeJson(data.type);
 const sql = new Sql(dbpool);
 server.listen(E.PORT||80);
-dtype.setup();
-dterm.setup();
-dgroup.setup();
-dfood.setup();
+data.setup();
 
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
