@@ -84,7 +84,7 @@ BEGIN
   IF _key IS NOT NULL AND _oid IS NULL THEN
   -- 5. insert types key, #key
     PERFORM type_insertone(json_build_object('id', _key, 'value', E'TEXT NOT NULL DEFAULT \'\''));
-    PERFORM type_insertone(json_build_object('id', '#'||_key, 'value', 'TEXT[] NOT NULL DEFAULT ARRAY[]', 'index', 'gin'));
+    PERFORM type_insertone(json_build_object('id', '#'||_key, 'value', 'TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[]', 'index', 'gin'));
   END IF;
   -- 7. add tag to key
   PERFORM group_executeone(_a);
