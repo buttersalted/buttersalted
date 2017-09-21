@@ -26,7 +26,7 @@ CREATE OR REPLACE FUNCTION "type_upsertone" (
 BEGIN
   -- 1. try to insert row into table, else update
   INSERT INTO "type" VALUES (_a->>'id', _a->>'value')
-  ON CONFLICT DO UPDATE SET "value"=_a->>'value';
+  ON CONFLICT ("id") DO UPDATE SET "value"=_a->>'value';
 END;
 $$ LANGUAGE plpgsql;
 
