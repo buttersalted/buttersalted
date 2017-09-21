@@ -29,7 +29,7 @@ CREATE OR REPLACE FUNCTION "term_upsertone" (
 BEGIN
   -- 1. should try to insert first, else make an update
   INSERT INTO "term" VALUES (_a->>'id', _a->>'value')
-  ON CONFLICT DO UPDATE SET "value"=_a->>'value';
+  ON CONFLICT ("id") DO UPDATE SET "value"=_a->>'value';
 END;
 $$ LANGUAGE plpgsql;
 
