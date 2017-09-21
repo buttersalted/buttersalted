@@ -16,7 +16,7 @@ CREATE OR REPLACE FUNCTION "type_insertone" (
 DECLARE
   _id    TEXT := _a->>'id';
   _value TEXT := _a->>'value';
-  _index TEXT := coalesce(_a->>'index', '');
+  _index TEXT := coalesce(_a->>'index', 'btree');
 BEGIN
   -- 1. get id, value, index from input (and set proper case)
   -- SELECT "id", upper("value") INTO _id, _value FROM json_populate_record(NULL::"type", _a);
@@ -24,7 +24,7 @@ BEGIN
   -- 2. add column id to food table with index (if its a column)
   IF _value<>'TABLE' THEN
     EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s', _id, _value);
-    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON "food" %s (%I)', 'food_'||_id||'_idx', _index, _id);
+    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON "food" USING %s (%I)', 'food_'||_id||'_idx', _index, _id);
   END IF;
   -- 3. insert into table using id, value
   INSERT INTO "type" VALUES (_id, _value);
