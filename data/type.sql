@@ -21,8 +21,10 @@ DECLARE
 BEGIN
   -- 2. add column id to food table with index (if its a column)
   IF _value<>'TABLE' THEN
-    EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s', _id, _value);
-    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON "food" USING %s (%I)', 'food_'||_id||'_idx', _index, _id);
+    EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s',
+      _id, _value);
+    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON "food" USING %s (%I)',
+      'food_'||_id||'_idx', _index, _id);
   END IF;
   -- 3. insert into table using id, value
   INSERT INTO "type" VALUES (_id, _value);
@@ -51,3 +53,9 @@ BEGIN
   PERFORM type_insertone(_a);
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "type_selectone" (JSON)
+RETURNS "type" AS $$
+  SELECT * FROM "type" WHERE "id"=$1->>'id';
+$$ LANGUAGE SQL;
