@@ -34,8 +34,9 @@ BEGIN
   -- 3. are key and tag known?
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
   -- 4. update food to add the tag to key, #key (if not exists)
-    EXECUTE format('UPDATE "food" SET %I=array_to_string(array_sort(array_append(%I, %L)), %L), %I=array_sort(array_append(%I, %L)) WHERE NOT %I @> ARRAY[%L]',
-    _key, '#'||_key, _tag, ',', '#'||_key, '#'||_key, _tag, '#'||_key, _tag);
+    EXECUTE format('UPDATE "food" SET %I=array_sort(array_append(%I, %L)), '||
+      '%I=array_to_string(array_sort(array_append(%I, %L)), %L) WHERE NOT %I @> ARRAY[%L]',
+      '#'||_key, '#'||_key, _tag, _key, '#'||_key, _tag, ', ', '#'||_key, _tag);
   END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -56,8 +57,9 @@ BEGIN
   -- 3. are key and tag are known?
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
   -- 4. update food to remove the tag from key, #key (if exists)
-    EXECUTE format('UPDATE "food" SET %I=array_to_string(array_remove(%I, %L), %L), %I=array_remove(%I, %L) WHERE %I @> ARRAY[%L]',
-    _key, '#'||_key, _tag, ',', '#'||_key, _tag, '#'||_key, _tag);
+    EXECUTE format('UPDATE "food" SET %I=array_remove(%I, %L), '||
+      '%I=array_to_string(array_remove(%I, %L), %L) WHERE %I @> ARRAY[%L]',
+      '#'||_key, '#'||_key, _tag, _key, '#'||_key, _tag, ', ', '#'||_key, _tag);
   END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -83,8 +85,10 @@ BEGIN
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
   -- 5. insert types key, #key
-    PERFORM type_insertone(json_build_object('id', _key, 'value', E'TEXT NOT NULL DEFAULT \'\''));
-    PERFORM type_insertone(json_build_object('id', '#'||_key, 'value', 'TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[]', 'index', 'gin'));
+    PERFORM type_insertone(json_build_object('id', _key,
+      'value', E'TEXT NOT NULL DEFAULT \'\''));
+    PERFORM type_insertone(json_build_object('id', '#'||_key,
+      'value', 'TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[]', 'index', 'gin'));
   END IF;
   -- 7. add tag to key
   PERFORM group_executeone(_a);
