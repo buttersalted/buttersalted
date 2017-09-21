@@ -37,7 +37,6 @@ X.use((err, req, res, next) => {
 // product
 // ingredient
 /*
-- DEFAULT KEY-TAGS
 - UPDATE KEY-TAGS
 - UPDATE VIEWS (NEW COLUMNS)
 - RAW THINGS LOOK GOOD

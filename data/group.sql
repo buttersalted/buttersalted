@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS "group" (
 
 CREATE OR REPLACE FUNCTION "array_sort" (ANYARRAY)
 RETURNS ANYARRAY AS $$
+  -- 1. stealthily taken from postgresql mailing list
   SELECT array(SELECT $1[i] FROM
   generate_series(array_lower($1,1), array_upper($1,1)) g(i)
   ORDER BY 1)
@@ -34,7 +35,6 @@ DECLARE
   _id   TEXT;
   _key  TEXT;
   _tag  TEXT;
-  _hkey TEXT;
 BEGIN
   -- 1. get id from input
   SELECT "id" INTO _id FROM json_populate_record(NULL::"group", _a);
@@ -42,16 +42,9 @@ BEGIN
   SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
   -- 3. are key and tag known?
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
-  -- 4. generate quoted id, key, tag, #key
-    _hkey := quote_ident('#'||_key);
-    _tag := quote_literal(_tag);
-    _key := quote_ident(_key);
-    _id := quote_ident(_id);
-  -- 5. update food to add the tag to key, #key (if not exists)
-    EXECUTE 'UPDATE "food" SET '||
-    _key||'=array_to_string(array_sort(array_append('||_hkey||','||_tag||')),'||quote_literal(', ')||'), '||
-    _hkey||'=array_sort(array_append('||_hkey||','||_tag||')) '||
-    'WHERE NOT '||_hkey||' @> ARRAY['||_tag||']';
+  -- 4. update food to add the tag to key, #key (if not exists)
+    EXECUTE format('UPDATE "food" SET %I=array_to_string(array_sort(array_append(%I, %L))), %I=array_sort(array_append(%I, %L)) WHERE NOT %I @> ARRAY[%L]',
+    _key, '#'||_key, _tag, '#'||_key, '#'||_key, _tag, '#'||_key, _tag);
   END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -64,7 +57,6 @@ DECLARE
   _id   TEXT;
   _key  TEXT;
   _tag  TEXT;
-  _hkey TEXT;
 BEGIN
   -- 1. get id from input
   SELECT "id" INTO _id FROM json_populate_record(NULL::"group", _a);
@@ -72,16 +64,9 @@ BEGIN
   SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
   -- 3. are key and tag are known?
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
-  -- 4. generate quoted id, key, tag, and #key
-    _hkey := quote_ident('#'||_key);
-    _tag := quote_literal(_tag);
-    _key := quote_ident(_key);
-    _id := quote_ident(_id);
-  -- 5. update food to remove the tag from key, #key (if exists)
-    EXECUTE 'UPDATE "food" SET '||
-    _key||'=array_to_string(array_remove('||_hkey||','||_tag||'),'||quote_literal(', ')||'), '||
-    _hkey||'=array_remove('||_hkey||','||_tag||') '||
-    'WHERE '||_hkey||' @> ARRAY['||_tag||']';
+  -- 4. update food to remove the tag from key, #key (if exists)
+    EXECUTE format('UPDATE "food" SET %I=array_to_string(array_remove(%I, %L)), %I=array_remove(%I, %L) WHERE %I @> ARRAY[%L]',
+    _key, '#'||_key, _tag, '#'||_key, _tag, '#'||_key, _tag);
   END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -97,25 +82,18 @@ DECLARE
   _oid   TEXT;
 BEGIN
   -- 1. get id, key, value from input
-  SELECT "id", "key", "value" INTO _id, _key, _value FROM
-  json_populate_record(NULL::"group", _a);
+  SELECT "id", "key", "value" INTO _id, _key, _value
+  FROM json_populate_record(NULL::"group", _a);
   -- 2. insert record into table
   INSERT INTO "group" SELECT * FROM json_populate_record(NULL::"group", _a);
   -- 3. create view (id) using value
-  EXECUTE 'CREATE OR REPLACE VIEW '||quote_ident(_id)||' AS '||_value;
+  EXECUTE format('CREATE OR REPLACE VIEW %I AS %s', _id, _value);
   -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
-  -- 5. add columns key, #key
-    EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS '||
-    quote_ident(_key)||' TEXT';
-    EXECUTE 'ALTER TABLE "food" ADD COLUMN IF NOT EXISTS '||
-    quote_ident('#'||_key)||' TEXT[]';
-  -- 6. add indexes for key, #key
-    EXECUTE 'CREATE INDEX IF NOT EXISTS '||quote_ident('idx_food_'||_key)||
-    ' ON "food" ('||quote_ident(_key)||')';
-    EXECUTE 'CREATE INDEX IF NOT EXISTS '||quote_ident('idx_food_#'||_key)||
-    ' ON "food" USING gin ('||quote_ident('#'||_key)||')';
+  -- 5. insert types key, #key
+    PERFORM type_insertone(json_build_object('id', _key, 'value', E'TEXT NOT NULL DEFAULT \'\''));
+    PERFORM type_insertone(json_build_object('id', '#'||_key, 'value', 'TEXT[] NOT NULL DEFAULT ARRAY[]', 'index', 'gin'));
   END IF;
   -- 7. add tag to key
   PERFORM group_executeone(_a);
@@ -132,19 +110,19 @@ DECLARE
   _oid TEXT;
 BEGIN
   -- 1. get id, key from input
-  SELECT "id", "key" INTO _id, _key FROM
-  json_populate_record(NULL::"group", _a);
+  SELECT "id", "key" INTO _id, _key
+  FROM json_populate_record(NULL::"group", _a);
   -- 2. remove tag from key
   PERFORM group_unexecuteone(_a);
   -- 3. is this the last group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
-  -- 4. drop columns key, #key (indexes dropped too)
-    EXECUTE 'ALTER TABLE "food" DROP COLUMN IF EXISTS '||quote_ident(_key);
-    EXECUTE 'ALTER TABLE "food" DROP COLUMN IF EXISTS '||quote_ident('#'||_key);
+  -- 4. delete types key, #key
+    PERFORM type_deleteone(json_build_object('id', _key));
+    PERFORM type_deleteone(json_build_object('id', '#'||_key));
   END IF;
   -- 5. drop view of this group
-  EXECUTE 'DROP VIEW IF EXISTS '||quote_ident(_id)||' RESTRICT';
+  EXECUTE format('DROP VIEW IF EXISTS %I RESTRICT', _id);
   -- 6. delete group (finally, needs big persistence)
   DELETE FROM "group" WHERE "id"=_id;
 END;

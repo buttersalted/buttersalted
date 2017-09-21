@@ -16,14 +16,15 @@ CREATE OR REPLACE FUNCTION "type_insertone" (
 DECLARE
   _id    TEXT;
   _value TEXT;
+  _index TEXT;
 BEGIN
-  -- 1. get id, value from input (and set proper case)
-  SELECT "id", upper("value") INTO _id, _value
+  -- 1. get id, value, index from input (and set proper case)
+  SELECT "id", upper("value"), coalesce("index", '') INTO _id, _value, _index
   FROM json_populate_record(NULL::"type", _a);
   -- 2. add column id to food table with index (if its a column)
   IF _value<>'TABLE' THEN
     EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s', _id, _value);
-    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON "food" (%I)', 'food_'||_id||'_idx', _id);
+    EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON "food" %s (%I)', 'food_'||_id||'_idx', _index, _id);
   END IF;
   -- 3. insert into table using id, value
   INSERT INTO "type" VALUES (_id, _value);
