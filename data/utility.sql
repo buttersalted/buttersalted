@@ -11,5 +11,5 @@ CREATE OR REPLACE FUNCTION "json_keys" (JSON)
 RETURNS TEXT[] AS $$
   -- 1. stealthily take from stackoverflow (Marth)
   SELECT array_agg(f) FROM
-  (SELECT json_object_keys($1) AS f) u;
+  (SELECT json_object_keys($1) AS f) u
 $$ LANGUAGE SQL STRICT IMMUTABLE;
