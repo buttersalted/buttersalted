@@ -121,6 +121,6 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
-RETURNS TABLE AS $$
-  SELECT * FROM "group" WHERE "id"='1'
+RETURNS "group" AS $$
+  SELECT * FROM "group" WHERE "id"='1';
 $$ LANGUAGE SQL;
