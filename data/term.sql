@@ -23,6 +23,16 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION "term_deleteone" (
+  IN _a JSON
+) RETURNS VOID AS $$
+BEGIN
+  -- 1. delete row from table
+  DELETE FROM "term" WHERE id=_a->>'id';
+END;
+$$ LANGUAGE plpgsql;
+
+
 CREATE OR REPLACE FUNCTION "term_upsertone" (
   IN _a JSON
 ) RETURNS VOID AS $$
@@ -30,15 +40,5 @@ BEGIN
   -- 1. should try to insert first, else make an update
   INSERT INTO "term" VALUES (_a->>'id', _a->>'value')
   ON CONFLICT ("id") DO UPDATE SET "value"=_a->>'value';
-END;
-$$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION "term_deleteone" (
-  IN _a JSON
-) RETURNS VOID AS $$
-BEGIN
-  -- 1. delete row from table
-  DELETE FROM "term" WHERE id=_a->>'id';
 END;
 $$ LANGUAGE plpgsql;
