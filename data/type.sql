@@ -14,13 +14,13 @@ CREATE OR REPLACE FUNCTION "type_insertone" (
   IN _a JSON
 ) RETURNS VOID AS $$
 DECLARE
-  _id    TEXT;
-  _value TEXT;
-  _index TEXT;
+  _id    TEXT := _a->>'id';
+  _value TEXT := _a->>'value';
+  _index TEXT := coalesce(_a->>'index', '');
 BEGIN
   -- 1. get id, value, index from input (and set proper case)
-  SELECT "id", upper("value") INTO _id, _value, FROM json_populate_record(NULL::"type", _a);
-  _index = coalesce(_a->>'index', '');
+  -- SELECT "id", upper("value") INTO _id, _value FROM json_populate_record(NULL::"type", _a);
+  -- _index = coalesce(_a->>'index', '');
   -- 2. add column id to food table with index (if its a column)
   IF _value<>'TABLE' THEN
     EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s', _id, _value);
