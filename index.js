@@ -17,7 +17,7 @@ const data = new Data(dbpool);
 const json = Json(data);
 const sql = new Sql(dbpool);
 server.listen(E.PORT||80);
-data.setup();
+data.setup().catch((err) => throw err);
 
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
