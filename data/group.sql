@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS "group" (
     lower("value") NOT LIKE '% into %'
   )
 );
+CREATE INDEX IF NOT EXISTS "group_key_idx"
+ON "group" ("key");
+CREATE INDEX IF NOT EXISTS "group_tag_idx"
+ON "group" ("tag");
 
 
 CREATE OR REPLACE FUNCTION "group_executeone" (_a JSON)
