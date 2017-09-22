@@ -11,6 +11,12 @@ CREATE INDEX IF NOT EXISTS "term_value_idx"
 ON "term" ("value");
 
 
+CREATE OR REPLACE FUNCTION "term_value" (TEXT)
+RETURNS TEXT AS $$
+  SELECT "value" FROM "term" WHERE "id"=$1;
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION "term_insertone" (JSON)
 RETURNS VOID AS $$
   INSERT INTO "term" VALUES ($1->>'id', $1->>'value');

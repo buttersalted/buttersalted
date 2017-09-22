@@ -9,6 +9,12 @@ CREATE INDEX IF NOT EXISTS "type_value_idx"
 ON "type" ("value");
 
 
+CREATE OR REPLACE FUNCTION "type_value" (TEXT)
+RETURNS TEXT AS $$
+  SELECT "value" FROM "type" WHERE "id"=$1;
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION "type_insertone" (_a JSON)
 RETURNS VOID AS $$
 DECLARE

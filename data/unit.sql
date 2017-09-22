@@ -7,6 +7,29 @@ CREATE TABLE IF NOT EXISTS "unit" (
 );
 
 
+CREATE OR REPLACE FUNCTION "unit_value" (TEXT)
+RETURNS REAL AS $$
+  SELECT "value" FROM "unit" WHERE "id"=$1;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION "unit_tobase" (TEXT, TEXT)
+RETURNS REAL AS $$
+  -- 1. number * unit factor * column factor
+  SELECT (split_part($1, ' ', 1)::REAL)*
+  coalesce(unit_value(split_part($1, ' ', 2)), 1)*
+  coalesce(unit_value($2), 1);
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION "unit_convert" (TEXT, TEXT)
+RETURNS TEXT AS $$
+  -- 1. convert only real numbers
+  SELECT CASE WHEN type_value($2)<>'REAL' THEN $1
+  ELSE unit_tobase($1, $2) END;
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION "unit_insertone" (JSON)
 RETURNS VOID AS $$
   INSERT INTO "unit" VALUES($1->>'id', ($1->>'value')::REAL);
@@ -30,27 +53,3 @@ CREATE OR REPLACE FUNCTION "unit_selectone" (JSON)
 RETURNS "unit" AS $$
   SELECT * FROM "unit" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
-
-
-CREATE OR REPLACE FUNCTION "unit_convert" (_a JSON)
-RETURNS TEXT AS $$
-DECLARE
-  -- 1. get id, value
-  _id    TEXT := _a->>'id';
-  _value TEXT := _a->>'value';
-  _z     REAL;
-BEGIN
-  IF type_selectone(_a)<>'REAL' THEN
-    RETURN _value;
-  END IF;
-  -- 1. original number
-  _z := split_part(_value, ' ', 1);
-  -- 2. convert to base unit
-  SELECT _z*coalesce("value", 1) INTO _z
-    FROM "unit" WHERE "id"=split_part(_value, ' ', 2);
-  -- 3. convert to column-specific unit (optional)
-  SELECT _z*coalesce("value", 1) INTO _z
-    FROM "unit" WHERE "id"=_id;
-  RETURN _z::TEXT;
-END;
-$$ LANGUAGE plpgsql;
