@@ -19,16 +19,15 @@ CREATE TABLE IF NOT EXISTS "group" (
 );
 
 
-CREATE OR REPLACE FUNCTION "group_executeone" (
-  IN _a JSON
-) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION "group_executeone" (_a JSON)
+RETURNS VOID AS $$
 DECLARE
--- 1. get id from input
+-- 1. get id
   _id   TEXT := _a->>'id';
   _key  TEXT;
   _tag  TEXT;
 BEGIN
-  -- 2. get key, tag from group row
+  -- 2. get key, tag from row
   SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
   -- 3. are key and tag known?
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
@@ -41,16 +40,15 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_unexecuteone" (
-  IN _a JSON
-) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION "group_unexecuteone" (_a JSON)
+RETURNS VOID AS $$
 DECLARE
--- 1. get id from input
+-- 1. get id
   _id   TEXT := _a->>'id';
   _key  TEXT;
   _tag  TEXT;
 BEGIN
-  -- 2. get key, tag from group row
+  -- 2. get key, tag from row
   SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
   -- 3. are key and tag are known?
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
@@ -63,9 +61,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_insertone" (
-  IN _a JSON
-) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION "group_insertone" (_a JSON)
+RETURNS VOID AS $$
 DECLARE
 -- 1. get id, key, value from input
   _id    TEXT := _a->>'id';
@@ -92,11 +89,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_deleteone" (
-  IN _a JSON
-) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION "group_deleteone" (_a JSON)
+RETURNS VOID AS $$
 DECLARE
--- 1. get id, key from input
+-- 1. get id, key
   _id  TEXT := _a->>'id';
   _key TEXT := _a->>'key';
   _oid TEXT;
@@ -110,9 +106,8 @@ BEGIN
     PERFORM type_deleteone(json_build_object('id', _key));
     PERFORM type_deleteone(json_build_object('id', '#'||_key));
   END IF;
-  -- 5. drop view of this group
+  -- 5. drop view and delete row
   EXECUTE format('DROP VIEW IF EXISTS %I RESTRICT', _id);
-  -- 6. delete group (finally, needs big persistence)
   DELETE FROM "group" WHERE "id"=_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -120,6 +115,5 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
 RETURNS "group" AS $$
-  -- 1. select with id (field testing valuable)
   SELECT * FROM "group" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
