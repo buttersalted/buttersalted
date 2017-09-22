@@ -14,11 +14,25 @@ module.exports = $;
 const _ = $.prototype;
 
 _.select = function(a, l) {
-  // 1. lets get the select conditions (where, like)
+  // 1. get where with like, limit
   const p = [], w = format(a, '"%k" LIKE $%i', ' AND ', 1, p);
   const q = (w? ' WHERE '+w : '')+(l!=null? ' LIMIT '+l : '');
   // 2. execute the query (if its still valid)
   return this._db.query(`SELECT * FROM "${this._id}"`+q, p);
+};
+
+_.insert = function(a) {
+  // 1. get columns and values (to insert)
+  const p = [], c = format(a, '"%k"', ',', 1, p), v = format(a, '$%i', ',', 1);
+  // 2. execute an insert query (lets fight)
+  return this._db.query(`INSERT INTO "${this._id}" (${c}) VALUES (${v})`, p);
+};
+
+_.delete = function(a) {
+  // 1. get where with like
+  const p = [], w = format(a, '"%k" LIKE $%i', ' AND ', 1, p);
+  // 2. execute the query (ready for disaster?)
+  return this._db.query(`DELETE FROM "${this._id}"`+(w? ' WHERE '+w : ''), p);
 };
 
 _.update = function(a, b) {
