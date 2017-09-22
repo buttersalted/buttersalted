@@ -14,7 +14,7 @@ ON "term" ("value");
 CREATE OR REPLACE FUNCTION "term_insertone" (JSON)
 RETURNS VOID AS $$
   INSERT INTO "term" VALUES ($1->>'id', $1->>'value');
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION "term_deleteone" (JSON)
