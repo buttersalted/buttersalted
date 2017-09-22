@@ -40,12 +40,13 @@ _.setup = function() {
   // 1. setup utility functions
   return this.utility.setup().then(() => (
   // 2. setup type (dependencies first)
-    this.type.setup()
+    // this.type.setup()
+    1
   )).then(Promise.all([
   // 3. setup food, group, term, unit concurrently
-    this.food.setup(),
-    this.group.setup(),
-    this.term.setup(),
-    this.unit.setup()
+    // this.food.setup(),
+    // this.group.setup(),
+    // this.term.setup(),
+    // this.unit.setup()
   ]));
 };
