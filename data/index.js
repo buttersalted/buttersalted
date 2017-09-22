@@ -45,7 +45,7 @@ _.setup = function() {
   // 3. setup food, group, term, unit concurrently
     // this.food.setup(),
     // this.group.setup(),
-    // this.term.setup(),
+    this.term.setup(),
     this.unit.setup()
   ]));
 };
