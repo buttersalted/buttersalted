@@ -4,48 +4,33 @@ CREATE TABLE IF NOT EXISTS "term" (
   "value" TEXT NOT NULL,
   PRIMARY KEY ("id"),
   CHECK ("id"<>'' AND "value"<>''),
--- 2. prevent "type" delete and cascade update
   FOREIGN KEY ("value") REFERENCES "type" ("id")
   ON DELETE NO ACTION ON UPDATE CASCADE
 );
--- 3. create index for value (for sonic speeds)
 CREATE INDEX IF NOT EXISTS "term_value_idx"
 ON "term" ("value");
 
 
-CREATE OR REPLACE FUNCTION "term_insertone" (
-  IN _a JSON
-) RETURNS VOID AS $$
-BEGIN
-  -- 1. insert into table using json directly
-  INSERT INTO "term" SELECT * FROM json_populate_record(NULL::"term", _a);
-END;
+CREATE OR REPLACE FUNCTION "term_insertone" (JSON)
+RETURNS VOID AS $$
+  INSERT INTO "term" VALUES ($1->>'id', $1->>'value');
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "term_deleteone" (
-  IN _a JSON
-) RETURNS VOID AS $$
-BEGIN
-  -- 1. delete row from table
-  DELETE FROM "term" WHERE id=_a->>'id';
-END;
-$$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION "term_deleteone" (JSON)
+RETURNS VOID AS $$
+  DELETE FROM "term" WHERE "id"=$1->>'id';
+$$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_upsertone" (
-  IN _a JSON
-) RETURNS VOID AS $$
-BEGIN
-  -- 1. should try to insert first, else make an update
-  INSERT INTO "term" VALUES (_a->>'id', _a->>'value')
-  ON CONFLICT ("id") DO UPDATE SET "value"=_a->>'value';
-END;
-$$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION "term_upsertone" (JSON)
+RETURNS VOID AS $$
+  INSERT INTO "term" VALUES ($1->>'id', $1->>'value')
+  ON CONFLICT ("id") DO UPDATE SET "value"=$1->>'value';
+$$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION "term_selectone" (JSON)
 RETURNS "term" AS $$
-  -- 1. select with id (thanks postgresql docs)
   SELECT * FROM "term" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;

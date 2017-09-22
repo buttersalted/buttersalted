@@ -34,7 +34,7 @@ CREATE OR REPLACE FUNCTION "type_deleteone" (_a JSON)
 RETURNS VOID AS $$
 BEGIN
   -- 1. delete from table and drop column
-  DELETE FROM "type" WHERE id=_a->>'id';
+  DELETE FROM "type" WHERE "id"=_a->>'id';
   EXECUTE format('ALTER TABLE "food" DROP COLUMN IF EXISTS %I', _a->>'id');
 END;
 $$ LANGUAGE plpgsql;
