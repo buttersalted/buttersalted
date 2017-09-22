@@ -14,7 +14,7 @@ BEGIN
   IF NOT json_keys(_row) @> json_keys(_a) THEN
     RAISE EXCEPTION 'Bad row: %', _a::TEXT;
   END IF;
-  SELECT json_object_agg("key", "value") FROM (
+  SELECT json_object_agg("key", "value") INTO _a FROM (
     SELECT coalesce(term_selectone("key"), "key") AS "key", "value"
     FROM json_each(_a) t) u;
   INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _a);
