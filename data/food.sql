@@ -20,13 +20,14 @@ $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION "food_insertone" (_a JSON)
 RETURNS VOID AS $$
+DECLARE
+  _b   JSON := food_tobase(_a);
+  _row JSON := row_to_json(json_populate_record(NULL::"food", _b));
 BEGIN
-  _a := food_tobase(_a);
-  IF row_to_json(json_populate_record(NULL::"food", _a)) @> json_keys(_a) THEN
-    INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _a);
-  ELSE
-    RAISE EXCEPTION 'invalid row %', _a::TEXT;
+  IF NOT json_keys(_row) @> json_keys(_b) THEN
+    RAISE EXCEPTION 'invalid row %', _b::TEXT;
   END IF;
+  INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _b);
 END;
 $$ LANGUAGE plpgsql;
 
