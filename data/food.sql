@@ -17,7 +17,7 @@ BEGIN
   SELECT json_object_agg("key", "value") INTO _a FROM (
     SELECT coalesce(term_value("key"), "key") AS "key",
     unit_convert("value", coalesce(term_value("key"), "key")) AS "value"
-    FROM json_each(_a) t) u;
+    FROM json_each_text(_a) t) u;
   INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _a);
 END;
 $$ LANGUAGE plpgsql;
