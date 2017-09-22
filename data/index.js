@@ -22,7 +22,12 @@ const $ = function Data(db) {
     'setup': rstream('type.sql'),
     'map': true
   });
-  // 5. junkyard wars between functions
+  // 5. units to convert input to food
+  this.unit = new DbTable('unit', db, {
+    'setup': rstream('unit.sql'),
+    'map': true
+  });
+  // 6. junkyard wars between functions
   this.utility = new DbTable('utility', db, {
     'setup': rstream('utility.sql')
   });
@@ -34,12 +39,13 @@ const _ = $.prototype;
 _.setup = function() {
   // 1. setup utility functions
   return this.utility.setup().then(() => (
-  // 3. setup type (dependencies first)
+  // 2. setup type (dependencies first)
     this.type.setup()
   )).then(Promise.all([
-    // 2. setup food, group, term concurrently
+  // 3. setup food, group, term, unit concurrently
     this.food.setup(),
     this.group.setup(),
-    this.term.setup()
+    this.term.setup(),
+    this.unit.setup()
   ]));
 };

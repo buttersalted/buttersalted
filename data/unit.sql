@@ -1,9 +1,11 @@
+-- 1. create table to store unit conversion factors
 CREATE TABLE IF NOT EXISTS "unit" (
   "id"    TEXT NOT NULL,
   "value" REAL NOT NULL,
   PRIMARY KEY ("id"),
   CHECK ("id"<>'')
 );
+
 
 CREATE OR REPLACE FUNCTION "unit_insertone" (JSON)
 RETURNS VOID AS $$
