@@ -4,6 +4,7 @@ const food = require('./food');
 const group = require('./group');
 const term = require('./term');
 const type = require('./type');
+const unit = require('./unit');
 
 module.exports = function Json(src) {
   const x = express();
@@ -11,5 +12,6 @@ module.exports = function Json(src) {
   x.use('/group', group(src.group));
   x.use('/term', term(src.term));
   x.use('/type', type(src.type));
+  x.use('/unit', unit(src.unit));
   return x;
 };
