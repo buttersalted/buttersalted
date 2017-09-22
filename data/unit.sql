@@ -30,3 +30,24 @@ CREATE OR REPLACE FUNCTION "unit_selectone" (JSON)
 RETURNS "unit" AS $$
   SELECT * FROM "unit" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION "unit_convert" (_a JSON)
+RETURNS REAL AS $$
+DECLARE
+  -- 1. get id, value
+  _id    TEXT := _a->>'id';
+  _value TEXT := _a->>'value';
+  _z     REAL;
+BEGIN
+  -- 1. original number
+  _z := split_part(_value, ' ', 1);
+  -- 2. convert to base unit
+  SELECT _z*coalesce("value", 1) INTO _z
+    FROM "unit" WHERE "id"=split_part(_value, ' ', 2);
+  -- 3. convert to column-specific unit (optional)
+  SELECT _z*coalesce("value", 1) INTO _z
+    FROM "unit" WHERE "id"=_id;
+  RETURN _z;
+END;
+$$ LANGUAGE plpgsql;
