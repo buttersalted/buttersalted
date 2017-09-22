@@ -21,12 +21,15 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION "food_insertone" (_a JSON)
 RETURNS VOID AS $$
 DECLARE
+  -- 1. get base json and row json
   _b   JSON := food_tobase(_a);
   _row JSON := row_to_json(json_populate_record(NULL::"food", _b));
 BEGIN
+  -- 2. does it fit in the row (no extra columns)?
   IF NOT json_keys(_row) @> json_keys(_b) THEN
     RAISE EXCEPTION 'invalid row %', _b::TEXT;
   END IF;
+  -- 3. insert to table (hopefully valid data)
   INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _b);
 END;
 $$ LANGUAGE plpgsql;
