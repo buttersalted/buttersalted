@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS "food" (
 
 
 CREATE OR REPLACE FUNCTION "food_tobase" (JSON)
-RETURNS VOID AS $$
+RETURNS JSON AS $$
   -- 4. aggregate all keys and values to json
   SELECT json_object_agg("key", "value") FROM (
   -- 2. field names to base field names
