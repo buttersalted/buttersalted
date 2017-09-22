@@ -26,7 +26,7 @@ CREATE OR REPLACE FUNCTION "unit_convert" (TEXT, TEXT)
 RETURNS TEXT AS $$
   -- 1. convert only real numbers
   SELECT CASE WHEN type_value($2)<>'REAL' THEN $1
-  ELSE unit_tobase($1, $2) END;
+  ELSE unit_tobase($1, $2)::TEXT END;
 $$ LANGUAGE SQL;
 
 
