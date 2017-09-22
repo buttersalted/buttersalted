@@ -11,11 +11,13 @@ DECLARE
   _row JSON;
 BEGIN
   _row := row_to_json(json_populate_record(NULL::"food", _a));
-  IF json_keys(_row) @> json_keys(_a) THEN
-    INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _a);
-  ELSE
+  IF NOT json_keys(_row) @> json_keys(_a) THEN
     RAISE EXCEPTION 'Bad row: %', _a::TEXT;
   END IF;
+  SELECT json_object_agg("key", "value") FROM (
+    SELECT coalesce(term_selectone("key"), "key") AS "key", "value"
+    FROM json_each(_a) t) u;
+  INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _a);
 END;
 $$ LANGUAGE plpgsql;
 
