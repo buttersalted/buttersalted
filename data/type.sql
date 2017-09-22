@@ -32,23 +32,19 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "type_deleteone" (
-  IN _a JSON
-) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION "type_deleteone" (_a JSON)
+RETURNS VOID AS $$
 BEGIN
-  -- 1. delete from table with id
+  -- 1. delete from table and drop column
   DELETE FROM "type" WHERE id=_a->>'id';
-  -- 2. drop column if it exists
   EXECUTE format('ALTER TABLE "food" DROP COLUMN IF EXISTS %I', _a->>'id');
 END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "type_upsertone" (
-  IN _a JSON
-) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION "type_upsertone" (_a JSON)
+RETURNS VOID AS $$
 BEGIN
-  -- 1. the very complex approach
   PERFORM type_deleteone(_a);
   PERFORM type_insertone(_a);
 END;
@@ -57,6 +53,5 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "type_selectone" (JSON)
 RETURNS "type" AS $$
-  -- 1. select with id (use return as table)
   SELECT * FROM "type" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
