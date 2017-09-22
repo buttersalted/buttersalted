@@ -20,7 +20,7 @@ RETURNS VOID AS $$
 DECLARE
 -- 1. get id, value, index
   _id    TEXT := _a->>'id';
-  _value TEXT := _a->>'value';
+  _value TEXT := upper(_a->>'value');
   _index TEXT := coalesce(_a->>'index', 'btree');
 BEGIN
   -- 2. insert into table (fail early)
