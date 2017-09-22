@@ -37,15 +37,12 @@ module.exports = $;
 const _ = $.prototype;
 
 _.setup = function() {
-  // 1. setup utility functions
-  return this.utility.setup().then(() => (
-  // 2. setup type (dependencies first)
-    this.type.setup()
-  )).then(Promise.all([
-  // 3. setup food, group, term, unit concurrently
-    this.food.setup(),
-    this.group.setup(),
-    this.term.setup(),
-    this.unit.setup()
-  ]));
+  // 1. setup in sequence (order, order)
+  return this.utility.setup().then(() =>
+    this.type.setup()).then(() =>
+    this.unit.setup()).then(() =>
+    this.term.setup()).then(() =>
+    this.food.setup()).then(() =>
+    this.group.setup()
+  );
 };
