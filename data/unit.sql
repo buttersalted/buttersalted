@@ -33,13 +33,16 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION "unit_convert" (_a JSON)
-RETURNS REAL AS $$
+RETURNS TEXT AS $$
 DECLARE
   -- 1. get id, value
   _id    TEXT := _a->>'id';
   _value TEXT := _a->>'value';
   _z     REAL;
 BEGIN
+  IF type_selectone(_a)<>'REAL' THEN
+    RETURN _value;
+  END IF;
   -- 1. original number
   _z := split_part(_value, ' ', 1);
   -- 2. convert to base unit
@@ -48,6 +51,6 @@ BEGIN
   -- 3. convert to column-specific unit (optional)
   SELECT _z*coalesce("value", 1) INTO _z
     FROM "unit" WHERE "id"=_id;
-  RETURN _z;
+  RETURN _z::TEXT;
 END;
 $$ LANGUAGE plpgsql;
