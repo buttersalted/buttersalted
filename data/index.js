@@ -43,7 +43,7 @@ _.setup = function() {
     this.type.setup()
   )).then(Promise.all([
   // 3. setup food, group, term, unit concurrently
-    // this.food.setup(),
+    this.food.setup(),
     this.group.setup(),
     this.term.setup(),
     this.unit.setup()
