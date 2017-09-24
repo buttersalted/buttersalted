@@ -14,8 +14,8 @@ const convert = function(a) {
 module.exports = function(dst) {
   const x = express();
   x.get('/', (req, res, next) => src(body(req)).then((ans) => {
-    res.json(convert(ans)), next);
-  });
+    res.json(convert(ans));
+  }, next));
   x.post('/', (req, res, next) => src(body(req)).then((ans) => {
     var a = convert(ans), p = [], z = {}, e = 0;
     const insert = (v) => dst.insertOne(v).then(
@@ -24,5 +24,5 @@ module.exports = function(dst) {
     );
     for(var v in a) p.push(insert(v));
     Promise.all(p).then(() => (e? res.status(400) : res).json(z));
-  }));
+  }, next));
 };
