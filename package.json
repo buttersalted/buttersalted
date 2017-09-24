@@ -1,6 +1,6 @@
 {
   "name": "foodsql",
-  "version": "0.0.175",
+  "version": "0.0.176",
   "description": "A new way to understand food through queries.",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,7 @@
     "object-format": "0.0.7",
     "pg": "^7.3.0",
     "pg-connection-string": "^2.0.0",
-    "stream-string": "^2.0.0"
+    "stream-string": "^2.0.0",
+    "usda-ndb": "^0.1.5"
   }
 }

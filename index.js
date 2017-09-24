@@ -7,6 +7,7 @@ const pg = require('pg');
 const pgconfig = require('pg-connection-string');
 const Data = require('./data');
 const Json = require('./json');
+const Pipe = require('./pipe')
 const Sql = require('./sql');
 
 const E = process.env;
@@ -15,6 +16,7 @@ const server = http.createServer(X);
 const dbpool = new pg.Pool(pgconfig(E.DATABASE_URL));
 const data = new Data(dbpool);
 const json = Json(data);
+const pipe = Pipe(data);
 const sql = new Sql(dbpool);
 server.listen(E.PORT||80);
 data.setup();
@@ -22,6 +24,7 @@ data.setup();
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
 X.use('/json', json);
+X.use('/pipe', pipe);
 X.use('/sql', sql);
 X.use('/', (req, res) => {
   res.send('Haaarrry Ppottterrr ...');
