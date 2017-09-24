@@ -6,8 +6,8 @@ const body = (req) => Object.assign(req.body, req.query, req.params);
 
 const convert = function(a) {
   return Object.keys(a).map((k) => Object.assign(a[k], {
-    'Id': parseInt(k.substring(k.lastIndexOf(',')+1)),
-    'Name': k.substring(0, k.lastIndexOf(','))
+    'Id': parseInt(k.substring(0, k.indexOf(','))),
+    'Name': k.substring(k.indexOf(',')+1).trim()
   }));
 };
 
