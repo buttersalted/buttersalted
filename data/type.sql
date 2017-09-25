@@ -59,3 +59,7 @@ CREATE OR REPLACE FUNCTION "type_selectone" (JSONB)
 RETURNS SETOF "type" AS $$
   SELECT * FROM "type" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
+
+
+/* DEFAULT VALUES */
+INSERT INTO "type" VALUES ("Id", "INT");

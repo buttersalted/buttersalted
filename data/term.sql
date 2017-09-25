@@ -40,3 +40,7 @@ CREATE OR REPLACE FUNCTION "term_selectone" (JSONB)
 RETURNS SETOF "term" AS $$
   SELECT * FROM "term" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
+
+
+/* DEFAULT VALUES */
+INSERT INTO "term" VALUES ("id", "Id");

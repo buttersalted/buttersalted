@@ -1,7 +1,7 @@
 -- 1. create bare table for storing food details
 CREATE TABLE IF NOT EXISTS "food" (
-  "id" INT NOT NULL,
-  PRIMARY KEY ("id")
+  "Id" INT NOT NULL,
+  PRIMARY KEY ("Id")
 );
 
 
@@ -38,11 +38,11 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "food_deleteone" (JSONB)
 RETURNS VOID AS $$
-  DELETE FROM "food" WHERE "id"=($1->>'id')::INT;
+  DELETE FROM "food" WHERE "Id"=($1->>'Id')::INT;
 $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION "food_selectone" (JSONB)
 RETURNS SETOF "food" AS $$
-  SELECT * FROM "food" WHERE "id"=($1->>'id')::INT;
+  SELECT * FROM "food" WHERE "Id"=($1->>'Id')::INT;
 $$ LANGUAGE SQL;
