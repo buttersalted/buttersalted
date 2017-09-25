@@ -36,8 +36,6 @@ X.use((err, req, res, next) => {
 // product
 // ingredient
 /*
-- UPDATE KEY-TAGS
-- UPDATE VIEWS (NEW COLUMNS)
 - RAW THINGS LOOK GOOD
 - TOOLS LIKE MYFITNESSPAL
 - USE LIMITS
