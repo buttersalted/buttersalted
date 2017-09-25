@@ -121,3 +121,15 @@ CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
 RETURNS "group" AS $$
   SELECT * FROM "group" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION "group_restart" (_a JSON)
+RETURNS VOID AS $$
+DECLARE
+  _r "group";
+BEGIN
+  FOR _r IN EXECUTE query_selectlike('group', _a) LOOP
+    group_restartone(_r.id);
+  END LOOP;
+END;
+$$ LANGUAGE plpgsql;
