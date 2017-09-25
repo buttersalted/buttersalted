@@ -15,7 +15,7 @@ RETURNS TEXT AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "type_insertone" (_a JSON)
+CREATE OR REPLACE FUNCTION "type_insertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
 -- 1. get id, value, index
@@ -36,7 +36,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "type_deleteone" (_a JSON)
+CREATE OR REPLACE FUNCTION "type_deleteone" (_a JSONB)
 RETURNS VOID AS $$
 BEGIN
   -- 1. delete from table and drop column
@@ -46,7 +46,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "type_upsertone" (_a JSON)
+CREATE OR REPLACE FUNCTION "type_upsertone" (_a JSONB)
 RETURNS VOID AS $$
 BEGIN
   PERFORM type_deleteone(_a);
@@ -55,7 +55,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "type_selectone" (JSON)
+CREATE OR REPLACE FUNCTION "type_selectone" (JSONB)
 RETURNS "type" AS $$
   SELECT * FROM "type" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;

@@ -17,26 +17,26 @@ RETURNS TEXT AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_insertone" (JSON)
+CREATE OR REPLACE FUNCTION "term_insertone" (JSONB)
 RETURNS VOID AS $$
   INSERT INTO "term" VALUES ($1->>'id', $1->>'value');
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_deleteone" (JSON)
+CREATE OR REPLACE FUNCTION "term_deleteone" (JSONB)
 RETURNS VOID AS $$
   DELETE FROM "term" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_upsertone" (JSON)
+CREATE OR REPLACE FUNCTION "term_upsertone" (JSONB)
 RETURNS VOID AS $$
   INSERT INTO "term" VALUES ($1->>'id', $1->>'value')
   ON CONFLICT ("id") DO UPDATE SET "value"=$1->>'value';
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_selectone" (JSON)
+CREATE OR REPLACE FUNCTION "term_selectone" (JSONB)
 RETURNS "term" AS $$
   SELECT * FROM "term" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;

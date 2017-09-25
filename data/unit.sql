@@ -30,26 +30,26 @@ RETURNS TEXT AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "unit_insertone" (JSON)
+CREATE OR REPLACE FUNCTION "unit_insertone" (JSONB)
 RETURNS VOID AS $$
   INSERT INTO "unit" VALUES($1->>'id', ($1->>'value')::REAL);
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "unit_deleteone" (JSON)
+CREATE OR REPLACE FUNCTION "unit_deleteone" (JSONB)
 RETURNS VOID AS $$
   DELETE FROM "unit" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "unit_upsertone" (JSON)
+CREATE OR REPLACE FUNCTION "unit_upsertone" (JSONB)
 RETURNS VOID AS $$
   INSERT INTO "unit" VALUES($1->>'id', ($1->>'value')::REAL)
   ON CONFLICT ("id") DO UPDATE SET "value"=($1->>'value')::REAL;
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "unit_selectone" (JSON)
+CREATE OR REPLACE FUNCTION "unit_selectone" (JSONB)
 RETURNS "unit" AS $$
   SELECT * FROM "unit" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;

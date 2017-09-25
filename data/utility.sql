@@ -7,15 +7,15 @@ RETURNS ANYARRAY AS $$
 $$ LANGUAGE SQL STRICT IMMUTABLE;
 
 
-CREATE OR REPLACE FUNCTION "json_keys" (JSON)
+CREATE OR REPLACE FUNCTION "jsonb_keys" (JSONB)
 RETURNS TEXT[] AS $$
   -- 1. stealthily take from stackoverflow (Marth)
   SELECT array_agg(f) FROM
-  (SELECT json_object_keys($1) AS f) u;
+  (SELECT jsonb_object_keys($1) AS f) u;
 $$ LANGUAGE SQL STRICT IMMUTABLE;
 
 
-CREATE OR REPLACE FUNCTION "query_format" (JSON, TEXT, TEXT, TEXT)
+CREATE OR REPLACE FUNCTION "query_format" (JSONB, TEXT, TEXT, TEXT)
 RETURNS TEXT AS $$
   -- 5. return completed string
   SELECT $2||g
@@ -25,26 +25,26 @@ RETURNS TEXT AS $$
   FROM (SELECT format($3, "key",
   -- 2. convert json double quotes to sql single
     replace("value"::TEXT, E'\"'::TEXT, E'\''::TEXT)) AS f
-  -- 1. get all keys and values (as json)
-  FROM json_each($1) t) u) v;
+  -- 1. get all keys and values (as jsonb)
+  FROM jsonb_each($1) t) u) v;
 $$ LANGUAGE SQL STRICT IMMUTABLE;
 
 
-CREATE OR REPLACE FUNCTION "query_selectlike" (TEXT, JSON)
+CREATE OR REPLACE FUNCTION "query_selectlike" (TEXT, JSONB)
 RETURNS TEXT AS $$
   SELECT format('SELECT * FROM %I%s', $1,
     query_format($2, ' WHERE ', '%I LIKE %s', ' AND '));
 $$ LANGUAGE SQL STRICT IMMUTABLE;
 
 
-CREATE OR REPLACE FUNCTION "query_deletelike" (TEXT, JSON)
+CREATE OR REPLACE FUNCTION "query_deletelike" (TEXT, JSONB)
 RETURNS TEXT AS $$
   SELECT format('DELETE FROM %I%s', $1,
     query_format($2, ' WHERE ', '%I LIKE %s', ' AND '));
 $$ LANGUAGE SQL STRICT IMMUTABLE;
 
 
-CREATE OR REPLACE FUNCTION "query_updatelike" (TEXT, JSON, JSON)
+CREATE OR REPLACE FUNCTION "query_updatelike" (TEXT, JSONB, JSONB)
 RETURNS TEXT AS $$
   SELECT format('UPDATE %I%s%s', $1,
     query_format($2, ' SET ', '%I = %s', ', '),
@@ -53,8 +53,8 @@ $$ LANGUAGE SQL STRICT IMMUTABLE;
 
 
 CREATE OR REPLACE FUNCTION "table_default" (TEXT)
-RETURNS JSON AS $$
-  SELECT json_object_agg(column_name, replace(split_part(column_default,'::',1), E'\'', ''))
+RETURNS JSONB AS $$
+  SELECT jsonb_object_agg(column_name, replace(split_part(column_default,'::',1), E'\'', ''))
   FROM information_schema.columns
   WHERE (table_schema, table_name) = ('public', $1);
 $$ LANGUAGE SQL STRICT IMMUTABLE;

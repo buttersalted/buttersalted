@@ -68,7 +68,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_insertone" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_insertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
 -- 1. get id, key, value from input
@@ -79,14 +79,14 @@ DECLARE
 BEGIN
   -- 2. insert record into table
   INSERT INTO "group" SELECT * FROM
-  jsonb_populate_record(NULL::"group", table_default('group')::JSONB||_a::JSONB);
+  jsonb_populate_record(NULL::"group", table_default('group')||_a);
   -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
   -- 5. insert types key, #key
-    PERFORM type_insertone(json_build_object('id', _key,
+    PERFORM type_insertone(jsonb_build_object('id', _key,
       'value', E'TEXT NOT NULL DEFAULT \'\''::TEXT));
-    PERFORM type_insertone(json_build_object('id', '#'||_key,
+    PERFORM type_insertone(jsonb_build_object('id', '#'||_key,
       'value', E'TEXT[] NOT NULL DEFAULT \'{}\'', 'index', 'gin'));
   END IF;
   -- 7. create view and add tag to key
@@ -95,7 +95,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_deleteone" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_deleteone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
 -- 1. get id, key
@@ -109,8 +109,8 @@ BEGIN
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
   -- 4. delete types key, #key
-    PERFORM type_deleteone(json_build_object('id', _key));
-    PERFORM type_deleteone(json_build_object('id', '#'||_key));
+    PERFORM type_deleteone(jsonb_build_object('id', _key));
+    PERFORM type_deleteone(jsonb_build_object('id', '#'||_key));
   END IF;
   -- 5. delete row
   DELETE FROM "group" WHERE "id"=_id;
@@ -118,23 +118,23 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
+CREATE OR REPLACE FUNCTION "group_selectone" (JSONB)
 RETURNS "group" AS $$
   SELECT * FROM "group" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "group_upsertone" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_upsertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
   _len INT;
 BEGIN
-  SELECT count(*) INTO _len FROM json_object_keys(_a);
+  SELECT count(*) INTO _len FROM jsonb_object_keys(_a);
   IF _len = 1 THEN
     PERFORM group_stopone(_a->>'id');
     PERFORM group_startone(_a->>'id');
   ELSE
-    SELECT row_to_json(group_selectone(_a))||_a INTO _a;
+    SELECT row_to_jsonb(group_selectone(_a))||_a INTO _a;
     PERFORM group_deleteone(_a);
     PERFORM group_insertone(_a);
   END IF;
@@ -142,7 +142,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_refresh" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_refresh" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
   _r "group";
