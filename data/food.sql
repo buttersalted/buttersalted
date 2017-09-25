@@ -40,3 +40,9 @@ CREATE OR REPLACE FUNCTION "food_deleteone" (JSONB)
 RETURNS VOID AS $$
   DELETE FROM "food" WHERE "id"=($1->>'id')::INT;
 $$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION "food_selectone" (JSONB)
+RETURNS "food" AS $$
+  SELECT * FROM "food" WHERE "id"=($1->>'id')::INT;
+$$ LANGUAGE SQL;
