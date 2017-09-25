@@ -2,18 +2,21 @@
 const stream = require('stream');
 stream.is = require('is-stream');
 stream.toString = require('stream-string');
+const rename = require('object-rename');
 const format = require('object-format');
 
 const $ = function DbTable(id, db, opt) {
   this._id = id;
   this._db = db;
   this._opt = opt||{};
+  this._map = this._opt.map? new Map() : null;
 };
 module.exports = $;
 
 const _ = $.prototype;
 
 _.select = function(a, l) {
+  a = rename(a, opt.rename||{});
   // 1. get where with like, limit
   const p = [], w = format(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
   const q = (w? ' WHERE '+w : '')+(l!=null? ' LIMIT '+l : '');
@@ -22,6 +25,7 @@ _.select = function(a, l) {
 };
 
 _.insert = function(a) {
+  a = rename(a, opt.rename||{});
   // 1. get columns and values (to insert)
   const p = [], c = format(a, '"%k"', ',', 1, p), v = format(a, '$%i', ',', 1);
   // 2. execute an insert query (lets fight)
@@ -29,6 +33,7 @@ _.insert = function(a) {
 };
 
 _.delete = function(a) {
+  a = rename(a, opt.rename||{});
   // 1. get where with like
   const p = [], w = format(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
   // 2. execute the query (ready for disaster?)
@@ -36,6 +41,8 @@ _.delete = function(a) {
 };
 
 _.update = function(a, b) {
+  a = rename(a, opt.rename||{});
+  b = rename(b, opt.rename||{});
   // 1. prepare the update conditions (where, set)
   const p = [], w = format(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
   const s = format(b, '"%k"=$%i', ' AND ', p.length+1, p);
@@ -45,6 +52,7 @@ _.update = function(a, b) {
 };
 
 _.selectOne = function(a) {
+  a = rename(a, opt.rename||{});
   // 1. if map we have, get from it using "id"
   if(this._map) return this._map.get(a.id);
   // 2. instead of direct code, lets call a function
@@ -52,6 +60,7 @@ _.selectOne = function(a) {
 };
 
 _.insertOne = function(a) {
+  a = rename(a, opt.rename||{});
   // 1. insert new row into the table
   return this._db.query(`SELECT ${this._id}_insertone($1)`, [a]).then((ans) => {
   // 2. if map exists, then add it there too
@@ -61,6 +70,7 @@ _.insertOne = function(a) {
 };
 
 _.upsertOne = function(a) {
+  a = rename(a, opt.rename||{});
   // 1. insert or update row to table
   return this._db.query(`SELECT ${this._id}_upsertone($1)`, [a]).then((ans) => {
   // 2. if map exists, then add it there
@@ -70,6 +80,7 @@ _.upsertOne = function(a) {
 };
 
 _.deleteOne = function(a) {
+  a = rename(a, opt.rename||{});
   // 1. delete row from table
   return this._db.query(`SELECT ${this._id}_deleteone($1)`, [a]).then((ans) => {
   // 2. if map exists, then why still keep it there?
@@ -95,7 +106,7 @@ _.setup = function() {
   // 3. get a map if its required (opt.map = true)
   }).then((ans) => {
     return !this._opt.map? ans : this.select({}).then((ans) => {
-      const map = this._map = new Map();
+      const map = this._map;
       for(var i=0, I=ans.rowCount, R=ans.rows; i<I; i++)
         map.set(R[i].id, R[i]);
     });

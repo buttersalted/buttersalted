@@ -4,32 +4,33 @@ const DbTable = require('./dbtable');
 const rstream = (f) => fs.createReadStream(__dirname+'/'+f, 'utf8');
 
 const $ = function Data(db) {
-  // 1. setup food table (this is the big one)
-  this.food = new DbTable('food', db, {
-    'setup': rstream('food.sql')
-  });
-  // 2. this is to list maintain groups
+  // 1. this is to list maintain groups
   this.group = new DbTable('group', db, {
     'setup': rstream('group.sql')
   });
-  // 3. we can store some alternate terms here
+  // 2. we can store some alternate terms here
   this.term = new DbTable('term', db, {
     'setup': rstream('term.sql'),
     'map': true
   });
-  // 4. to store basic data type info
+  // 3. to store basic data type info
   this.type = new DbTable('type', db, {
     'setup': rstream('type.sql'),
     'map': true
   });
-  // 5. units to convert input to food
+  // 4. units to convert input to food
   this.unit = new DbTable('unit', db, {
     'setup': rstream('unit.sql'),
     'map': true
   });
-  // 6. junkyard wars between functions
+  // 5. junkyard wars between functions
   this.utility = new DbTable('utility', db, {
     'setup': rstream('utility.sql')
+  });
+  // 6. setup food table (this is the big one)
+  this.food = new DbTable('food', db, {
+    'setup': rstream('food.sql'),
+    'rename': this.term._map
   });
 };
 module.exports = $;
