@@ -23,44 +23,65 @@ CREATE INDEX IF NOT EXISTS "group_tag_idx"
 ON "group" ("tag");
 
 
-CREATE OR REPLACE FUNCTION "group_executeone" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_startone" (_id TEXT)
 RETURNS VOID AS $$
 DECLARE
--- 1. get id
-  _id   TEXT := _a->>'id';
-  _key  TEXT;
-  _tag  TEXT;
+  _key   TEXT;
+  _keyh  TEXT;
+  _tag   TEXT;
+  _value TEXT;
 BEGIN
-  -- 2. get key, tag from row
-  SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
-  -- 3. are key and tag known?
+  -- 1. get key, keyh, tag, value
+  SELECT "key", '#'||"key", "tag", "value" INTO _key, _keyh, _tag, _value
+  FROM "group" WHERE "id"=_id;
+  -- 2. create view
+  EXECUTE format('CREATE OR REPLACE VIEW %I AS %s', _id, _value);
+  -- 3. add tag to key column, if known
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
-  -- 4. update food to add the tag to key, #key (if not exists)
-    EXECUTE format('UPDATE "food" SET %I=array_sort(array_append(%I, %L)), '||
-      '%I=array_to_string(array_sort(array_append(%I, %L)), %L) WHERE NOT %I @> ARRAY[%L]',
-      '#'||_key, '#'||_key, _tag, _key, '#'||_key, _tag, ', ', '#'||_key, _tag);
+    EXECUTE format('UPDATE %I SET %I=array_sort(array_append(%I, %L)), '||
+      '%I=array_to_string(array_sort(array_append(%I, %L)), %L)',
+      _id, _keyh, _keyh, _tag, _key, _keyh, _tag, ', ', _keyh, _tag);
   END IF;
 END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_unexecuteone" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_stopone" (_id TEXT)
 RETURNS VOID AS $$
 DECLARE
--- 1. get id
-  _id   TEXT := _a->>'id';
-  _key  TEXT;
-  _tag  TEXT;
+  _key   TEXT;
+  _keyh  TEXT;
+  _tag   TEXT;
 BEGIN
-  -- 2. get key, tag from row
-  SELECT "key", "tag" INTO _key, _tag FROM "group" WHERE "id"=_id;
-  -- 3. are key and tag are known?
+  -- 1. get key, keyh, tag
+  SELECT "key", '#'||"key", "tag" INTO _key, _keyh, _tag
+  -- 2. remove tag from key column, if known
+  FROM "group" WHERE "id"=_id;
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
-  -- 4. update food to remove the tag from key, #key (if exists)
-    EXECUTE format('UPDATE "food" SET %I=array_remove(%I, %L), '||
-      '%I=array_to_string(array_remove(%I, %L), %L) WHERE %I @> ARRAY[%L]',
-      '#'||_key, '#'||_key, _tag, _key, '#'||_key, _tag, ', ', '#'||_key, _tag);
+    EXECUTE format('UPDATE %I SET %I=array_remove(%I, %L), '||
+      '%I=array_to_string(array_remove(%I, %L), %L)',
+      _id, _keyh, _keyh, _tag, _key, _keyh, _tag, ', ', _keyh, _tag);
   END IF;
+  -- 3. drop view
+  EXECUTE format('DROP VIEW IF EXISTS %I RESTRICT', _id);
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "group_restartone" (_a JSON)
+RETURNS VOID AS $$
+BEGIN
+  PERFORM group_stopone(_a->>'id');
+  PERFORM group_startone(_a->>'id');
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "group_start" (_a JSON)
+RETURNS VOID AS $$
+BEGIN
+  FOR _r IN EXECUTE format('SELECT "id" FROM "group"') LOOP
+  END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
