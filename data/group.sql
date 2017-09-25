@@ -79,7 +79,7 @@ DECLARE
 BEGIN
   -- 2. insert record into table
   INSERT INTO "group" SELECT * FROM
-  jsonb_populate_record(NULL::"group", table_default()::JSONB||_a::JSONB);
+  jsonb_populate_record(NULL::"group", table_default('group')::JSONB||_a::JSONB);
   -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
