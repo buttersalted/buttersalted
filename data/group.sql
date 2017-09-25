@@ -141,7 +141,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_upsert" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_refresh" (_a JSON)
 RETURNS VOID AS $$
 DECLARE
   _r "group";

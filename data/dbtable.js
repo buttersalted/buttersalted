@@ -82,7 +82,7 @@ _.call = function(fn, args) {
   // 1. generate argument list
   const a = format(args||[], '$%i', ',', 1);
   // 2. make a function call with arguments (for those extra secretives)
-  return this._db.query(`SELECT ${fn}(${a})`, args||[]);
+  return this._db.query(`SELECT ${this._id}_${fn}(${a})`, args||[]);
 };
 
 _.setup = function() {
