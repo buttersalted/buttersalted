@@ -30,7 +30,8 @@ BEGIN
     RAISE EXCEPTION 'invalid row %', _b::TEXT;
   END IF;
   -- 3. insert to table (hopefully valid data)
-  INSERT INTO "food" SELECT * FROM json_populate_record(NULL::"food", _b);
+  INSERT INTO "food" SELECT * FROM
+  jsonb_populate_record(NULL::"food", table_default('food')::JSONB||_b::JSONB);
 END;
 $$ LANGUAGE plpgsql;
 

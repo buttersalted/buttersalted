@@ -78,15 +78,16 @@ DECLARE
   _oid   TEXT;
 BEGIN
   -- 2. insert record into table
-  INSERT INTO "group" SELECT * FROM json_populate_record(NULL::"group", _a);
+  INSERT INTO "group" SELECT * FROM
+  jsonb_populate_record(NULL::"group", table_default()::JSONB||_a::JSONB);
   -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
   -- 5. insert types key, #key
     PERFORM type_insertone(json_build_object('id', _key,
-      'value', E'TEXT DEFAULT \'\''::TEXT));
+      'value', E'TEXT NOT NULL DEFAULT \'\''::TEXT));
     PERFORM type_insertone(json_build_object('id', '#'||_key,
-      'value', 'TEXT[] DEFAULT ARRAY[]::TEXT[]', 'index', 'gin'));
+      'value', 'TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[]', 'index', 'gin'));
   END IF;
   -- 7. create view and add tag to key
   PERFORM group_startone(_id);

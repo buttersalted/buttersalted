@@ -50,3 +50,11 @@ RETURNS TEXT AS $$
     query_format($2, ' SET ', '%I = %s', ', '),
     query_format($3, ' WHERE ', '%I LIKE %s', ' AND '));
 $$ LANGUAGE SQL STRICT IMMUTABLE;
+
+
+CREATE OR REPLACE FUNCTION "table_default" (TEXT)
+RETURNS JSON AS $$
+  SELECT json_object_agg(column_name, column_default)
+  FROM information_schema.columns
+  WHERE (table_schema, table_name) = ('public', $1);
+$$ LANGUAGE SQL STRICT IMMUTABLE;
