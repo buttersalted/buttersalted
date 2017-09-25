@@ -62,4 +62,4 @@ $$ LANGUAGE SQL;
 
 
 /* DEFAULT VALUES */
-INSERT INTO "type" VALUES ("Id", "INT");
+INSERT INTO "type" VALUES ('Id', 'INT');

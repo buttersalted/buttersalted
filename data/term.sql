@@ -43,4 +43,4 @@ $$ LANGUAGE SQL;
 
 
 /* DEFAULT VALUES */
-INSERT INTO "term" VALUES ("id", "Id");
+INSERT INTO "term" VALUES ('id', 'Id');
