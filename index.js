@@ -36,8 +36,10 @@ X.use((err, req, res, next) => {
 // product
 // ingredient
 /*
+- CASE HANDLING OF FOOD COLUMNS
 - RAW THINGS LOOK GOOD
 - TOOLS LIKE MYFITNESSPAL
+- REPLACE TERMS
 - USE LIMITS
 - FACE THE ROOKIES
 */
