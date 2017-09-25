@@ -123,11 +123,20 @@ RETURNS "group" AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "group_restartone" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_upsertone" (_a JSON)
 RETURNS VOID AS $$
+DECLARE
+  _len INT;
 BEGIN
-  PERFORM group_stopone(_a->>'id');
-  PERFORM group_startone(_a->>'id');
+  SELECT count(*) INTO _len FROM json_object_keys(_a);
+  IF _len = 1 THEN
+    PERFORM group_stopone(_a->>'id');
+    PERFORM group_startone(_a->>'id');
+  ELSE
+    SELECT row_to_json(group_selectone(_a))||_a INTO _a;
+    PERFORM group_deleteone(_a);
+    PERFORM group_insertone(_a);
+  END IF;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -138,7 +147,7 @@ DECLARE
   _r "group";
 BEGIN
   FOR _r IN EXECUTE query_selectlike('group', _a) LOOP
-    PERFORM group_restartone(_r.id);
+    PERFORM group_upsertone(_a);
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;
