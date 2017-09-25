@@ -117,12 +117,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
-RETURNS "group" AS $$
-  SELECT * FROM "group" WHERE "id"=$1->>'id';
-$$ LANGUAGE SQL;
-
-
 CREATE OR REPLACE FUNCTION "group_restartone" (_a JSON)
 RETURNS VOID AS $$
 BEGIN
@@ -142,3 +136,9 @@ BEGIN
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
+RETURNS "group" AS $$
+  SELECT * FROM "group" WHERE "id"=$1->>'id';
+$$ LANGUAGE SQL;
