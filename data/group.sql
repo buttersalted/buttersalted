@@ -134,7 +134,7 @@ BEGIN
     PERFORM group_stopone(_a->>'id');
     PERFORM group_startone(_a->>'id');
   ELSE
-    SELECT row_to_jsonb(group_selectone(_a))||_a INTO _a;
+    SELECT row_to_json(group_selectone(_a))::JSONB||_a INTO _a;
     PERFORM group_deleteone(_a);
     PERFORM group_insertone(_a);
   END IF;

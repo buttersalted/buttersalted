@@ -23,7 +23,7 @@ RETURNS VOID AS $$
 DECLARE
   -- 1. get base jsonb and row jsonb
   _b   JSONB := food_tobase(_a);
-  _row JSONB := row_to_jsonb(jsonb_populate_record(NULL::"food", _b));
+  _row JSONB := row_to_json(jsonb_populate_record(NULL::"food", _b))::JSONB;
 BEGIN
   -- 2. does it fit in the row (no extra columns)?
   IF NOT jsonb_keys(_row) @> jsonb_keys(_b) THEN
