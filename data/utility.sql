@@ -54,7 +54,7 @@ $$ LANGUAGE SQL STRICT IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION "table_default" (TEXT)
 RETURNS JSON AS $$
-  SELECT json_object_agg(column_name, column_default)
+  SELECT json_object_agg(column_name, replace(split_part(column_default,'::',1), E'\'', ''))
   FROM information_schema.columns
   WHERE (table_schema, table_name) = ('public', $1);
 $$ LANGUAGE SQL STRICT IMMUTABLE;

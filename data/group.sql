@@ -87,7 +87,7 @@ BEGIN
     PERFORM type_insertone(json_build_object('id', _key,
       'value', E'TEXT NOT NULL DEFAULT \'\''::TEXT));
     PERFORM type_insertone(json_build_object('id', '#'||_key,
-      'value', 'TEXT[] NOT NULL DEFAULT {}', 'index', 'gin'));
+      'value', 'TEXT[] NOT NULL DEFAULT ', 'index', 'gin'));
   END IF;
   -- 7. create view and add tag to key
   PERFORM group_startone(_id);
