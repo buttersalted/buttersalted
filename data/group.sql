@@ -118,12 +118,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_selectone" (JSONB)
-RETURNS "group" AS $$
-  SELECT * FROM "group" WHERE "id"=$1->>'id';
-$$ LANGUAGE SQL;
-
-
 CREATE OR REPLACE FUNCTION "group_upsertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
@@ -153,3 +147,9 @@ BEGIN
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "group_selectone" (JSONB)
+RETURNS SETOF "group" AS $$
+  SELECT * FROM "group" WHERE "id"=$1->>'id';
+$$ LANGUAGE SQL;

@@ -37,6 +37,6 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION "term_selectone" (JSONB)
-RETURNS "term" AS $$
+RETURNS SETOF "term" AS $$
   SELECT * FROM "term" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;

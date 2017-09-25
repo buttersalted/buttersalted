@@ -56,6 +56,6 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION "type_selectone" (JSONB)
-RETURNS "type" AS $$
+RETURNS SETOF "type" AS $$
   SELECT * FROM "type" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;

@@ -50,6 +50,6 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION "unit_selectone" (JSONB)
-RETURNS "unit" AS $$
+RETURNS SETOF "unit" AS $$
   SELECT * FROM "unit" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
