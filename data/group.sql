@@ -123,13 +123,22 @@ RETURNS "group" AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "group_restart" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_restartonez" (_a JSON)
+RETURNS VOID AS $$
+BEGIN
+  PERFORM group_stopone(_a->>'id');
+  PERFORM group_startone(_a->>'id');
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "group_restartz" (_a JSON)
 RETURNS VOID AS $$
 DECLARE
   _r "group";
 BEGIN
   FOR _r IN EXECUTE query_selectlike('group', _a) LOOP
-    group_restartone(_r.id);
+    group_restartonez(_r.id);
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;
