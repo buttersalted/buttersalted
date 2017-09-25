@@ -43,6 +43,6 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION "food_selectone" (JSONB)
-RETURNS "food" AS $$
+RETURNS SETOF "food" AS $$
   SELECT * FROM "food" WHERE "id"=($1->>'id')::INT;
 $$ LANGUAGE SQL;
