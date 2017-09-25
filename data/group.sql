@@ -141,13 +141,14 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_restart" (_a JSON)
+CREATE OR REPLACE FUNCTION "group_upsert" (_a JSON)
 RETURNS VOID AS $$
 DECLARE
   _r "group";
 BEGIN
   FOR _r IN EXECUTE query_selectlike('group', _a) LOOP
-    PERFORM group_upsertone(_a);
+    PERFORM group_stopone(_r.id);
+    PERFORM group_startone(_r.id);
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;
