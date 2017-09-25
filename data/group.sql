@@ -68,24 +68,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "group_restartone" (_a JSON)
-RETURNS VOID AS $$
-BEGIN
-  PERFORM group_stopone(_a->>'id');
-  PERFORM group_startone(_a->>'id');
-END;
-$$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION "group_start" (_a JSON)
-RETURNS VOID AS $$
-BEGIN
-  FOR _r IN EXECUTE format('SELECT "id" FROM "group"') LOOP
-  END LOOP;
-END;
-$$ LANGUAGE plpgsql;
-
-
 CREATE OR REPLACE FUNCTION "group_insertone" (_a JSON)
 RETURNS VOID AS $$
 DECLARE
@@ -97,19 +79,17 @@ DECLARE
 BEGIN
   -- 2. insert record into table
   INSERT INTO "group" SELECT * FROM json_populate_record(NULL::"group", _a);
-  -- 3. create view (id) using value
-  EXECUTE format('CREATE OR REPLACE VIEW %I AS %s', _id, _value);
   -- 4. is this the first group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
   -- 5. insert types key, #key
     PERFORM type_insertone(json_build_object('id', _key,
-      'value', E'TEXT NOT NULL DEFAULT \'\''));
+      'value', E'TEXT NOT NULL DEFAULT \'\''::TEXT));
     PERFORM type_insertone(json_build_object('id', '#'||_key,
       'value', 'TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[]', 'index', 'gin'));
   END IF;
-  -- 7. add tag to key
-  PERFORM group_executeone(_a);
+  -- 7. create view and add tag to key
+  PERFORM group_startone(_id);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -122,8 +102,8 @@ DECLARE
   _key TEXT := _a->>'key';
   _oid TEXT;
 BEGIN
-  -- 2. remove tag from key
-  PERFORM group_unexecuteone(_a);
+  -- 2. drop view and remove tag from key
+  PERFORM group_stopone(_id);
   -- 3. is this the last group with that key?
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
@@ -131,8 +111,7 @@ BEGIN
     PERFORM type_deleteone(json_build_object('id', _key));
     PERFORM type_deleteone(json_build_object('id', '#'||_key));
   END IF;
-  -- 5. drop view and delete row
-  EXECUTE format('DROP VIEW IF EXISTS %I RESTRICT', _id);
+  -- 5. delete row
   DELETE FROM "group" WHERE "id"=_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -142,3 +121,24 @@ CREATE OR REPLACE FUNCTION "group_selectone" (JSON)
 RETURNS "group" AS $$
   SELECT * FROM "group" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION "group_restartone" (_a JSON)
+RETURNS VOID AS $$
+BEGIN
+  PERFORM group_stopone(_a->>'id');
+  PERFORM group_startone(_a->>'id');
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "group_restart" (_a JSON)
+RETURNS VOID AS $$
+DECLARE
+  _r "group";
+BEGIN
+  FOR _r IN EXECUTE query_selectlike('group', _a) LOOP
+    group_restartone(_r.id);
+  END LOOP;
+END;
+$$ LANGUAGE plpgsql;
