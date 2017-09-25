@@ -52,7 +52,6 @@ _.selectOne = function(a) {
 };
 
 _.insertOne = function(a) {
-  console.log(a);
   // 1. insert new row into the table
   return this._db.query(`SELECT ${this._id}_insertone($1)`, [a]).then((ans) => {
   // 2. if map exists, then add it there too
