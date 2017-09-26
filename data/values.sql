@@ -143,6 +143,7 @@ SELECT type_insertoneifnotexists('Serine', 'REAL');
 SELECT type_insertoneifnotexists('Hydroxyproline', 'REAL');
 SELECT type_insertoneifnotexists('Genistein', 'REAL');
 SELECT type_insertoneifnotexists('Total isoflavones', 'REAL');
+SELECT type_insertoneifnotexists('Phytosterols', 'REAL');
 SELECT type_insertoneifnotexists('Alcohol, ethyl', 'REAL');
 SELECT type_insertoneifnotexists('Caffeine', 'REAL');
 SELECT type_insertoneifnotexists('Theobromine', 'REAL');
