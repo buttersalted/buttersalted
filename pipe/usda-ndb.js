@@ -31,8 +31,8 @@ module.exports = function(dst) {
   // 1. setup get from usda-ndb
   x.get('/', (req, res, next) => {
     const z = [];
-    each(body(req), (ans) => z.push(convert(ans))).then(() => res.json(z));
-  }, next);
+    each(body(req), (ans) => z.push(convert(ans))).then(() => res.json(z), next);
+  });
   // 2. setup insert using usda-ndb
   x.post('/', (req, res, next) => {
     var z = [], p = [], e = 0;
@@ -46,7 +46,7 @@ module.exports = function(dst) {
     // 2. return status of each insert
     }).then(() => Promise.all(p)).then(() => {
       (e? res.status(400) : res).json(z);
-    });
-  }, next);
+    }, next);
+  });
   return x;
 };
