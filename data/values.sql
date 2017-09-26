@@ -157,6 +157,7 @@ SELECT x('Formononetin', 'REAL');
 SELECT x('Apigenin', 'REAL');
 SELECT x('Naringenin', 'REAL');
 SELECT x('Luteolin', 'REAL');
+SELECT x('Isorhamnetin', 'REAL');
 SELECT x('Myricetin', 'REAL');
 SELECT x('Quercetin', 'REAL');
 SELECT x('Kaempferol', 'REAL');
