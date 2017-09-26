@@ -20,10 +20,10 @@ const each = function(a, fn) {
 
 const convert = function(a) {
   // 1. convert object to row format
-  return Object.keys(a).map((k) => Object.assign(a[k], {
-    'Id': parseInt(k.substring(0, k.indexOf(','))),
-    'Name': k.substring(k.indexOf(',')+1).trim()
-  }));
+  const k = Object.keys(a)[0], v = a[k];
+  v['Id'] = parseInt(k.substring(0, k.indexOf(',')));
+  v['Name'] = k.substring(k.indexOf(',')+1).trim();
+  return v;
 };
 
 module.exports = function(dst) {
