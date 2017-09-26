@@ -16,8 +16,8 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION "unit_tobase" (TEXT, TEXT)
 RETURNS REAL AS $$
   -- 1. number * unit factor * column factor
-  SELECT (split_part($1, ' ', 1)::REAL)*
-  coalesce(unit_value(split_part($1, ' ', 2)), 1)*
+  SELECT (real_get($1)::REAL)*
+  coalesce(unit_value(btrim(replace($1, real_get($1), ''))), 1)*
   coalesce(unit_value($2), 1);
 $$ LANGUAGE SQL;
 

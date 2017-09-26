@@ -58,3 +58,9 @@ RETURNS JSONB AS $$
   FROM information_schema.columns
   WHERE (table_schema, table_name) = ('public', $1);
 $$ LANGUAGE SQL STRICT IMMUTABLE;
+
+
+CREATE OR REPLACE FUNCTION "real_get" (TEXT)
+RETURNS TEXT AS $$
+  SELECT (regexp_matches('-0.9 1.0 1 -2 -0.1e-9', '[+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?'))[1];
+$$ LANGUAGE SQL STRICT IMMUTABLE;
