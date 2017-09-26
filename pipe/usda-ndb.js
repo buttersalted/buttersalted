@@ -4,9 +4,9 @@ const usdaNdb = require('usda-ndb');
 const body = (req) => Object.assign(req.body, req.query, req.params);
 
 const each = function(a, fn) {
-  // 1. get start, stop, step
-  const inc = Math.sign(a.step||1);
-  const start = a.start||0, stop = a.stop||start+1, step = a.step||1;
+  // 1. get start, stop, step, inc
+  const start = parseInt(a.start)||0, stop = parseInt(a.stop)||start+1;
+  const step = parseInt(a.step)||1, inc = Math.sign(step);
   const fetch = (id) => pro.then(() => usdaNdb(id)).then(fn);
   // 2. get object for every id, and call the callback fn
   for(var i=start, pro=Promise.resolve(); i!==stop;) {
