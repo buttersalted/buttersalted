@@ -42,10 +42,12 @@ RETURNS SETOF "term" AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_insertone" (TEXT, TEXT)
+CREATE OR REPLACE FUNCTION "term_insertone" (_id TEXT, _value TEXT)
 RETURNS VOID AS $$
-  SELECT term_insertone(jsonb_build_object('id', $1, 'value', $2));
-$$ LANGUAGE SQL;
+BEGIN
+  PERFORM term_insertone(jsonb_build_object('id', _id, 'value', _value));
+END;
+$$ LANGUAGE plpgsql;
 
 
 /* DEFAULT VALUES */

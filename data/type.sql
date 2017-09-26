@@ -61,10 +61,12 @@ RETURNS SETOF "type" AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "type_insertone" (TEXT, TEXT)
+CREATE OR REPLACE FUNCTION "type_insertone" (_id TEXT, _value TEXT)
 RETURNS VOID AS $$
-  SELECT type_insertone(jsonb_build_object('id', $1, 'value', $2));
-$$ LANGUAGE SQL;
+BEGIN
+  PERFORM type_insertone(jsonb_build_object('id', _id, 'value', _value));
+END;
+$$ LANGUAGE plpgsql;
 
 
 /* DEFAULT VALUES */
