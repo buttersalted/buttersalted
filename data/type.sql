@@ -61,9 +61,8 @@ RETURNS SETOF "type" AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "type_insertone" (_id TEXT, _value TEXT)
+CREATE OR REPLACE FUNCTION "type_insertoneifnotexists" (TEXT, TEXT)
 RETURNS VOID AS $$
-BEGIN
-  PERFORM type_insertone(jsonb_build_object('id', _id, 'value', _value));
-END;
-$$ LANGUAGE plpgsql;
+  SELECT type_insertone(jsonb_build_object('id', $1, 'value', $2))
+  WHERE NOT EXISTS (SELECT "id" FROM "type" WHERE "id"=$1);
+$$ LANGUAGE SQL;

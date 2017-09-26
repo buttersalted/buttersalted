@@ -42,9 +42,8 @@ RETURNS SETOF "term" AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_insertone" (_id TEXT, _value TEXT)
+CREATE OR REPLACE FUNCTION "term_insertoneifnotexists" (TEXT, TEXT)
 RETURNS VOID AS $$
-BEGIN
-  PERFORM term_insertone(jsonb_build_object('id', _id, 'value', _value));
-END;
-$$ LANGUAGE plpgsql;
+  SELECT term_insertone(jsonb_build_object('id', $1, 'value', $2))
+  WHERE NOT EXISTS (SELECT "id" FROM "term" WHERE "id"=$1);
+$$ LANGUAGE SQL;
