@@ -35,7 +35,7 @@ module.exports = function(dst) {
   });
   // 2. setup insert using usda-ndb
   x.post('/', (req, res, next) => {
-    var z = [], p = [], e = 0;
+    var z = {}, p = [], e = 0;
     // 1. get all objects and insert as rows
     each(body(req), (ans) => {
       const row = convert(ans);
