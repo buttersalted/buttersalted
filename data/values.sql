@@ -6,6 +6,7 @@ $$ LANGUAGE SQL;
 INSERT INTO "type" VALUES ('Id', 'INT NOT NULL')
 ON CONFLICT ("id") DO NOTHING;
 SELECT x('Name', 'TEXT NOT NULL');
+SELECT x('Scientific Name', 'TEXT');
 SELECT x('Manufacturer', 'TEXT');
 SELECT x('Food Group', 'TEXT');
 SELECT x('Carbohydrate Factor', 'REAL');
