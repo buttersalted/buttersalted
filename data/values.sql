@@ -146,6 +146,7 @@ SELECT x('Proline', 'REAL');
 SELECT x('Serine', 'REAL');
 SELECT x('Hydroxyproline', 'REAL');
 SELECT x('Genistein', 'REAL');
+SELECT x('Daidzein', 'REAL');
 SELECT x('Total isoflavones', 'REAL');
 SELECT x('Phytosterols', 'REAL');
 SELECT x('Alcohol, ethyl', 'REAL');
