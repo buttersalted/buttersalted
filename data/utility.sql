@@ -61,7 +61,7 @@ $$ LANGUAGE SQL STRICT IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION "table_default" (TEXT)
 RETURNS JSONB AS $$
-  SELECT jsonb_object_agg(column_name, replace(split_part(column_default,'::',1), E'\'', ''))
+  SELECT jsonb_object_agg(column_name, btrim(split_part(column_default,'::',1), E' \''))
   FROM information_schema.columns
   WHERE (table_schema, table_name) = ('public', $1);
 $$ LANGUAGE SQL STRICT IMMUTABLE;
