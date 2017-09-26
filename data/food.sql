@@ -30,7 +30,6 @@ BEGIN
     RAISE EXCEPTION 'invalid column(s): %',
     array_removes(jsonb_keys(_b), jsonb_keys(_row))::TEXT;
   END IF;
-  RAISE EXCEPTION 'valid row %', _a::TEXT;
   -- 3. insert to table (hopefully valid data)
   INSERT INTO "food" SELECT * FROM
   jsonb_populate_record(NULL::"food", table_default('food')||_b);
