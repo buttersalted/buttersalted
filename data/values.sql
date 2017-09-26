@@ -161,6 +161,7 @@ SELECT x('Isorhamnetin', 'REAL');
 SELECT x('Hesperetin', 'REAL');
 SELECT x('Myricetin', 'REAL');
 SELECT x('Quercetin', 'REAL');
+SELECT x('Eriodictyol', 'REAL');
 SELECT x('Kaempferol', 'REAL');
 SELECT x('Biochanin A', 'REAL');
 SELECT x('(-)-Epicatechin', 'REAL');
