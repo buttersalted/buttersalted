@@ -32,7 +32,7 @@ module.exports = function(dst) {
   x.get('/', (req, res, next) => {
     const z = [];
     each(body(req), (ans) => z.push(convert(ans))).then(() => res.json(z));
-  }, next));
+  }, next);
   // 2. setup insert using usda-ndb
   x.post('/', (req, res, next) => {
     var z = [], p = [], e = 0;
