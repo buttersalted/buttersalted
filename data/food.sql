@@ -27,7 +27,8 @@ DECLARE
 BEGIN
   -- 2. does it fit in the row (no extra columns)?
   IF NOT jsonb_keys(_row) @> jsonb_keys(_b) THEN
-    RAISE EXCEPTION 'invalid row %', _b::TEXT;
+    RAISE EXCEPTION 'invalid column(s): %',
+    array_remove(jsonb_keys(_b), jsonb_keys(_row))::TEXT;
   END IF;
   RAISE EXCEPTION 'valid row %', _a::TEXT;
   -- 3. insert to table (hopefully valid data)
