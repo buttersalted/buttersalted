@@ -66,6 +66,13 @@ SELECT type_insertoneifnotexists('Ash', 'REAL');
 SELECT type_insertoneifnotexists('Carbohydrate, by difference', 'REAL');
 SELECT type_insertoneifnotexists('Fiber, total dietary', 'REAL');
 SELECT type_insertoneifnotexists('Sugars, total', 'REAL');
+SELECT type_insertoneifnotexists('Lactose', 'REAL');
+SELECT type_insertoneifnotexists('Maltose', 'REAL');
+SELECT type_insertoneifnotexists('Sucrose', 'REAL');
+SELECT type_insertoneifnotexists('Fructose', 'REAL');
+SELECT type_insertoneifnotexists('Galactose', 'REAL');
+SELECT type_insertoneifnotexists('Glucose (dextrose)', 'REAL');
+
 SELECT type_insertoneifnotexists('Calcium, Ca', 'REAL');
 SELECT type_insertoneifnotexists('Iron, Fe', 'REAL');
 SELECT type_insertoneifnotexists('Magnesium, Mg', 'REAL');
