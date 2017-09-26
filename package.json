@@ -1,6 +1,6 @@
 {
   "name": "foodsql",
-  "version": "0.0.246",
+  "version": "0.0.247",
   "description": "A new way to understand food through queries.",
   "main": "index.js",
   "scripts": {
@@ -22,14 +22,14 @@
   },
   "homepage": "https://github.com/wolfram77/web-foodsql#readme",
   "dependencies": {
-    "body-parser": "^1.18.1",
-    "express": "^4.15.4",
+    "body-parser": "^1.18.2",
+    "express": "^4.15.5",
     "is-stream": "^1.1.0",
     "object-format": "0.0.7",
     "object-rename": "^0.1.1",
     "pg": "^7.3.0",
     "pg-connection-string": "^2.0.0",
     "stream-string": "^2.0.0",
-    "usda-ndb": "^0.1.5"
+    "usda-ndb": "^0.1.14"
   }
 }
