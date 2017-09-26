@@ -46,7 +46,7 @@ module.exports = function(dst) {
     // 2. return status of each insert
     }).then(() => Promise.all(p)).then(() => {
       (e? res.status(400) : res).json(z);
-    }, next);
-  });
+    });
+  }, next);
   return x;
 };
