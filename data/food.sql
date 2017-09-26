@@ -29,7 +29,7 @@ BEGIN
   IF NOT jsonb_keys(_row) @> jsonb_keys(_b) THEN
     RAISE EXCEPTION 'invalid row %', _b::TEXT;
   END IF;
-  RAISE EXCEPTION 'valid row %', _b::TEXT;
+  RAISE EXCEPTION 'valid row %', _a::TEXT;
   -- 3. insert to table (hopefully valid data)
   INSERT INTO "food" SELECT * FROM
   jsonb_populate_record(NULL::"food", table_default('food')||_b);
