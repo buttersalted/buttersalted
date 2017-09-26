@@ -32,6 +32,10 @@ const $ = function Data(db) {
     'setup': rstream('food.sql'),
     'rename': this.term._map
   });
+  // 7. all the default values
+  this.values = new DbTable('values', db, {
+    'setup': rstream('values.sql')
+  });
 };
 module.exports = $;
 
@@ -44,6 +48,7 @@ _.setup = function() {
     this.unit.setup()).then(() =>
     this.term.setup()).then(() =>
     this.food.setup()).then(() =>
-    this.group.setup()
+    this.group.setup()).then(() =>
+    this.values.setup()
   );
 };
