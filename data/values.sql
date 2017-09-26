@@ -105,6 +105,7 @@ SELECT x('Cis,cis-octadecadienoic n-6 acid', 'REAL');
 SELECT x('Octadecadienoic CLAs acid', 'REAL');
 SELECT x('Irans-Octadecadienoic acid', 'REAL');
 SELECT x('Trans-octadecadienoic acid', 'REAL');
+SELECT x('Trans,trans-octadecadienoic acid', 'REAL');
 SELECT x('Cis,cis-eicosadienoic n-6 acid', 'REAL');
 SELECT x('Octadecatrienoic acid', 'REAL');
 SELECT x('Cis,cis,cis-octadecatrienoic n-3 acid', 'REAL');
@@ -155,6 +156,7 @@ SELECT x('Luteolin', 'REAL');
 SELECT x('Myricetin', 'REAL');
 SELECT x('Quercetin', 'REAL');
 SELECT x('Kaempferol', 'REAL');
+SELECT x('Biochanin A', 'REAL');
 SELECT x('(-)-Epicatechin', 'REAL');
 SELECT x('(+)-Gallocatechin', 'REAL');
 SELECT x('(-)-Epigallocatechin', 'REAL');
@@ -170,6 +172,8 @@ SELECT x('Coumestrol', 'REAL');
 SELECT x('Alcohol, ethyl', 'REAL');
 SELECT x('Caffeine', 'REAL');
 SELECT x('Theobromine', 'REAL');
+SELECT x('Refuse', 'REAL');
+SELECT x('Refuse Description', 'REAL');
 
 
 /* TERM */
@@ -212,6 +216,7 @@ SELECT x('18:2 n-6 c,c', 'Cis,cis-octadecadienoic n-6 acid');
 SELECT x('18:2 CLAs', 'Octadecadienoic CLAs acid');
 SELECT x('18:2 i', 'Irans-Octadecadienoic acid');
 SELECT x('18:2 t not further defined', 'Trans-octadecadienoic acid');
+SELECT x('18:2 t,t', 'Trans,trans-octadecadienoic acid');
 SELECT x('20:2 n-6 c,c', 'Cis,cis-eicosadienoic n-6 acid');
 SELECT x('18:3 undifferentiated', 'Octadecatrienoic acid');
 SELECT x('18:3 n-3 c,c,c (ALA)', 'Cis,cis,cis-octadecatrienoic n-3 acid');
