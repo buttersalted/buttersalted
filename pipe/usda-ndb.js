@@ -22,7 +22,7 @@ module.exports = function(dst) {
       (ans) => z[v.Id] = ans.rowCount,
       (err) => {e = 1; return z[v.Id] = err.message;}
     );
-    for(var v in a) p.push(insert(v));
+    for(var v of a) p.push(insert(v));
     Promise.all(p).then(() => (e? res.status(400) : res).json(z));
   }, next));
   return x;
