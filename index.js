@@ -19,7 +19,9 @@ const json = Json(data);
 const pipe = Pipe(data);
 const sql = new Sql(dbpool);
 server.listen(E.PORT||80);
-data.setup();
+data.setup().catch((err) => {
+  console.error(err);
+});
 
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
