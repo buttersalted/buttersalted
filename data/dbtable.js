@@ -111,9 +111,6 @@ _.setup = function() {
   // 2. run the setup commands (just crash if its garbage $)
   }).then((ans) => {
     return this._db.query(ans);
-  // 3. get a map if its required (opt.map = true)
-  }).then((ans) => {
-    if(this._opt.map) return this.select({}).then(() => ans);
-    return ans;
+  // NOTE: to fill up the map call select({})
   });
 };
