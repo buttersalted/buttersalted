@@ -21,7 +21,14 @@ _.select = function(a, l) {
   const p = [], w = format(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
   const q = (w? ' WHERE '+w : '')+(l!=null? ' LIMIT '+l : '');
   // 2. execute the query (if its still valid)
-  return this._db.query(`SELECT * FROM "${this._id}"`+q, p);
+  return this._db.query(`SELECT * FROM "${this._id}"`+q, p).then((ans) => {
+  // 3. get a map if its required (opt.map = true)
+    if(!this._opt.map) return ans;
+    const map = this._map;
+    for(var i=0, I=ans.rowCount, R=ans.rows; i<I; i++)
+      map.set(R[i].id, R[i]);
+    return ans;
+  });
 };
 
 _.insert = function(a) {
@@ -106,10 +113,7 @@ _.setup = function() {
     return this._db.query(ans);
   // 3. get a map if its required (opt.map = true)
   }).then((ans) => {
-    return !this._opt.map? ans : this.select({}).then((ans) => {
-      const map = this._map;
-      for(var i=0, I=ans.rowCount, R=ans.rows; i<I; i++)
-        map.set(R[i].id, R[i]);
-    });
+    if(this._opt.map) return this.select({}).then(() => ans);
+    return ans;
   });
 };
