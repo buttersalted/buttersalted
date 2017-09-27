@@ -81,6 +81,7 @@ _.upsertOne = function(a) {
 
 _.deleteOne = function(a) {
   a = rename(a, this._opt.rename||{});
+  console.log('deleteOne', this._id, a);
   // 1. delete row from table
   return this._db.query(`SELECT ${this._id}_deleteone($1)`, [a]).then((ans) => {
   // 2. if map exists, then why still keep it there?
