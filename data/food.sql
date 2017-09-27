@@ -39,11 +39,11 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "food_deleteone" (JSONB)
 RETURNS VOID AS $$
-  DELETE FROM "food" WHERE "Id"=($1->>'Id')::INT;
+  DELETE FROM "food" WHERE "Id"=(food_tobase($1)->>'Id')::INT;
 $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION "food_selectone" (JSONB)
 RETURNS SETOF "food" AS $$
-  SELECT * FROM "food" WHERE "Id"=($1->>'Id')::INT;
+  SELECT * FROM "food" WHERE "Id"=(food_tobase($1)->>'Id')::INT;
 $$ LANGUAGE SQL;
