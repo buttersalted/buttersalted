@@ -52,7 +52,7 @@ _.setup = function() {
     this.values.setup()).then(() =>
   // 2. fill up the maps (order, uhunhh)
     this.type.select({})).then(() =>
-    this.unit.select({}).then(() =>
+    this.unit.select({})).then(() =>
     this.term.select({})
   );
 };
