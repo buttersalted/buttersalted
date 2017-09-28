@@ -1,3 +1,7 @@
+document.querySelector('#sql').onsubmit = function() {
+  console.log(this);
+};
+
 m.request({'method': 'GET', 'url': '/json/type'}).then((ans) => {
   const thead = document.querySelector('thead');
   m.render(thead, m('tr', ans.map((a) => m('th', a.id))));
