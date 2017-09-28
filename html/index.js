@@ -1,5 +1,6 @@
 document.querySelector('#sql').onsubmit = function() {
   console.log(this);
+  return false;
 };
 
 m.request({'method': 'GET', 'url': '/json/type'}).then((ans) => {
