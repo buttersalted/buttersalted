@@ -1,5 +1,5 @@
 document.querySelector('#sql').onsubmit = function() {
-  const value = encodeURI(this.elements.value);
+  const value = encodeURI(this.elements.value.value);
   const thead = document.querySelector('thead');
   const tbody = document.querySelector('tbody');
   m.request({'method': 'GET', 'url': `/sql/${value}`}).then((ans) => {
