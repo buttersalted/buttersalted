@@ -1,13 +1,12 @@
 document.querySelector('#sql').onsubmit = function() {
-  console.log(this);
+  const value = this.elements.value;
+  const thead = document.querySelector('thead');
+  const tbody = document.querySelector('tbody');
+  m.request({'method': 'GET', 'url': '/json/type'}).then((ans) => {
+    if(!ans.length) return;
+    const cols = Object.keys(ans[0]);
+    m.render(thead, m('tr', cols.map((k) => m('th', k))));
+    m.render(tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
+  });
   return false;
 };
-
-m.request({'method': 'GET', 'url': '/json/type'}).then((ans) => {
-  const thead = document.querySelector('thead');
-  m.render(thead, m('tr', ans.map((a) => m('th', a.id))));
-});
-m.request({'method': 'GET', 'url': '/json/food'}).then((ans) => {
-  const tbody = document.querySelector('tbody');
-  m.render(tbody, ans.map((a) => m('tr', Object.keys(a).map((k) => m('td', a[k])))));
-});
