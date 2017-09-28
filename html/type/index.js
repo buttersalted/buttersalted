@@ -1,4 +1,4 @@
 document.querySelector('form').onsubmit = function() {
-  console.log(this.elements.http.value);
+  console.log(this.elements.submitted);
   return false;
 };
