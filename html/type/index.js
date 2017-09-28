@@ -5,6 +5,6 @@ for(var e in document.querySelectorAll('form [type=submit]'))
   e.onclick = dosubmit;
 
 document.querySelector('form').onsubmit = function() {
-  console.log(this.submitted);
+  console.log(this.elements.http.value);
   return false;
 };
