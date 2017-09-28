@@ -2,7 +2,7 @@ document.querySelector('#sql').onsubmit = function() {
   const value = encodeURI(this.elements.value);
   const thead = document.querySelector('thead');
   const tbody = document.querySelector('tbody');
-  m.request({'method': 'GET', 'url': `/json/sql/${value}`}).then((ans) => {
+  m.request({'method': 'GET', 'url': `/sql/${value}`}).then((ans) => {
     if(!ans.length) return;
     const cols = Object.keys(ans[0]);
     m.render(thead, m('tr', cols.map((k) => m('th', k))));
