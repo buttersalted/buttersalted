@@ -1,8 +1,8 @@
 const dosubmit = function() {
   console.log('name', this.name);
   console.log('value', this.value);
-  this.form[this.name].value = this.value;
-  console.log('set value', this.form[this.name].value);
+  this.form.elements[this.name].value = this.value;
+  console.log('set value', this.form.elements[this.name].value);
 
 };
 for(var e of document.querySelectorAll('form [type=submit]'))
