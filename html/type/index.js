@@ -1,14 +1,10 @@
 const dosubmit = function() {
-  console.log('name', this.name);
-  console.log('value', this.value);
-  this.form.elements[this.name].value = this.value;
-  console.log('set value', this.form.elements[this.name].value);
-
+  this.form.submitted = this.value;
 };
 for(var e of document.querySelectorAll('form [type=submit]'))
   e.onclick = dosubmit;
 
 document.querySelector('form').onsubmit = function() {
-  console.log(this.elements.http.value);
+  console.log(this.submitted);
   return false;
 };
