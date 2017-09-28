@@ -28,9 +28,9 @@ X.use(bodyParser.urlencoded({'extended': true}));
 X.use('/json', json);
 X.use('/pipe', pipe);
 X.use('/sql', sql);
-X.use('/', (req, res) => {
-  res.send('Haaarrry Ppottterrr ...');
-});
+//X.use('/', (req, res) => {
+//});
+X.use('/', express.static(__dirname+'/html'));
 X.use((err, req, res, next) => {
   res.status(400).send(err.message);
   console.error(err);
