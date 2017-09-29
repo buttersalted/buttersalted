@@ -1,11 +1,14 @@
 const renderTable = function(ans) {
   const thead = document.querySelector('#sql-ans thead');
   const tbody = document.querySelector('#sql-ans tbody');
-  if(!(ans instanceof Array)) m.render(thead, m('tr', m('th', ans)));
-  else if(!ans.length) m.render(thead, m('tr', m('th', 'no results.')));
-  else {
+  if(ans instanceof Array && ans.length) {
     m.render(thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
     m.render(tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
+  }
+  else {
+    if(!(ans instanceof Array)) m.render(thead, m('tr', m('th', ans)));
+    else m.render(thead, m('tr', m('th', 'no results.')));
+    m.render(tbody, null);
   }
 };
 
