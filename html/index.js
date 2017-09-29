@@ -6,8 +6,7 @@ const renderTable = function(ans) {
     m.render(tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
   }
   else {
-    console.log('handling error', ans);
-    if(!(ans instanceof Array)) m.render(thead, m('tr', m('th', ans)));
+    if(ans instanceof Error) m.render(thead, m('tr', m('th', ans.message)));
     else m.render(thead, m('tr', m('th', 'no results.')));
     m.render(tbody, null);
   }
