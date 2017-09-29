@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ace.js"></script>
   <script src="https://unpkg.com/mithril@1.1.4/mithril.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/bare-css/css/bare.min.css">
   <link rel="stylesheet" href="index.css">
@@ -14,9 +15,7 @@
 <label>
 <input type="checkbox">
   <header>
-    <a href="/"><img src="/favicon.png" alt="FoodSQL: ">
-      Ask Questions about Food with SQL
-    </a>
+    <a href="/"><img src="/favicon.png" alt="FoodSQL: ">FoodSQL</a>
   </header>
   <ul>
     <li><a href="#!/food.html">Food</a></li>
@@ -28,6 +27,13 @@
 </label>
 </nav>
 
+<main>
+  <div id="editor">
+    -- ask questions about food with sql
+    SELECT * FROM "food" ORDER BY "Vitamin C"
+  </div>
+
+</main>
   <h1>Haaarrry Ppottterrr ...</h1>
   <form action="sql" method="get" id="sql">
     <textarea name="value" rows="8" cols="80"></textarea>

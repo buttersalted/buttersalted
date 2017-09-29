@@ -1,3 +1,7 @@
+var editor = ace.edit("editor");
+editor.setTheme("ace/theme/monokai");
+editor.getSession().setMode("ace/mode/pgsql");
+
 document.querySelector('#sql').onsubmit = function() {
   const value = encodeURI(this.elements.value.value);
   const thead = document.querySelector('thead');
