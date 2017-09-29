@@ -10,7 +10,7 @@ const onrequest = function(ans) {
   const tbody = document.querySelector('tbody');
   if(!(ans instanceof Array)) return m.render(thead, m('tr', m('th', ans)));
   m.render(thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
-  m.render(tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
+  if(ans.length>0) m.render(tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
 };
 
 document.querySelector('form').onsubmit = function() {
