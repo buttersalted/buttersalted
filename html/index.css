@@ -1,7 +1,4 @@
-nav {
-  font-size: 2rem;
-}
-#editor div {
+#editor {
   position: absolute;
   width: 100%;
 }
