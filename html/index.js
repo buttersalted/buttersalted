@@ -1,5 +1,5 @@
 var editor = ace.edit("editor");
-editor.setTheme("ace/theme/monokai");
+editor.setTheme("ace/theme/github");
 editor.getSession().setMode("ace/mode/pgsql");
 
 document.querySelector('#sql').onsubmit = function() {
