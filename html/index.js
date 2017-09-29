@@ -1,4 +1,4 @@
-var editor = ace.edit("editor");
+var editor = ace.edit("sql-value");
 editor.setTheme("ace/theme/clouds");
 editor.getSession().setMode("ace/mode/pgsql");
 
