@@ -9,6 +9,7 @@ const renderTable = function(ans) {
     if(ans instanceof Error) m.render(thead, m('tr', m('th', ans.message)));
     else m.render(thead, m('tr', m('th', 'no results.')));
     m.render(tbody, null);
+    console.log('handled');
   }
 };
 
