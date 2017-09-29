@@ -6,4 +6,5 @@
 }
 #sql-get {
   float: right;
+  z-index: 2;
 }
