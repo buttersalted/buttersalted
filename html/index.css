@@ -1,9 +1,9 @@
 nav {
   font-size: 2rem;
 }
-#editor { 
+#editor {
   position: absolute;
-  top: 0;
+  top: 200;
   right: 0;
   bottom: 0;
   left: 0;
