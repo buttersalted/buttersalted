@@ -1,8 +1,8 @@
-nav:not([class]) label {
-  max-width: none;
-}
+nav:not([class]) label { max-width: none; }
+main { padding-top: 2rem;}
 #logo {
-  width: 20%;
+  margin: auto;
+  width: 15%;
 }
 #sql-value {
   font-size: 1.4em;
