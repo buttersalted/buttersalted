@@ -6,6 +6,10 @@ nav:not([class]) a[active] {
 }
 main {
   padding-top: 2rem;
+  margin: auto;
+}
+form {
+  max-width: 40rem;
 }
 #logo {
   display: block;
