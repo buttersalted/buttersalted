@@ -7,11 +7,11 @@ main { padding-top: 2rem;}
   margin-bottom: 1rem;
   width: 16rem;
 }
-@media (max-height: 50rem) {
+@media (max-height: 32rem) {
   #logo { margin-top: 0; }
 }
 #sql-value {
-  font-size: 1.4em;
+  font-size: 1.44em;
   position: absolute;
   height: 100%;
   width: 100%;
