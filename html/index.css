@@ -12,6 +12,12 @@ form {
   margin: auto;
   padding: 8rem;
 }
+table {
+  text-align: center;
+}
+table th {
+  border-bottom: 4px solid #679;
+}
 #logo {
   display: block;
   margin: auto;
