@@ -4,7 +4,7 @@ main { padding-top: 2rem;}
   display: block;
   margin: auto;
   margin-top: 4rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   width: 16rem;
 }
 @media (max-height: 32rem) {
@@ -16,3 +16,4 @@ main { padding-top: 2rem;}
   height: 100%;
   width: 100%;
 }
+#sql-method { margin-top: 2rem;}
