@@ -12,7 +12,7 @@ form {
   margin: auto;
   padding: 8rem;
 }
-th {
+table:not([class]) th {
   border-bottom: 4px solid #679;
 }
 th, td {
