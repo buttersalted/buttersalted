@@ -1,9 +1,13 @@
+/* 1. header cosmeticization */
 nav:not([class]) label {
   max-width: none;
 }
 nav:not([class]) a[active] {
   border-bottom: 4px solid black;
 }
+
+
+/* 2. main beautification */
 main {
   padding-top: 2rem;
 }
@@ -38,7 +42,7 @@ th, td {
 #sql-method { margin-top: 2rem;}
 
 
-/* footer */
+/* 3. footer sundarization */
 html {
   height: 100%;
 }
