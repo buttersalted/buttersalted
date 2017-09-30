@@ -1,5 +1,12 @@
-nav:not([class]) label { max-width: none; }
-main { padding-top: 2rem;}
+nav:not([class]) label {
+  max-width: none;
+}
+nav a[active] {
+  border-bottom: 4px solid black;
+}
+main {
+  padding-top: 2rem;
+}
 #logo {
   display: block;
   margin: auto;
