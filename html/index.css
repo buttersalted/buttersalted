@@ -1,7 +1,7 @@
 nav:not([class]) label {
   max-width: none;
 }
-nav a[active] {
+nav:not([class]) a[active] {
   border-bottom: 4px solid black;
 }
 main {
