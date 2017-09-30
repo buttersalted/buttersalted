@@ -33,4 +33,8 @@ footer {
   bottom: 0;
   overflow: hidden;
   height: 60px;
+  max-width: none;
+}
+footer a {
+  padding: 0 1rem;
 }
