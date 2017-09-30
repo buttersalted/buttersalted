@@ -3,7 +3,9 @@ main { padding-top: 2rem;}
 #logo {
   display: block;
   margin: auto;
-  width: 15%;
+  margin-top: 4rem;
+  margin-bottom: 1rem;
+  width: 12%;
 }
 #sql-value {
   font-size: 1.4em;
