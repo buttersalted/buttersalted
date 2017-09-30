@@ -6,6 +6,7 @@ main { padding-top: 2rem;}
   margin-top: 4rem;
   margin-bottom: 2rem;
   width: 16rem;
+  height: 16rem;
 }
 @media (max-height: 32rem) {
   #logo { margin-top: 0; }
