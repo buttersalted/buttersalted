@@ -2,10 +2,7 @@ nav:not([class]) label {
   max-width: none;
 }
 #logo {
-  height: 30%;
-  background-image: url('/index.png');
-  background-position: center;
-  background-repeat: no-repeat;
+  width: 20%;
 }
 #sql-value {
   font-size: 1.4em;
