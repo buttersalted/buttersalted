@@ -1,4 +1,6 @@
-label { margin: none; }
+nav:not([class]) label {
+  max-width: none;
+}
 #sql-value {
   font-size: 1.4em;
   position: absolute;
