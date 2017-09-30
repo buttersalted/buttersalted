@@ -14,9 +14,8 @@ const onready = function() {
     var id = this.elements.id.value;
     var value = this.elements.value.value;
     const data = {'id': id, 'value': value};
-    m.request({'method': 'GET', 'url': '/json/unit', 'data': data}).then(
-      render, errornotify
-    );
+    m.request({'method': 'GET', 'url': '/json/unit', 'data': data}).then(render, errornotify);
+    return false;
   };
 };
 
