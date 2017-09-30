@@ -1,6 +1,7 @@
 nav:not([class]) label { max-width: none; }
 main { padding-top: 2rem;}
 #logo {
+  display: block;
   margin: auto;
   width: 15%;
 }
