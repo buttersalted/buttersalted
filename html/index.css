@@ -20,6 +20,9 @@ main { padding-top: 2rem;}
 
 
 /* footer */
+footer {
+  max-width: none;
+}
 /*
 html {
   position: relative;
