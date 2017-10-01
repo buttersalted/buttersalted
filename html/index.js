@@ -43,7 +43,7 @@ const setupPage = function() {
   url = url.startsWith('/')? url.substring(1) : url;
   const pre = url.split('/')[0].toLowerCase()||'sql';
   // 2. update html class list (updates ui)
-  Html.classList.add(pre);
+  Html.classList.value = pre;
   if(url.indexOf('?')>=0) Html.classList.add('query');
 };
 
