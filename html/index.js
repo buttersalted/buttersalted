@@ -3,6 +3,8 @@ const Editor = ace.edit('sql-value');
 const Header = document.querySelector('header');
 const Navs = document.querySelectorAll('nav li a');
 const Divs = document.querySelectorAll('main > div');
+const Thead = document.querySelector('#ans thead');
+const Tbody = document.querySelector('#ans tbody');
 
 const urlSetup = function(url) {
   // 1. get url path (form a full url)
@@ -25,20 +27,11 @@ const urlSetup = function(url) {
   location.href = location.origin+(url? '/#!/'+url : '');
 };
 
-
-
-const renderTable = function(ans) {
-  const thead = document.querySelector('#sql-ans thead');
-  const tbody = document.querySelector('#sql-ans tbody');
-  if(ans instanceof Array && ans.length) {
-    m.render(thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
-    m.render(tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
-  }
-  else {
-    if(ans instanceof Error) m.render(thead, m('tr', m('th', ans.message)));
-    else m.render(thead, m('tr', m('th', 'no results.')));
-    m.render(tbody, null);
-  }
+const tableRender = function(ans) {
+  // 1. set table head from data columns
+  m.render(Thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
+  // 2. set table body from data rows
+  m.render(Tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
 };
 
 const setup = function() {
