@@ -30,21 +30,18 @@ const ansError = function(err) {
   iziToast.error({'title': 'Query Error', 'message': err.message});
 };
 
-const setupPage = function(url) {
-  // 1. get url path (form a full url)
-  url = url.replace(location.origin, '');
-  url = url.replace('/#!/', '');
+const setupPage = function() {
+  // 1. get url path, and prefix
+  url = location.href;
+  url = url.replace(location.origin, '').replace('/#!/', '');
   url = url.startsWith('/')? url.substring(1) : url;
-  console.log('url', url);
-  // 2. get path prefix
   const pre = url.split('/')[0]||'sql';
-  console.log('pre', pre);
-  // 3. update navigation menu
+  // 2. update navigation menu
   for(var i=0, I=Navs.length; i<I; i++) {
     if(Navs[i].id===pre) Navs[i].setAttribute('active', '');
     else Navs[i].removeAttribute('active');
   }
-  // 4, update main view
+  // 3. update main view
   for(var i=0, I=Forms.length; i<I; i++) {
     if(Forms[i].id===pre) Forms[i].hidden = false;
     else Forms[i].hidden = true;
@@ -69,7 +66,8 @@ const setup = function() {
     return false;
   };
   // 4. setup page
-  setupPage(location.href);
+  window.addEventListener('hashchange', setupPage);
+  setupPage();
 };
 
 setup();
