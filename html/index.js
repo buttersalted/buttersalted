@@ -2,7 +2,7 @@
 const Editor = ace.edit('sql-value');
 const Header = document.querySelector('header');
 const Navs = document.querySelectorAll('nav li > a');
-const Sections = document.querySelectorAll('Sections');
+const Sections = document.querySelectorAll('section');
 const Sql = document.querySelector('#sql');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
