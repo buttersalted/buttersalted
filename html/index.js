@@ -2,7 +2,7 @@
 const Editor = ace.edit('sql-value');
 const Header = document.querySelector('header');
 const Navs = document.querySelectorAll('nav li > a');
-const Forms = document.querySelectorAll('main > form');
+const Sections = document.querySelectorAll('Sections');
 const Sql = document.querySelector('#sql');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
@@ -44,9 +44,9 @@ const setupPage = function() {
     else Navs[i].removeAttribute('active');
   }
   // 3. update main view
-  for(var i=0, I=Forms.length; i<I; i++) {
-    if(Forms[i].id===pre) Forms[i].hidden = false;
-    else Forms[i].hidden = true;
+  for(var i=0, I=Sections`.length; i<I; i++) {
+    if(Sections`[i].id===pre) Sections`[i].hidden = false;
+    else Sections`[i].hidden = true;
   }
 };
 
