@@ -7,7 +7,22 @@ const Sql = document.querySelector('#sql');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
 
-const urlSetup = function(url) {
+const ansRender = function(ans) {
+  // 1. set table head from data columns
+  m.render(Thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
+  // 2. set table body from data rows
+  m.render(Tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
+};
+
+const ansEmpty = function() {
+  iziToast.info({'title': 'Empty Query', 'message': 'no values returned'});
+};
+
+const ansError = function(err) {
+  iziToast.error({'title': 'Query Error', 'message': err.message});
+};
+
+const setupPage = function(url) {
   // 1. get url path (form a full url)
   url = url.replace(location.origin, '');
   url = url.replace('/#!/', '');
@@ -24,23 +39,6 @@ const urlSetup = function(url) {
     if(Forms[i].id===pre) Forms[i].hidden = false;
     else Forms[i].hidden = true;
   }
-  // 5.set the location (and live happily ever after)
-  location.href = location.origin+(url? '/#!/'+url : '');
-};
-
-const ansRender = function(ans) {
-  // 1. set table head from data columns
-  m.render(Thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
-  // 2. set table body from data rows
-  m.render(Tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
-};
-
-const ansEmpty = function() {
-  iziToast.info({'title': 'Empty Query', 'message': 'no values returned'});
-};
-
-const ansError = function(err) {
-  iziToast.error({'title': 'Query Error', 'message': err.message});
 };
 
 const setup = function() {
@@ -60,8 +58,8 @@ const setup = function() {
     }, ansError);
     return false;
   };
-  // 4. setup url
-  urlSetup(location.href);
+  // 4. setup page
+  setupPage(location.href);
 };
 
 setup();
