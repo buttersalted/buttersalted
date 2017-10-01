@@ -43,6 +43,7 @@ th, td {
   width: 100%;
 }
 #sql-value ~ button {
+  z-index: 2;
   position: absolute;
   right: 0;
   margin: 2rem;
