@@ -112,10 +112,29 @@
 <!-- 6. unit interface -->
 <section id="unit">
 <form>
+  <p>
+    `Unit` is used to remember unit conversion factors (to base unit). These
+    values are put to use when adding a new `food`, where a quantity is written
+    as `<magnitude> <unit>`, or even `<magnitude><unit>`. There are 2 columns,
+    `id` is the name of the unit, and `value` is its conversion factor to base
+    unit. Base unit is `Cal` for `Energy`, `IU` for `Vitamin A`, `Vitamin C`
+    and `Vitamin D`, and `g` for the rest. Examples would be like `id = kg`,
+    `value = 0.001` or `id = tsp`, `value = 4`. Please note that the `id` is
+    case-sensitive, and so if you want to recognize `KG` as kilogram, it must
+    also be added like so `id = KG`, `value = 0.001`. Scientific notation is
+    supported for the `value` field like `1e-3`. For special base units like
+    `IU`, it is possible to mention a different conversion factor for each
+    column by using the name of the column as `id`, and the column specific
+    conversion factor as `value`. An example would be `id = Vitamin A`,
+    `value = 1.66e+6` (assuming beta-carotene). Now, if `Vitamin A` is written
+    in `mcg` then it will first be converted to `g`, and finally to `IU`. Thanks
+    for making it this far. If still in doubt post your question to
+    <a href="mailto:wolfram77@gmail.com">wolfram77@gmail.com</a>.
+  </p>
   <label>id</label>
   <input type="text" name="id" placeholder="Name of unit, like: mg">
   <label>value</label>
-  <input type="text" name="value" placeholder="Conversion value to root unit, like: 0.001">
+  <input type="text" name="value" placeholder="Conversion value to base unit, like: 0.001">
   <p txt="c">
     <button type="submit" primary>Search</button>
     <button type="reset">Reset</button>
