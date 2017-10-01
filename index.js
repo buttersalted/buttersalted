@@ -1,5 +1,6 @@
 'use strict';
 const fs = require('fs');
+const path = require('path');
 const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -12,6 +13,7 @@ const Sql = require('./sql');
 
 const E = process.env;
 const X = express();
+const HTML = path.join(__dirname, 'html');
 const server = http.createServer(X);
 const dbpool = new pg.Pool(pgconfig(E.DATABASE_URL));
 const data = new Data(dbpool);
@@ -28,7 +30,7 @@ X.use(bodyParser.urlencoded({'extended': true}));
 X.use('/json', json);
 X.use('/pipe', pipe);
 X.use('/sql', sql);
-X.use('/', express.static(__dirname+'/html'));
+X.use('/', express.static(HTML, {'index': false, 'extensions': ['html']}));
 X.use((err, req, res, next) => {
   res.status(400).send(err.message);
   console.error(err);
