@@ -14,7 +14,7 @@ nav:not([class]) a[active] {
 main {
   padding-top: 2rem;
 }
-form {
+form:not(#sql) {
   max-width: 80rem;
   margin: auto;
   padding: 8rem;
