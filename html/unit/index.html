@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
   <script src="https://cdn.jsdelivr.net/npm/mithril"></script>
   <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bare-css">
@@ -13,7 +12,7 @@
 
 <body>
 <!-- navbar (subtle look) -->
-<nav style="border: none;">
+<nav>
 <label>
 <input type="checkbox">
   <header>
@@ -30,29 +29,20 @@
 </nav>
 
 <main>
-<!-- 1. search -->
-<!-- 2. add -->
-<!-- 3. edit -->
-<!-- 1. delete -->
 <form id="unit">
   <label>id</label>
   <input type="text" name="id" placeholder="Name of unit, like: mg">
   <label>value</label>
   <input type="text" name="value" placeholder="Conversion value to root unit, like: 0.001">
   <p txt="c">
-    <button type="submit" primary>Search</button>
-    <button type="reset">Reset</button>
+    <button type="submit" primary>Search Units</button>
+    <button type="reset">Reset Search</button>
   </p>
 </form>
 
-<!-- 2. results -->
-<table id="unitans">
-  <thead>
-  <tr>
-    <th>id</th>
-    <th>value</th>
-  </tr>
-  </thead>
+<!-- 2. ans -->
+<table id="ans">
+  <thead></thead>
   <tbody></tbody>
 </table>
 </main>
