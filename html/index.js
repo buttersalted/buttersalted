@@ -41,14 +41,6 @@ const renderTable = function(ans) {
   }
 };
 
-const relocate = function(url) {
-  const pre = url.substr
-  if(!url) Header.hidden = false;
-  for(var i=0, I=Navs.length; i<I; i++)
-    if(Navs[i].textContent.toLowerCase()===)
-  location.href = location.origin+(url? '/#!/'+url : '');
-};
-
 const setup = function() {
   // 1. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
