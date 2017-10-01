@@ -1,4 +1,7 @@
 /* 1. header cosmeticization */
+nav:not([class]) {
+  border: none;
+}
 nav:not([class]) label {
   max-width: none;
 }
