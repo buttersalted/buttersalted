@@ -42,6 +42,11 @@ th, td {
   height: 100%;
   width: 100%;
 }
+#sql-value ~ button {
+  position: absolute;
+  right: 0;
+  margin: 2rem;
+}
 #sql-method { margin-top: 2rem;}
 #ans {
   overflow-x: auto;
