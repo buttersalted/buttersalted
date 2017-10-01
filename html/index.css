@@ -43,9 +43,6 @@ th, td {
   width: 100%;
 }
 #sql-method { margin-top: 2rem;}
-#ans {
-  overflow-x: scroll;
-}
 
 
 /* 3. footer sundarization */
