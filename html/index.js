@@ -55,7 +55,7 @@ const setup = function() {
   // 1. enable form multi submit
   const submit = document.querySelectorAll('form [type=submit]');
   for(var i=0, I=submit.length; i<I; i++)
-    submit[i].onclick = () => this.form.submitted = this.value;
+    submit[i].onclick = () => this.form.submitted = this.name;
   // 2. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
