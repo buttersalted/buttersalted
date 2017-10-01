@@ -30,6 +30,11 @@ const ansError = function(err) {
   iziToast.error({'title': 'Query Error', 'message': err.message});
 };
 
+const setupSql = function() {
+  const qry = url.split('?')[1]||'';
+  
+};
+
 const setupPage = function() {
   // 1. get url path, and prefix
   url = location.href;
