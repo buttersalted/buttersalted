@@ -36,6 +36,7 @@ const setupPage = function() {
   url = url.replace(location.origin, '').replace('/#!/', '');
   url = url.startsWith('/')? url.substring(1) : url;
   const pre = url.split('/')[0]||'sql';
+  console.log('pre', pre);
   // 2. update navigation menu
   for(var i=0, I=Navs.length; i<I; i++) {
     if(Navs[i].id===pre) Navs[i].setAttribute('active', '');
