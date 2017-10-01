@@ -3,6 +3,7 @@ const Editor = ace.edit('sql-value');
 const Header = document.querySelector('header');
 const Navs = document.querySelectorAll('nav li a');
 const Divs = document.querySelectorAll('main > div');
+const Sql = document.querySelector('#sql');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
 
@@ -43,19 +44,22 @@ const ansError = function(err) {
 };
 
 const setup = function() {
-  // 1. setup ace editor
+  // 1. enable form multi submit
+  const formsubmit = document.querySelectorAll('form [type=submit]');
+  for(var i=0, I=formsubmit.length; i<I; i++)
+    formsubmit[i].onclick = () => this.form.submitted = this.value;
+  // 2. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
 
   /*
   // 2. setup sql get on click
-  const sqlGet = document.getElementById('sql-get')
   sqlGet.onclick = function() {
     const value = sqlValue.getValue();
     m.request({'method': 'GET', 'url': `/sql/${value}`}).then(renderTable, renderTable);
   };
   */
-  // 2. setup url
+  // 3. setup url
   urlSetup(location.href);
 };
 
