@@ -27,11 +27,19 @@ const urlSetup = function(url) {
   location.href = location.origin+(url? '/#!/'+url : '');
 };
 
-const tableRender = function(ans) {
+const ansRender = function(ans) {
   // 1. set table head from data columns
   m.render(Thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
   // 2. set table body from data rows
   m.render(Tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
+};
+
+const ansEmpty = function() {
+  iziToast.info({'title': 'Empty Query', 'message': 'no values returned'});
+};
+
+const ansError = function(err) {
+  iziToast.error({'title': 'Query Error', 'message': err.message});
 };
 
 const setup = function() {
