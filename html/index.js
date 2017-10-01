@@ -33,7 +33,7 @@ const ansError = function(err) {
 const setupPage = function() {
   // 1. get url path, and prefix
   url = location.href;
-  url = url.replace(location.origin, '').replace('/#!/', '');
+  url = url.replace(location.origin, '').replace(/\/#?\!?\/?/, '');
   url = url.startsWith('/')? url.substring(1) : url;
   const pre = url.split('/')[0]||'sql';
   console.log('pre', pre);
