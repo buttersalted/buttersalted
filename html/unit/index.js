@@ -16,7 +16,7 @@ const onready = function() {
   const unit = document.getElementById('unit')
   unit.onsubmit = function() {
     const id = wildcard(this.elements.id.value||'*');
-    const value = wildcard(this.elements.value.value||'?');
+    const value = wildcard(this.elements.value.value||'*');
     const data = {'id': id, 'value': value};
     m.request({'method': 'GET', 'url': '/json/unit', 'data': data}).then(render, errornotify);
     return false;
