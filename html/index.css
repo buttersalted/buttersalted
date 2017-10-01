@@ -32,10 +32,8 @@ html.type section:not(#type),
 html.unit section:not(#unit) {
   display: none;
 }
-html:not(.query) section:not(#sql) > form {
-  max-width: 80rem;
-  margin: auto;
-  padding: 8rem;
+html.query section {
+  max-width: none;
 }
 #logo {
   display: none;
@@ -61,7 +59,7 @@ html.sql:not(.query) #logo {
   z-index: 2;
   position: absolute;
   right: 0;
-  margin: 2rem;
+  margin: 4rem 2rem;
 }
 #sql p {
   margin-top: 2rem;
