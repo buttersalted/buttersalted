@@ -30,7 +30,7 @@ X.use(bodyParser.urlencoded({'extended': true}));
 X.use('/json', json);
 X.use('/pipe', pipe);
 X.use('/sql', sql);
-X.use('/', express.static(HTML, {'index': false, 'extensions': ['html']}));
+X.use('/', express.static(HTML, {'extensions': ['html']}));
 X.use((err, req, res, next) => {
   res.status(400).send(err.message);
   console.error(err);
