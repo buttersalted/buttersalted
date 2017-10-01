@@ -29,7 +29,7 @@ const setupPage = function(url) {
   url = url.startsWith('/')? url.substring(1) : url;
   console.log('url', url);
   // 2. get path prefix
-  const pre = url.split('/')[0];
+  const pre = url.split('/')[0]||'sql';
   console.log('pre', pre);
   // 3. update navigation menu
   for(var i=0, I=Navs.length; i<I; i++) {
