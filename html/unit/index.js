@@ -1,6 +1,10 @@
+const ontrclick = function() {
+
+};
+
 const render = function(ans) {
   const tbody = document.querySelector('#unitans tbody');
-  m.render(tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
+  m.render(tbody, ans.map((r) => m('tr', {onclick: ontrclick}, Object.values(r).map((v) => m('td', v)))));
 };
 
 const errornotify = function(err) {
