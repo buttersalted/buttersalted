@@ -1,4 +1,5 @@
 // global variables
+const Html = document.querySelector('html');
 const Editor = ace.edit('sql-value');
 const Header = document.querySelector('header');
 const Navs = document.querySelectorAll('nav li > a');
@@ -32,7 +33,7 @@ const ansError = function(err) {
 
 const setupSql = function() {
   const qry = url.split('?')[1]||'';
-  
+
 };
 
 const setupPage = function() {
@@ -40,19 +41,10 @@ const setupPage = function() {
   url = location.href;
   url = url.replace(location.origin, '').replace(/\/#?\!?\/?/, '');
   url = url.startsWith('/')? url.substring(1) : url;
-  const pre = url.split('/')[0]||'sql';
-  console.log('pre', pre);
-  // 2. update navigation menu
-  for(var i=0, I=Navs.length; i<I; i++) {
-    var id = Navs[i].textContent.toLowerCase();
-    if(id===pre) Navs[i].setAttribute('active', '');
-    else Navs[i].removeAttribute('active');
-  }
-  // 3. update main view
-  for(var i=0, I=Sections.length; i<I; i++) {
-    if(Sections[i].id===pre) Sections[i].hidden = false;
-    else Sections[i].hidden = true;
-  }
+  const pre = url.split('/')[0].toLowerCase()||'sql';
+  // 2. update html class list (updates ui)
+  Html.classList.add(pre);
+  if(url.indexOf('?')>=0) Html.classList.add('query');
 };
 
 const setup = function() {
