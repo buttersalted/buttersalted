@@ -2,7 +2,7 @@
 const Editor = ace.edit('sql-value');
 const Header = document.querySelector('header');
 const Navs = document.querySelectorAll('nav li a');
-const Divs = document.querySelectorAll('main > div');
+const Forms = document.querySelectorAll('main > form');
 const Sql = document.querySelector('#sql');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
@@ -20,9 +20,9 @@ const urlSetup = function(url) {
     else Navs[i].removeAttribute('active');
   }
   // 4, update main view
-  for(var i=0, I=Divs.length; i<I; i++) {
-    if(Divs[i].id===pre) Divs[i].hidden = false;
-    else Divs[i].hidden = true;
+  for(var i=0, I=Forms.length; i<I; i++) {
+    if(Forms[i].id===pre) Forms[i].hidden = false;
+    else Forms[i].hidden = true;
   }
   // 5.set the location (and live happily ever after)
   location.href = location.origin+(url? '/#!/'+url : '');
@@ -45,21 +45,22 @@ const ansError = function(err) {
 
 const setup = function() {
   // 1. enable form multi submit
-  const formsubmit = document.querySelectorAll('form [type=submit]');
-  for(var i=0, I=formsubmit.length; i<I; i++)
-    formsubmit[i].onclick = () => this.form.submitted = this.value;
+  const submit = document.querySelectorAll('form [type=submit]');
+  for(var i=0, I=submit.length; i<I; i++)
+    submit[i].onclick = () => this.form.submitted = this.value;
   // 2. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
-
-  /*
-  // 2. setup sql get on click
-  sqlGet.onclick = function() {
-    const value = sqlValue.getValue();
-    m.request({'method': 'GET', 'url': `/sql/${value}`}).then(renderTable, renderTable);
+  // 3. setup sql interface
+  Sql.onsubmit = function() {
+    const value = Editor.getValue();
+    m.request({'method': 'GET', 'url': `/sql/${value}`}).then((ans) => {
+      if(ans.length) ansRender(ans);
+      else ansEmpty();
+    }, ansError);
+    return false;
   };
-  */
-  // 3. setup url
+  // 4. setup url
   urlSetup(location.href);
 };
 
