@@ -27,8 +27,10 @@ const setupPage = function(url) {
   url = url.replace(location.origin, '');
   url = url.replace('/#!/', '');
   url = url.startsWith('/')? url.substring(1) : url;
+  console.log('url', url);
   // 2. get path prefix
   const pre = url.split('/')[0];
+  console.log('pre', pre);
   // 3. update navigation menu
   for(var i=0, I=Navs.length; i<I; i++) {
     if(Navs[i].id===pre) Navs[i].setAttribute('active', '');
