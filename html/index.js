@@ -15,10 +15,18 @@ const ansRender = function(ans) {
 };
 
 const ansEmpty = function() {
+  // 1. clear table
+  m.render(Thead, null);
+  m.render(Tbody, null);
+  // 2. show toast message
   iziToast.info({'title': 'Empty Query', 'message': 'no values returned'});
 };
 
 const ansError = function(err) {
+  // 1. clear table
+  m.render(Thead, null);
+  m.render(Tbody, null);
+  // 2. show toast message
   iziToast.error({'title': 'Query Error', 'message': err.message});
 };
 
