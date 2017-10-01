@@ -35,6 +35,9 @@ html.unit section:not(#unit) {
 html.query section {
   max-width: none;
 }
+html:not(.query) section:not(#sql) {
+  max-width: 80rem;
+}
 #logo {
   display: none;
 }
