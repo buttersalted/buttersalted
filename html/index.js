@@ -44,9 +44,9 @@ const setupPage = function() {
     else Navs[i].removeAttribute('active');
   }
   // 3. update main view
-  for(var i=0, I=Sections`.length; i<I; i++) {
-    if(Sections`[i].id===pre) Sections`[i].hidden = false;
-    else Sections`[i].hidden = true;
+  for(var i=0, I=Sections.length; i<I; i++) {
+    if(Sections[i].id===pre) Sections[i].hidden = false;
+    else Sections[i].hidden = true;
   }
 };
 
