@@ -1,7 +1,7 @@
 // global variables
 const Editor = ace.edit('sql-value');
 const Header = document.querySelector('header');
-const Navs = document.querySelectorAll('nav li a');
+const Navs = document.querySelectorAll('nav li > a');
 const Forms = document.querySelectorAll('main > form');
 const Sql = document.querySelector('#sql');
 const Thead = document.querySelector('#ans thead');
@@ -39,7 +39,8 @@ const setupPage = function() {
   console.log('pre', pre);
   // 2. update navigation menu
   for(var i=0, I=Navs.length; i<I; i++) {
-    if(Navs[i].id===pre) Navs[i].setAttribute('active', '');
+    var id = Navs[i].textContent.toLowerCase();
+    if(id===pre) Navs[i].setAttribute('active', '');
     else Navs[i].removeAttribute('active');
   }
   // 3. update main view
