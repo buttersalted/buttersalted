@@ -15,7 +15,7 @@ const stringBefore = function(str, sep) {
 
 const stringAfter = function(str, sep) {
   const i = str.search(sep);
-  return i>=0? str.substring(i+1) : '';
+  return i>=0? str.substring(i+1) : str;
 };
 
 const dequery = function (a) {
@@ -60,7 +60,8 @@ const setupPage = function(e) {
   // 1. get path, prefix, and query
   const path = stringAfter(location.hash.replace(/\/?#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
-  const sqry = stringAfter(path, /\?/)||'';
+  const sqry = path.split('?')[1]||'';
+  console.log('sqry', sqry);
   const qry = sqry? dequery(sqry) : {};
   // 2. update html class list (updates ui)
   Html.classList.value = pre;
