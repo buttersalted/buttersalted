@@ -67,12 +67,13 @@ const formKv = function(katt, vatt, val) {
   const Inp = [], Fn = [];
   // 2. define a new key-value generator
   const newKv = function(key, val) {
+    console.log('newKv', key, val, Inp, Fn);
     // 1. define key, onchange function
     const fn = () => key;
     const onchange = function() {
       // 1. update key from key input
       key = this.value;
-      console.log('onchange', key, Fn[Fn.length-1]());
+      console.log('onchange', key, val, Inp, Fn);
       // 2. add new key-value if last filled up
       if(key && Fn[Fn.length-1]()) newKv('', '');
       // 3. remove key-value if key empty and not last
@@ -84,7 +85,7 @@ const formKv = function(katt, vatt, val) {
     };
     // 2. push vnode for key-value
     Inp.push(m('div.input', [
-      m('input', Object.assign({'onchange': onchange}, katt)),
+      m('input', Object.assign({'value': key, 'onchange': onchange}, katt)),
       m('input', Object.assign({'name': key, 'value': val}, vatt))
     ]));
     // 3. push key function
