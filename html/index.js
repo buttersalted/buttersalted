@@ -61,7 +61,7 @@ const formSet = function(frm, val) {
   return frm;
 };
 
-const formKv = function(katt, vatt, val) {
+const formKv = function(frm, katt, vatt, val) {
   console.log('formKv');
   // 1. setup input vnodes, key functions
   const Inp = [], Fn = [];
@@ -82,6 +82,7 @@ const formKv = function(katt, vatt, val) {
         Inp.splice(i, 1);
         Fn.splice(i, 1);
       }
+      m.render(frm, Inp);
     };
     // 2. push vnode for key-value
     Inp.push(m('div.input', [
@@ -91,12 +92,11 @@ const formKv = function(katt, vatt, val) {
     // 3. push key function
     Fn.push(fn);
   };
-  // 3. load key-values based on object
+  // 3. load key-values based on object, and render
   val = val||{'' : ''};
   for(var k in val)
     newKv(k, val[k]);
-  // 4. return component to mount
-  return {'view': () => Inp};
+  m.render(frm, Inp);
 };
 
 const formSql = function() {
@@ -135,7 +135,7 @@ const setupPage = function(e) {
   // 3. prepare forms if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
   else if(pre!=='food') formSet(Forms[pre], qry);
-  m.mount(FoodInputs, formKv(katt, vatt, pre==='food'? qry : null));
+  formKv(FoodInputs, katt, vatt, pre==='food'? qry : null);
   // 4. submit form if have query
   if(sqry) Forms[pre].onsubmit();
 };
