@@ -80,7 +80,7 @@ const formSql = function() {
   console.log('formSql');
   Html.classList.add('query');
   const value = Editor.getValue();
-  location.hash = '#!/?value='+value;
+  location.href = location.origin+'/#!/?value='+value;
   m.request({'method': 'GET', 'url': '/sql/'+value}).then(ansRender, ansError);
   return false;
 };
@@ -90,7 +90,7 @@ const formJson = function() {
   Html.classList.add('query');
   const data = formGet(this);
   const id = this.parentElement.id;
-  location.hash = `#!/${id}?${formSerialize(data)}`;
+  location.href = location.origin+`/#!/${id}?${formSerialize(data)}`;
   m.request({'method': 'GET', 'url': `/json/${id}`, 'data': data}).then(ansRender, ansError);
   return false;
 };
