@@ -21,19 +21,11 @@ const stringAfter = function(str, sep) {
 
 const ansRender = function(ans) {
   console.log('ansRender');
-  // 1. set table head from data columns
-  m.render(Thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
-  // 2. set table body from data rows
-  m.render(Tbody, ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))));
-};
-
-const ansEmpty = function() {
-  console.log('ansEmpty');
-  // 1. clear table
-  m.render(Thead, null);
-  m.render(Tbody, null);
-  // 2. show toast message
-  iziToast.info({'title': 'Empty Query', 'message': 'no values returned'});
+  // 1. set table head, body from data
+  m.render(Thead, ans.length? m('tr', Object.keys(ans[0]).map((k) => m('th', k))) : null);
+  m.render(Tbody, ans.length? ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))) : null);
+  // 3. show toast message (if empty)
+  if(!ans.length) iziToast.info({'title': 'Empty Query', 'message': 'no values returned'});
 };
 
 const ansError = function(err) {
@@ -96,22 +88,58 @@ const formDeserialize = function(str) {
   return z;
 };
 
-
 const formSql = function() {
   console.log('formSql');
   Html.classList.add('query');
   const value = Editor.getValue();
-  location.hash = `#!/?value=${value}`;
-  m.request({'method': 'GET', 'url': `/sql/${value}`}).then((ans) => {
-    if(ans.length) ansRender(ans);
-    else ansEmpty();
-  }, ansError);
+  location.hash = '#!/?value='+value;
+  m.request({'method': 'GET', 'url': '/sql/'+value}).then(ansRender, ansError);
+  return false;
+};
+
+const formFood = function() {
+  console.log('formFood');
+  Html.classList.add('query');
+  const data = formGet(this);
+  location.hash = '#!/food?'+formSerialize(data);
+  m.request({'method': 'GET', 'url': '/json/food', 'data': data}).then(ansRender, ansError);
+  return false;
+};
+
+const formGroup = function() {
+  console.log('formGroup');
+  Html.classList.add('query');
+  const data = formGet(this);
+  location.hash = '#!/group?'+formSerialize(data);
+  m.request({'method': 'GET', 'url': '/json/group', 'data': data}).then(ansRender, ansError);
+  return false;
+};
+
+const formTerm = function() {
+  console.log('formTerm');
+  Html.classList.add('query');
+  const data = formGet(this);
+  location.hash = '#!/term?'+formSerialize(data);
+  m.request({'method': 'GET', 'url': '/json/term', 'data': data}).then(ansRender, ansError);
+  return false;
+};
+
+const formType = function() {
+  console.log('formType');
+  Html.classList.add('query');
+  const data = formGet(this);
+  location.hash = '#!/type?'+formSerialize(data);
+  m.request({'method': 'GET', 'url': '/json/type', 'data': data}).then(ansRender, ansError);
   return false;
 };
 
 const formUnit = function() {
   console.log('formUnit');
   Html.classList.add('query');
+  const data = formGet(this);
+  location.hash = '#!/unit?'+formSerialize(data);
+  m.request({'method': 'GET', 'url': '/json/unit', 'data': data}).then(ansRender, ansError);
+  return false;
 };
 
 const setup = function() {
