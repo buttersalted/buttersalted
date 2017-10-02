@@ -58,11 +58,11 @@ const setupSql = function() {
 };
 
 const setupPage = function() {
-  // 1. get url path, prefix, and query
+  // 1. get path, prefix, and query
   const path = stringAfter(location.href.replace(location.origin, '')
     .replace(/\/#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
-  const sqry = stringAfter(url, '?')||'';
+  const sqry = stringAfter(path, '?')||'';
   const qry = dequery(sqry);
   console.log('pre', pre);
   console.log('sqry', sqry);
