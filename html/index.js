@@ -130,11 +130,8 @@ const setup = function() {
   Editor.focus();
   // 3. setup sql interface
   Forms.sql.onsubmit = formSql;
-  Forms.food.onsubmit = formJson;
-  Forms.group.onsubmit = formJson;
-  Forms.term.onsubmit = formJson;
-  Forms.type.onsubmit = formJson;
-  Forms.unit.onsubmit = formJson;
+  for(var k in Forms)
+    Forms[k].onsubmit = formJson;
   // 4. setup page
   window.addEventListener('hashchange', setupPage);
   setupPage();
