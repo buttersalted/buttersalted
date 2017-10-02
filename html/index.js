@@ -42,22 +42,6 @@ const ansError = function(err) {
   iziToast.error({'title': 'Query Error', 'message': err.message});
 };
 
-const setupPage = function(e) {
-  console.log('setupPage');
-  // 1. get path, prefix, and query
-  const path = stringAfter(location.hash.replace(/\/?#?\!?\/?/, ''), '/');
-  const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
-  const sqry = path.split('?')[1]||'';
-  const qry = sqry? dequery(sqry) : {};
-  // 2. update html class list (updates ui)
-  Html.classList.value = pre;
-  if(sqry) Html.classList.add('query');
-  if(e) return;
-  // 3. submit form if just loaded
-  if(pre==='sql') Editor.setValue(qry.value||'');
-  if(sqry) document.querySelector(`#${pre} form`).submit();
-};
-
 const formGet = function(frm) {
   // 1. set object from form elements
   const E = frm.elements, z = {};
@@ -109,6 +93,22 @@ const formJson = function() {
   location.hash = `#!/${id}?${formSerialize(data)}`;
   m.request({'method': 'GET', 'url': `/json/${id}`, 'data': data}).then(ansRender, ansError);
   return false;
+};
+
+const setupPage = function(e) {
+  console.log('setupPage');
+  // 1. get path, prefix, and query
+  const path = stringAfter(location.hash.replace(/\/?#?\!?\/?/, ''), '/');
+  const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
+  const sqry = path.split('?')[1]||'';
+  const qry = sqry? formDeserialize(sqry) : {};
+  // 2. update html class list (updates ui)
+  Html.classList.value = pre;
+  if(sqry) Html.classList.add('query');
+  if(e) return;
+  // 3. submit form if just loaded
+  if(pre==='sql') Editor.setValue(qry.value||'');
+  if(sqry) document.querySelector(`#${pre} form`).submit();
 };
 
 const setup = function() {
