@@ -8,6 +8,17 @@ const Sql = document.querySelector('#sql');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
 
+const dequery = function (a) {
+  if(a.indexOf('?') > -1) a = a.split('?')[1];
+  var kvs = a.split('&');
+  var z = {};
+  kvs.forEach((pair) => {
+    pair = pair.split('=');
+    z[pair[0]] = decodeURIComponent(pair[1]||'');
+  });
+  return z;
+}
+
 const ansRender = function(ans) {
   // 1. set table head from data columns
   m.render(Thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
@@ -37,15 +48,20 @@ const setupSql = function() {
 };
 
 const setupPage = function() {
-  // 1. get url path, and prefix
+  // 1. get url path, prefix, and query
   url = location.href;
   url = url.replace(location.origin, '').replace(/\/#?\!?\/?/, '');
   url = url.startsWith('/')? url.substring(1) : url;
   const pre = url.split('/')[0].toLowerCase()||'sql';
+  const sqry = url.split('?')[1]||'';
+  const qry = dequery(sqry);
   // 2. update html class list (updates ui)
   Html.classList.value = pre;
-  if(url.indexOf('?')>=0) Html.classList.add('query');
+  if(sqry) Html.classList.add('query');
+  if(pre==='sql') Editor.setValue(qry.value);
+  if(sqry) document.querySelector(`#${pre} form`).submit();
 };
+
 
 const setup = function() {
   // 1. enable form multi submit
