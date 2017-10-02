@@ -1,4 +1,4 @@
-// global variables
+// 1. define global variables
 const Html = document.querySelector('html');
 const Editor = ace.edit('sql-value');
 const Header = document.querySelector('header');
@@ -132,4 +132,5 @@ const setup = function() {
   setupPage();
 };
 
+// 2. begin setup
 setup();
