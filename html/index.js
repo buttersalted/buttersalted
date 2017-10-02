@@ -4,15 +4,18 @@ const Editor = ace.edit('sql-value');
 const Header = document.querySelector('header');
 const Navs = document.querySelectorAll('nav li > a');
 const Sections = document.querySelectorAll('section');
-const Sql = document.querySelector('#sql form');
-const Food = document.querySelector('#food form');
-const Group = document.querySelector('#group form');
-const Term = document.querySelector('#term form');
-const Type = document.querySelector('#type form');
-const Unit = document.querySelector('#unit form');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
 const Types = document.querySelector('#types');
+const Forms = {
+  'sql': document.querySelector('#sql form'),
+  'food': document.querySelector('#food form'),
+  'group': document.querySelector('#group form'),
+  'term': document.querySelector('#term form'),
+  'type': document.querySelector('#type form'),
+  'unit': document.querySelector('#unit form')
+};
+
 
 const stringBefore = function(str, sep) {
   const i = str.search(sep);
@@ -108,6 +111,7 @@ const setupPage = function(e) {
   if(e) return;
   // 3. submit form if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
+  else formSet(document.querySelector(''));
   if(sqry) document.querySelector(`#${pre} form`).submit();
 };
 
@@ -125,12 +129,12 @@ const setup = function() {
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
   // 3. setup sql interface
-  Sql.onsubmit = formSql;
-  Food.onsubmit = formJson;
-  Group.onsubmit = formJson;
-  Term.onsubmit = formJson;
-  Type.onsubmit = formJson;
-  Unit.onsubmit = formJson;
+  Forms.sql.onsubmit = formSql;
+  Forms.food.onsubmit = formJson;
+  Forms.group.onsubmit = formJson;
+  Forms.term.onsubmit = formJson;
+  Forms.type.onsubmit = formJson;
+  Forms.unit.onsubmit = formJson;
   // 4. setup page
   window.addEventListener('hashchange', setupPage);
   setupPage();
