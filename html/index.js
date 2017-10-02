@@ -83,8 +83,8 @@ const formKv = function(katt, vatt, val) {
     };
     // 2. push vnode for key-value
     Inp.push(m('div.input', [
-      m('input.key', Object.assign({'onchange': onchange}, katt)),
-      m('input.value', Object.assign({'name': key, 'value': val}, vatt))
+      m('input', Object.assign({'onchange': onchange}, katt)),
+      m('input', Object.assign({'name': key, 'value': val}, vatt))
     ]));
     // 3. push key function
     Fn.push(fn);
