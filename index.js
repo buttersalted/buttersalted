@@ -38,6 +38,7 @@ X.use((err, req, res, next) => {
 // product
 // ingredient
 /*
+- CHECK GROUP INSERT IS WITHOUT COMMA
 - PATCH ID DIFFERENT FROM QUERY ID
 - RAW THINGS LOOK GOOD
 - TOOLS LIKE MYFITNESSPAL

@@ -67,7 +67,32 @@
 <!-- 3. group interface -->
 <section id="group">
 <form>
+  <p txt="j">
+    <code>Group</code> is used to create and maintain groups or classifications of
+    <code>food</code>. This can be used as a method of filtering and aggregating
+    <code>food</code>. A few examples of <code>group</code> would be like
+    <code>baking</code> (based on method of cooking), or like <code>salty</code> (basic
+    taste of <code>food</code>). A <code>group</code> has 4 columns, <code>id</code>
+    which gives the name of the <code>group</code> and is also the name of SQL view
+    which can be used in an SQL query, <code>key</code> is the name of the column
+    to which this <code>group</code> belongs, <code>tag</code> is the name of the
+    tag used to represent this <code>group</code> within the <code>key</code> column,
+    and last yet not the least, <code>value</code>, which is an SQL query which
+    returns all rows to which this <code>group</code> belongs. Once a new
+    <code>group</code> is inserted, two columns namely <code>&lt;key&gt;</code> and
+    <code>#&lt;key&gt;</code> are created (with index), and <code>tag</code> is added
+    all the rows in <code>&lt;key&gt;</code> and <code>#&lt;key&gt;</code> which are
+    selected by the SQL query in <code>value</code>. If any new rows are added
+    <code>food</code>, they can be refreshed later. A single row within the same
+    <code>&gt;key&lt;</code>can have the same tags (like <code>salty, sweet</code>),
+    and they are separated using a comma. Deleting a group deletes the associated
+    view, and the tags from all <code>food</code>.
+  </p>
   <label>id</label>
+  <input type="text" name="id" placeholder="Name of unit, like: mg">
+  <label>key</label>
+  <input type="text" name="id" placeholder="Name of unit, like: mg">
+  <label>tag</label>
   <input type="text" name="id" placeholder="Name of unit, like: mg">
   <label>value</label>
   <input type="text" name="value" placeholder="Conversion value to root unit, like: 0.001">
