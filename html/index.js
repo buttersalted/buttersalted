@@ -30,6 +30,7 @@ const dequery = function (a) {
 }
 
 const ansRender = function(ans) {
+  console.log('ansRender');
   // 1. set table head from data columns
   m.render(Thead, m('tr', Object.keys(ans[0]).map((k) => m('th', k))));
   // 2. set table body from data rows
@@ -37,6 +38,7 @@ const ansRender = function(ans) {
 };
 
 const ansEmpty = function() {
+  console.log('ansEmpty');
   // 1. clear table
   m.render(Thead, null);
   m.render(Tbody, null);
@@ -45,19 +47,16 @@ const ansEmpty = function() {
 };
 
 const ansError = function(err) {
+  console.log('ansError');
   // 1. clear table
   m.render(Thead, null);
   m.render(Tbody, null);
   // 2. show toast message
-  iziToast.error({'title': 'Query Error', 'message': err.message});
-};
-
-const setupSql = function() {
-  const qry = url.split('?')[1]||'';
-
+  iziToast.error({'title': 'Query Error', 'message': err.message.replace('\n', '')});
 };
 
 const setupPage = function(e) {
+  console.log('setupPage');
   // 1. get path, prefix, and query
   const path = stringAfter(location.hash.replace(/\/#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
@@ -73,6 +72,7 @@ const setupPage = function(e) {
 };
 
 const formSql = function() {
+  console.log('formSql');
   Html.classList.add('query');
   const value = Editor.getValue();
   location.hash = `#!/?value=${value}`;
@@ -84,6 +84,7 @@ const formSql = function() {
 };
 
 const setup = function() {
+  console.log('setup');
   // 1. enable form multi submit
   const submit = document.querySelectorAll('form [type=submit]');
   for(var i=0, I=submit.length; i<I; i++)
