@@ -19,17 +19,6 @@ const stringAfter = function(str, sep) {
   return i>=0? str.substring(i+1) : str;
 };
 
-const dequery = function (a) {
-  if(a.indexOf('?') > -1) a = a.split('?')[1];
-  var kvs = a.split('&');
-  var z = {};
-  kvs.forEach((pair) => {
-    pair = pair.split('=');
-    z[pair[0]] = decodeURIComponent(pair[1]||'');
-  });
-  return z;
-}
-
 const ansRender = function(ans) {
   console.log('ansRender');
   // 1. set table head from data columns
@@ -73,6 +62,41 @@ const setupPage = function(e) {
   if(sqry) document.querySelector(`#${pre} form`).submit();
 };
 
+const formGet = function(frm) {
+  // 1. set object from form elements
+  const E = frm.elements, z = {};
+  for(var i=0, I=E.length; i<I; i++)
+    if(E[i].name) z[E[i].name] = E[i].value;
+  return z;
+};
+
+const formSet = function(frm, val) {
+  // 1. set form elements from object
+  const E = frm.elements;
+  for(var i=0, I=E.length; i<I; i++)
+    if(E[i].name) E[i].value = val[E[i].name];
+  return frm;
+};
+
+const formSerialize = function(val) {
+  // 1. serialize object as key=value&...
+  var z = '';
+  for(var k in val)
+    z += k+'='+encodeURIComponent(val[k])+'&';
+  return z? z.slice(0, -1) : z;
+};
+
+const formDeserialize = function(str) {
+  // 1. deserialize object from key=value&...
+  const z = {};
+  for(var kv of str.split('&')) {
+    var p = kv.split('=');
+    z[p[0]] = decodeURIComponent(p[1]||'');
+  }
+  return z;
+};
+
+
 const formSql = function() {
   console.log('formSql');
   Html.classList.add('query');
@@ -83,6 +107,11 @@ const formSql = function() {
     else ansEmpty();
   }, ansError);
   return false;
+};
+
+const formUnit = function() {
+  console.log('formUnit');
+  Html.classList.add('query');
 };
 
 const setup = function() {
