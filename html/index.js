@@ -52,7 +52,7 @@ const ansError = function(err) {
   m.render(Thead, null);
   m.render(Tbody, null);
   // 2. show toast message
-  iziToast.error({'title': 'Query Errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr', 'message': err.message});
+  iziToast.error({'title': 'Query Error', 'message': err.message});
 };
 
 const setupPage = function(e) {
@@ -61,6 +61,7 @@ const setupPage = function(e) {
   const path = stringAfter(location.hash.replace(/\/?#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
   const sqry = stringAfter(path, /\?/)||'';
+  console.log('sqry', sqry);
   const qry = sqry? dequery(sqry) : {};
   // 2. update html class list (updates ui)
   Html.classList.value = pre;
