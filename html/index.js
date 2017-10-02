@@ -16,6 +16,19 @@ const Forms = {
   'unit': document.querySelector('#unit form')
 };
 
+const any = function(itr) {
+  // 1. check if any value if truthy
+  for(var v of itr)
+    if(v) return true;
+};
+
+const all = function(itr) {
+  // 1. check if all values are truthy
+  for(var v of itr)
+    if(!v) return false;
+  return true;
+};
+
 const stringBefore = function(str, sep) {
   const i = str.search(sep);
   return i>=0? str.substring(0, i) : str;
@@ -58,6 +71,32 @@ const formSet = function(frm, val) {
   for(var i=0, I=E.length; i<I; i++)
     if(E[i].name && val[E[i].name]) E[i].value = val[E[i].name];
   return frm;
+};
+
+const formKv = function(katt, vatt) {
+  console.log('formKv');
+  const Inp = [], Fn = [];
+  const newKv = function() {
+    var name = '';
+    const fn = () => name;
+    Fn.push(fn);
+    const onchange = function() {
+      name = this.value;
+      if(name && Fn[Fn.length-1]()) newKv();
+      if(!name && Fn.length>1) {
+        var i = Fn.indexOf(fn);
+        Inp.splice(i, 1);
+        Fn.splice(i, 1);
+      }
+    };
+    Inp.push(m('div', [
+      m('input', Object.assign({'onchange': onchange}, katt)),
+      m('input', Object.assign({'name': name}, vatt))
+    ]));
+    Fn.push(fn);
+  };
+  newKv();
+  return Inp;
 };
 
 const formSql = function() {
