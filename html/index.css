@@ -5,11 +5,8 @@ nav:not([class]) {
 nav:not([class]) label {
   max-width: none;
 }
-html.sql header {
+html:not([class]) header, html.sql:not(.query) header {
   visibility: hidden;
-}
-html.query header {
-  visibility: visible;
 }
 html.food nav:not([class]) a.food,
 html.group nav:not([class]) a.group,
