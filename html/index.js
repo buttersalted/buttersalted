@@ -104,8 +104,8 @@ const formKv = function(katt, vatt, val) {
   // 3. load key-values based on object
   for(var k in val||{'': ''})
     newKv(k, val[k]);
-  // 4. return vnodes to mount
-  return Inp;
+  // 4. return component to mount
+  return {'view': () => Inp};
 };
 
 const formSql = function() {
@@ -129,18 +129,22 @@ const formJson = function() {
 
 const setupPage = function(e) {
   console.log('setupPage');
-  // 1. get path, prefix, and query
+  // 1. define food key, value attributes
+  const katt = {'list': 'types', 'placeholder': 'Column name, like: Id'};
+  const vatt = {'type': 'text', 'placeholder': 'Column name, like: %'};
+  // 2. get path, prefix, and query
   const path = stringAfter(location.hash.replace(/\/?#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
   const sqry = path.split('?')[1]||'';
   const qry = sqry? m.parseQueryString(sqry) : {};
-  // 2. update html class list (updates ui)
+  // 3. update html class list (updates ui)
   Html.classList.value = pre;
   if(sqry) Html.classList.add('query');
   if(e) return;
   // 3. submit form if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
-  else formSet(Forms[pre], qry);
+  else if(pre!=='food') formSet(Forms[pre], qry);
+  else m.mount(Forms.food.querySelector('.inputs'), formKv(katt, vatt, qry));
   if(sqry) Forms[pre].onsubmit();
 };
 
