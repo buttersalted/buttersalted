@@ -52,7 +52,7 @@ const ansError = function(err) {
   m.render(Thead, null);
   m.render(Tbody, null);
   // 2. show toast message
-  iziToast.error({'title': 'Query Error', 'message': err.message.replace('\n', '')});
+  iziToast.error({'title': 'Query Errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr', 'message': err.message});
 };
 
 const setupPage = function(e) {
