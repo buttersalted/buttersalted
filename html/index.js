@@ -58,7 +58,7 @@ const ansError = function(err) {
 const setupPage = function(e) {
   console.log('setupPage');
   // 1. get path, prefix, and query
-  const path = stringAfter(location.hash.replace(/\/#?\!?\/?/, ''), '/');
+  const path = stringAfter(location.hash.replace(/\/?#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
   const sqry = stringAfter(path, /\?/)||'';
   const qry = sqry? dequery(sqry) : {};
