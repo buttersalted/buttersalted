@@ -97,48 +97,13 @@ const formSql = function() {
   return false;
 };
 
-const formFood = function() {
-  console.log('formFood');
+const formJson = function() {
+  console.log('formJson');
   Html.classList.add('query');
   const data = formGet(this);
-  location.hash = '#!/food?'+formSerialize(data);
-  m.request({'method': 'GET', 'url': '/json/food', 'data': data}).then(ansRender, ansError);
-  return false;
-};
-
-const formGroup = function() {
-  console.log('formGroup');
-  Html.classList.add('query');
-  const data = formGet(this);
-  location.hash = '#!/group?'+formSerialize(data);
-  m.request({'method': 'GET', 'url': '/json/group', 'data': data}).then(ansRender, ansError);
-  return false;
-};
-
-const formTerm = function() {
-  console.log('formTerm');
-  Html.classList.add('query');
-  const data = formGet(this);
-  location.hash = '#!/term?'+formSerialize(data);
-  m.request({'method': 'GET', 'url': '/json/term', 'data': data}).then(ansRender, ansError);
-  return false;
-};
-
-const formType = function() {
-  console.log('formType');
-  Html.classList.add('query');
-  const data = formGet(this);
-  location.hash = '#!/type?'+formSerialize(data);
-  m.request({'method': 'GET', 'url': '/json/type', 'data': data}).then(ansRender, ansError);
-  return false;
-};
-
-const formUnit = function() {
-  console.log('formUnit');
-  Html.classList.add('query');
-  const data = formGet(this);
-  location.hash = '#!/unit?'+formSerialize(data);
-  m.request({'method': 'GET', 'url': '/json/unit', 'data': data}).then(ansRender, ansError);
+  const id = this.parentElement.id;
+  location.hash = `#!/${id}?${formSerialize(data)}`;
+  m.request({'method': 'GET', 'url': `/json/${id}`, 'data': data}).then(ansRender, ansError);
   return false;
 };
 
@@ -157,6 +122,11 @@ const setup = function() {
   Editor.getSession().setMode('ace/mode/pgsql');
   // 3. setup sql interface
   Sql.onsubmit = formSql;
+  Food.onsubmit = formJson;
+  Group.onsubmit = formJson;
+  Term.onsubmit = formJson;
+  Type.onsubmit = formJson;
+  Unit.onsubmit = formJson;
   // 4. setup page
   window.addEventListener('hashchange', setupPage);
   setupPage();
