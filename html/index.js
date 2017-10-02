@@ -58,7 +58,7 @@ const setupPage = function() {
   // 2. update html class list (updates ui)
   Html.classList.value = pre;
   if(sqry) Html.classList.add('query');
-  if(pre==='sql') Editor.setValue(qry.value);
+  if(pre==='sql') Editor.setValue(qry.value||'');
   if(sqry) document.querySelector(`#${pre} form`).submit();
 };
 
