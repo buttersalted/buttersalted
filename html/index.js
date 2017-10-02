@@ -75,26 +75,36 @@ const formSet = function(frm, val) {
 
 const formKv = function(katt, vatt, val) {
   console.log('formKv');
+  // 1. setup input vnodes, key functions
   const Inp = [], Fn = [];
+  // 2. define a new key-value generator
   const newKv = function(key, val) {
+    // 1. define key, onchange function
     const fn = () => key;
     const onchange = function() {
+      // 1. update key from key input
       key = this.value;
+      // 2. add new key-value if last filled up
       if(key && Fn[Fn.length-1]()) newKv('', '');
+      // 3. remove key-value if key empty and not last
       if(!key && Fn.length>1) {
         var i = Fn.indexOf(fn);
         Inp.splice(i, 1);
         Fn.splice(i, 1);
       }
     };
-    Inp.push(m('div', [
-      m('input', Object.assign({'onchange': onchange}, katt)),
-      m('input', Object.assign({'name': key, 'value': val}, vatt))
+    // 2. push vnode for key-value
+    Inp.push(m('div.input', [
+      m('input.key', Object.assign({'onchange': onchange}, katt)),
+      m('input.value', Object.assign({'name': key, 'value': val}, vatt))
     ]));
+    // 3. push key function
     Fn.push(fn);
   };
+  // 3. load key-values based on object
   for(var k in val||{'': ''})
     newKv(k, val[k]);
+  // 4. return vnodes to mount
   return Inp;
 };
 
