@@ -7,6 +7,7 @@ const Sections = document.querySelectorAll('section');
 const Sql = document.querySelector('#sql');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
+const Types = document.querySelector('#types');
 
 const stringBefore = function(str, sep) {
   const i = str.search(sep);
@@ -90,6 +91,10 @@ const setup = function() {
   const submit = document.querySelectorAll('form [type=submit]');
   for(var i=0, I=submit.length; i<I; i++)
     submit[i].onclick = function() { this.form.submitted = this.name; };
+  // 2. setup types data list
+  m.request({'method': 'GET', 'url': '/json/type'}).then((ans) => {
+    m.render(Types, ans.map((r) => m('option', r.id)));
+  });
   // 2. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
