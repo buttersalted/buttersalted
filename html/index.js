@@ -7,6 +7,7 @@ const Sections = document.querySelectorAll('section');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
 const Types = document.querySelector('#types');
+const FoodInputs = document.querySelector('#food form .inputs');
 const Forms = {
   'sql': document.querySelector('#sql form'),
   'food': document.querySelector('#food form'),
@@ -141,10 +142,11 @@ const setupPage = function(e) {
   Html.classList.value = pre;
   if(sqry) Html.classList.add('query');
   if(e) return;
-  // 3. submit form if just loaded
+  // 3. prepare forms if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
   else if(pre!=='food') formSet(Forms[pre], qry);
-  else m.mount(Forms.food.querySelector('.inputs'), formKv(katt, vatt, qry));
+  m.mount(FoodInputs, formKv(katt, vatt, pre==='food'? qry : null));
+  // 4. submit form if have query
   if(sqry) Forms[pre].onsubmit();
 };
 
