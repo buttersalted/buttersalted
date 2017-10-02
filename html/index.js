@@ -63,7 +63,7 @@ const setupPage = function() {
     .replace(/\/#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
   const sqry = stringAfter(path, /\?/)||'';
-  const qry = dequery(sqry);
+  const qry = sqry? dequery(sqry) : {};
   console.log('pre', pre);
   console.log('sqry', sqry);
   console.log('qry', qry);
@@ -79,7 +79,7 @@ const setup = function() {
   // 1. enable form multi submit
   const submit = document.querySelectorAll('form [type=submit]');
   for(var i=0, I=submit.length; i<I; i++)
-    submit[i].onclick = () => this.form.submitted = this.name;
+    submit[i].onclick = function() { this.form.submitted = this.name; };
   // 2. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
