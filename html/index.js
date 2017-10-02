@@ -90,7 +90,8 @@ const formKv = function(katt, vatt, val) {
     Fn.push(fn);
   };
   // 3. load key-values based on object
-  for(var k in val||{'': ''})
+  val = val||{'' : ''};
+  for(var k in val)
     newKv(k, val[k]);
   // 4. return component to mount
   return {'view': () => Inp};
