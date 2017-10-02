@@ -8,6 +8,16 @@ const Sql = document.querySelector('#sql');
 const Thead = document.querySelector('#ans thead');
 const Tbody = document.querySelector('#ans tbody');
 
+const stringBefore = function(str, sep) {
+  const i = str.search(sep);
+  return i>=0? str.substring(0, i) : str;
+};
+
+const stringAfter = function(str, sep) {
+  const i = str.search(sep);
+  return i>=0? str.substring(i+1) : str;
+};
+
 const dequery = function (a) {
   if(a.indexOf('?') > -1) a = a.split('?')[1];
   var kvs = a.split('&');
@@ -49,12 +59,14 @@ const setupSql = function() {
 
 const setupPage = function() {
   // 1. get url path, prefix, and query
-  url = location.href;
-  url = url.replace(location.origin, '').replace(/\/#?\!?\/?/, '');
-  url = url.startsWith('/')? url.substring(1) : url;
-  const pre = url.split('/?')[0].toLowerCase()||'sql';
-  const sqry = url.split('?')[1]||'';
+  const path = stringAfter(location.href.replace(location.origin, '')
+    .replace(/\/#?\!?\/?/, ''), '/');
+  const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
+  const sqry = stringAfter(url, '?')||'';
   const qry = dequery(sqry);
+  console.log('pre', pre);
+  console.log('sqry', sqry);
+  console.log('qry', qry);
   // 2. update html class list (updates ui)
   Html.classList.value = pre;
   if(sqry) Html.classList.add('query');
