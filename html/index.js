@@ -72,6 +72,7 @@ const formKv = function(katt, vatt, val) {
     const onchange = function() {
       // 1. update key from key input
       key = this.value;
+      console.log('onchange', key);
       // 2. add new key-value if last filled up
       if(key && Fn[Fn.length-1]()) newKv('', '');
       // 3. remove key-value if key empty and not last
