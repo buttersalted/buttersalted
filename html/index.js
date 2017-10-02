@@ -62,7 +62,7 @@ const setupPage = function() {
   const path = stringAfter(location.href.replace(location.origin, '')
     .replace(/\/#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
-  const sqry = stringAfter(path, '?')||'';
+  const sqry = stringAfter(path, /\?/)||'';
   const qry = dequery(sqry);
   console.log('pre', pre);
   console.log('sqry', sqry);
