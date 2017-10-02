@@ -73,17 +73,15 @@ const formSet = function(frm, val) {
   return frm;
 };
 
-const formKv = function(katt, vatt) {
+const formKv = function(katt, vatt, val) {
   console.log('formKv');
   const Inp = [], Fn = [];
-  const newKv = function() {
-    var name = '';
-    const fn = () => name;
-    Fn.push(fn);
+  const newKv = function(key, val) {
+    const fn = () => key;
     const onchange = function() {
-      name = this.value;
-      if(name && Fn[Fn.length-1]()) newKv();
-      if(!name && Fn.length>1) {
+      key = this.value;
+      if(key && Fn[Fn.length-1]()) newKv('', '');
+      if(!key && Fn.length>1) {
         var i = Fn.indexOf(fn);
         Inp.splice(i, 1);
         Fn.splice(i, 1);
@@ -91,11 +89,12 @@ const formKv = function(katt, vatt) {
     };
     Inp.push(m('div', [
       m('input', Object.assign({'onchange': onchange}, katt)),
-      m('input', Object.assign({'name': name}, vatt))
+      m('input', Object.assign({'name': key, 'value': val}, vatt))
     ]));
     Fn.push(fn);
   };
-  newKv();
+  for(var k in val||{'': ''})
+    newKv(k, val[k]);
   return Inp;
 };
 
