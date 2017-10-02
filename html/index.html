@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
   <script src="https://cdn.jsdelivr.net/npm/mithril"></script>
   <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ace-builds/src-min/ace.js"></script>
@@ -31,6 +30,7 @@
   </ul>
 </label>
 </nav>
+
 
 <main>
 <!-- 1. sql interface -->
@@ -105,7 +105,7 @@
   <label>tag</label>
   <input type="text" name="tag" placeholder="Name of tag, like: chocolate">
   <label>value</label>
-  <input type="text" name="value" placeholder="SQL select query, like: SELECT * FROM food WHERE Name LIKE '%chocolate%'">
+  <input type="text" name="value" placeholder="SQL query, like: SELECT * FROM food WHERE Name LIKE '%chocolate%'">
   <p txt="c">
     <button type="submit" primary>Search</button>
     <button type="reset">Reset</button>
