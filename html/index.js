@@ -52,7 +52,7 @@ const setupPage = function() {
   url = location.href;
   url = url.replace(location.origin, '').replace(/\/#?\!?\/?/, '');
   url = url.startsWith('/')? url.substring(1) : url;
-  const pre = url.split('/')[0].toLowerCase()||'sql';
+  const pre = url.split('/?')[0].toLowerCase()||'sql';
   const sqry = url.split('?')[1]||'';
   const qry = dequery(sqry);
   // 2. update html class list (updates ui)
