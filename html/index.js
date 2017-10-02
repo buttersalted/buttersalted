@@ -112,7 +112,7 @@ const setupPage = function(e) {
   // 3. submit form if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
   else formSet(Forms[pre], qry);
-  if(sqry) document.querySelector(`#${pre} form`).submit();
+  if(sqry) Forms[pre].onsubmit();
 };
 
 const setup = function() {
