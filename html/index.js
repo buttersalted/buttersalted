@@ -60,24 +60,6 @@ const formSet = function(frm, val) {
   return frm;
 };
 
-const formSerialize = function(val) {
-  // 1. serialize object as key=value&...
-  var z = '';
-  for(var k in val)
-    z += k+'='+encodeURIComponent(val[k])+'&';
-  return z? z.slice(0, -1) : z;
-};
-
-const formDeserialize = function(str) {
-  // 1. deserialize object from key=value&...
-  const z = {};
-  for(var kv of str.split('&')) {
-    var p = kv.split('=');
-    z[p[0]] = decodeURIComponent(p[1]||'');
-  }
-  return z;
-};
-
 const formSql = function() {
   console.log('formSql');
   Html.classList.add('query');
@@ -92,7 +74,7 @@ const formJson = function() {
   Html.classList.add('query');
   const data = formGet(this);
   const id = this.parentElement.id;
-  location.href = location.origin+`/#!/${id}?${formSerialize(data)}`;
+  location.href = location.origin+`/#!/${id}?${m.buildQueryString(data)}`;
   m.request({'method': 'GET', 'url': `/json/${id}`, 'data': data}).then(ansRender, ansError);
   return false;
 };
@@ -103,7 +85,7 @@ const setupPage = function(e) {
   const path = stringAfter(location.hash.replace(/\/?#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
   const sqry = path.split('?')[1]||'';
-  const qry = sqry? formDeserialize(sqry) : {};
+  const qry = sqry? m.parseQueryString(sqry) : {};
   // 2. update html class list (updates ui)
   Html.classList.value = pre;
   if(sqry) Html.classList.add('query');
