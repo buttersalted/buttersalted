@@ -16,7 +16,6 @@ const Forms = {
   'unit': document.querySelector('#unit form')
 };
 
-
 const stringBefore = function(str, sep) {
   const i = str.search(sep);
   return i>=0? str.substring(0, i) : str;
@@ -57,7 +56,7 @@ const formSet = function(frm, val) {
   // 1. set form elements from object
   const E = frm.elements;
   for(var i=0, I=E.length; i<I; i++)
-    if(E[i].name) E[i].value = val[E[i].name];
+    if(E[i].name && val[E[i].name]) E[i].value = val[E[i].name];
   return frm;
 };
 
