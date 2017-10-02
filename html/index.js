@@ -57,23 +57,31 @@ const setupSql = function() {
 
 };
 
-const setupPage = function() {
+const setupPage = function(e) {
   // 1. get path, prefix, and query
-  const path = stringAfter(location.href.replace(location.origin, '')
-    .replace(/\/#?\!?\/?/, ''), '/');
+  const path = stringAfter(location.hash.replace(/\/#?\!?\/?/, ''), '/');
   const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
   const sqry = stringAfter(path, /\?/)||'';
   const qry = sqry? dequery(sqry) : {};
-  console.log('pre', pre);
-  console.log('sqry', sqry);
-  console.log('qry', qry);
   // 2. update html class list (updates ui)
   Html.classList.value = pre;
   if(sqry) Html.classList.add('query');
+  if(e) return;
+  // 3. submit form if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
   if(sqry) document.querySelector(`#${pre} form`).submit();
 };
 
+const formSql = function() {
+  Html.classList.add('query');
+  const value = Editor.getValue();
+  location.hash = `#!/?value=${value}`;
+  m.request({'method': 'GET', 'url': `/sql/${value}`}).then((ans) => {
+    if(ans.length) ansRender(ans);
+    else ansEmpty();
+  }, ansError);
+  return false;
+};
 
 const setup = function() {
   // 1. enable form multi submit
@@ -84,14 +92,7 @@ const setup = function() {
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
   // 3. setup sql interface
-  Sql.onsubmit = function() {
-    const value = Editor.getValue();
-    m.request({'method': 'GET', 'url': `/sql/${value}`}).then((ans) => {
-      if(ans.length) ansRender(ans);
-      else ansEmpty();
-    }, ansError);
-    return false;
-  };
+  Sql.onsubmit = formSql;
   // 4. setup page
   window.addEventListener('hashchange', setupPage);
   setupPage();
