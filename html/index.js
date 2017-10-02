@@ -128,6 +128,7 @@ const setup = function() {
   // 2. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
+  Editor.focus();
   // 3. setup sql interface
   Forms.sql.onsubmit = formSql;
   Forms.food.onsubmit = formJson;
