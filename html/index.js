@@ -125,7 +125,7 @@ const setupPage = function(e) {
   console.log('setupPage');
   // 1. define food key, value attributes
   const katt = {'list': 'types', 'placeholder': 'Column name, like: Id'};
-  const vatt = {'type': 'text', 'placeholder': 'Column name, like: %'};
+  const vatt = {'type': 'text', 'placeholder': 'Value, like: 1001'};
   // 2. get path, prefix, and query
   const path = location.hash.replace(/#?\!?\/?/, '')
   const pre = path.split(/[\/\?]/)[0].toLowerCase()||'sql';
