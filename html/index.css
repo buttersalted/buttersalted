@@ -5,7 +5,8 @@ nav:not([class]) {
 nav:not([class]) label {
   max-width: none;
 }
-html:not([class]) header, html.sql:not(.query) header {
+html:not([class]) header,
+html.sql:not(.query) header {
   visibility: hidden;
 }
 html.food nav:not([class]) a.food,
@@ -21,6 +22,7 @@ html.unit nav:not([class]) a.unit {
 html:not(.query) main {
   padding-top: 2rem;
 }
+html:not([class]) section,
 html.sql section:not(#sql),
 html.food section:not(#food),
 html.group section:not(#group),
