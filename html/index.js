@@ -82,7 +82,7 @@ const formKv = function(frm, katt, vatt, val) {
         Inp.splice(i, 1);
         Fn.splice(i, 1);
       }
-      console.log('render', frm, Inp.length);
+      console.log('render', frm, windows.a=Inp);
       m.render(frm, Inp);
     };
     // 2. push vnode for key-value
@@ -97,7 +97,7 @@ const formKv = function(frm, katt, vatt, val) {
   val = Object.assign(val||{}, {'': ''});
   for(var k in val)
     newKv(k, val[k]);
-  console.log('render', frm, Inp.length);
+  console.log('renderOnce', frm, Inp);
   m.render(frm, Inp);
 };
 
