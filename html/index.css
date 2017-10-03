@@ -60,7 +60,8 @@ html.sql:not(.query) #logo {
 }
 fieldset {
   border: none;
-  margin: none;
+  margin: 0;
+  padding: 0;
 }
 html.query form fieldset {
   display: inline-block;

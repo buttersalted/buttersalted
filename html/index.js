@@ -70,7 +70,7 @@ const inpKv = function(e, key, val, katt, vatt) {
     val = this.value;
   };
   // 4. return component
-  return Object.assign(comp, {'view': function() { return m('div.input', [
+  return Object.assign(comp, {'view': function() { return m('fieldset', [
     m('input', Object.assign({'value': key, 'onchange': onkey}, katt)),
     m('input', Object.assign({'name': key, 'value': val, 'onchange': onval}, vatt))
   ]); }});
