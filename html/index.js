@@ -61,43 +61,39 @@ const formSet = function(frm, val) {
   return frm;
 };
 
-const formKv = function(frm, katt, vatt, val) {
-  console.log('formKv');
-  var Nodes = {}, n = 0;
-  const keyval = function(key, val, fn) {
-    const onkey = function() {
-      const k = this.value;
-      if(k && !key) CREATE();
-      if(!k && key) DETETE();
-      key = k;
-    };
-    const onval = function() {
-      val = this.value;
-    };
-  };
-  const add = function(i, key, val) {
-
-  };
+const inpKv = function(e, key, val, katt, vatt) {
+  const comp = {};
   const onkey = function() {
-    const k = this.parentElement.getAttribute('key');
-    const key = this.value, okey = Nodes[k].key;
-    if(key && !okey) Nodes[''+(n++)] = {'key': '', 'val': ''};
-    if(!key && okey) delete Nodes[k];
-    Nodes[k].key = key;
-    m.redraw(frm); // might not be needed
+    const k = this.value;
+    if(k && !key) e.create(comp);
+    if(!k && key) e.delete(comp);
+    key = k;
   };
   const onval = function() {
-    const k = this.parentElement.key;
-    Nodes[k].val = this.value;
+    val = this.value;
   };
-  const view = () => Object.keys(Nodes).map((k) => m('div.input', {'key': k}, [
-    m('input', Object.assign({'value': Nodes[k].key, 'onchange': onkey}, katt)),
-    m('input', Object.assign({'name': Nodes[k].key, 'value': Nodes[k].val, 'onchange': onval}, vatt))
-  ]));
+  return Object.assign(comp, {'view': function() { return m('div.input', [
+    m('input', Object.assign({'value': key, 'onchange': onkey}, katt)),
+    m('input', Object.assign({'name': key, 'value': val, 'onchange': onval}, vatt))
+  ]); }});
+};
+
+const formKv = function(frm, katt, vatt, val) {
+  console.log('formKv');
+  const Comps = new Set();
+  const e = {
+    'create': function(c) { Comps.add(inpKv(e, '', '', katt, vatt)); },
+    'delete': function(c) { Comps.delete(c); }
+  };
   val = Object.assign(val||{}, {'': ''});
   for(var k in val)
-    Nodes[''+(n++)] = {'key': k, 'val': val[k]};
-  m.mount(frm, {'view': view});
+    Comps.add(inpKv(e, key, val, katt, vatt));
+  m.mount(frm, {'view': function() {
+    var z = [];
+    for(var c of Comps)
+      z.push(c.view());
+    return z;
+  }});
 };
 
 const formSql = function() {
