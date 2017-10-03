@@ -17,16 +17,6 @@ const Forms = {
   'unit': document.querySelector('#unit form')
 };
 
-const stringBefore = function(str, sep) {
-  const i = str.search(sep);
-  return i>=0? str.substring(0, i) : str;
-};
-
-const stringAfter = function(str, sep) {
-  const i = str.search(sep);
-  return i>=0? str.substring(i+1) : str;
-};
-
 const ansRender = function(ans) {
   console.log('ansRender');
   // 1. set table head, body from data
