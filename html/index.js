@@ -85,7 +85,7 @@ const formKv = function(frm, katt, vatt, val) {
         Fn.splice(i, 1);
       }
       console.log('render', frm, window.a=Inp);
-      m.render(frm, Inp);
+      m.render(frm, Inp.map(v => v));
     };
     // b. push vnode for key-value
     Inp.push(m('div.input', [
