@@ -94,7 +94,7 @@ const formKv = function(frm, katt, vatt, val) {
     Fn.push(fn);
   };
   // 3. load key-values based on object, and render
-  val = val||{'' : ''};
+  val = Object.assign(val||{}, {'': ''});
   for(var k in val)
     newKv(k, val[k]);
   m.render(frm, Inp);
@@ -136,7 +136,7 @@ const setupPage = function(e) {
   // 3. prepare forms if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
   else if(pre!=='food') formSet(Forms[pre], qry);
-  formKv(FoodInputs, katt, vatt, pre==='food'? qry : null);
+  formKv(FoodInputs, katt, vatt, pre==='food'? qry : {});
   // 4. submit form if have query
   if(sqry) Forms[pre].onsubmit();
 };
