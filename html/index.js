@@ -52,16 +52,24 @@ const formSet = function(frm, val) {
 };
 
 const inpKv = function(e, key, val, katt, vatt) {
+  // 1. setup component (empty, yet need to refer it)
   const comp = {};
+  // 2. this handles key change
   const onkey = function() {
+    // a. get new key
     const k = this.value;
+    // b. created if filled, delete if emptied
     if(k && !key) e.create(comp);
     if(!k && key) e.delete(comp);
+    // c. update key
     key = k;
   };
+  // 3. this handles value change
   const onval = function() {
+    // a. update value
     val = this.value;
   };
+  // 4. return component
   return Object.assign(comp, {'view': function() { return m('div.input', [
     m('input', Object.assign({'value': key, 'onchange': onkey}, katt)),
     m('input', Object.assign({'name': key, 'value': val, 'onchange': onval}, vatt))
@@ -70,14 +78,18 @@ const inpKv = function(e, key, val, katt, vatt) {
 
 const formKv = function(frm, katt, vatt, val) {
   console.log('formKv');
+  // 1. define components
   const Comps = new Set();
+  // 2. handle create and delete of components
   const e = {
     'create': function(c) { Comps.add(inpKv(e, '', '', katt, vatt)); },
     'delete': function(c) { Comps.delete(c); }
   };
+  // 3. initialize components from input
   val = Object.assign(val||{}, {'': ''});
   for(var k in val)
     Comps.add(inpKv(e, k, val[k], katt, vatt));
+  // 4. mount combined component to form
   m.mount(frm, {'view': function() {
     var z = [];
     for(var c of Comps)
@@ -88,8 +100,10 @@ const formKv = function(frm, katt, vatt, val) {
 
 const formSql = function() {
   console.log('formSql');
+  // 1. switch to query mode, and get form data
   Html.classList.add('query');
   const value = Editor.getValue();
+  // 2. update location, and make ajax request
   location.href = location.origin+'/#!/?value='+value;
   m.request({'method': 'GET', 'url': '/sql/'+value}).then(ansRender, ansError);
   return false;
@@ -97,9 +111,11 @@ const formSql = function() {
 
 const formJson = function() {
   console.log('formJson');
+  // 1. switch to query mode, and get form data
   Html.classList.add('query');
   const data = formGet(this);
   const id = this.parentElement.id;
+  // 2. update location, and make ajax request
   location.href = location.origin+`/#!/${id}?${m.buildQueryString(data)}`;
   m.request({'method': 'GET', 'url': `/json/${id}`, 'data': data}).then(ansRender, ansError);
   return false;
