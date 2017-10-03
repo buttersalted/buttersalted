@@ -65,26 +65,23 @@ const formKv = function(frm, katt, vatt, val) {
   console.log('formKv');
   // 1. setup input vnodes, key functions
   const Inp = [], Fn = [];
-  // 2. define a new vnode
-  const newVnode = (key, val) => m('div.input', [
-    m('input', Object.assign({'value': key, 'onchange': onchange}, katt)),
-    m('input', Object.assign({'name': key, 'value': val}, vatt))
-  ]);
-  // 3. define a new key-value generator
+  // 2. define a new key-value generator
   const newKv = function(key, val) {
     console.log('newKv', key, val, Inp, Fn);
     // a. define key, onchange function
     const fn = () => key;
+    const vkey = m('input', Object.assign({'value': key, 'onchange': onchange}, katt));
+    const vval = m('input', Object.assign({'name': key, 'value': val}, vatt));
     const onchange = function() {
       // i. update key from key input
       key = this.value;
-      const i = Fn.indexOf(fn);
-      Inp[i] = newVnode(key, val);
+      vval.attributes.name = key;
       console.log('onchange', key, val, Inp, Fn);
       // ii. add new key-value if last filled up
       if(key && Fn[Fn.length-1]()) newKv('', '');
       // iii. remove key-value if key empty and not last
       if(!key && Fn.length>1) {
+        const i = Fn.indexOf(fn);
         Inp.splice(i, 1);
         Fn.splice(i, 1);
       }
@@ -92,11 +89,11 @@ const formKv = function(frm, katt, vatt, val) {
       m.render(frm, Inp);
     };
     // b. push vnode for key-value
-    Inp.push(newVnode(key, val));
+    Inp.push(m('div.input', [vkey, vval]));
     // c. push key function
     Fn.push(fn);
   };
-  // 4. load key-values based on object, and render
+  // 3. load key-values based on object, and render
   val = Object.assign(val||{}, {'': ''});
   for(var k in val)
     newKv(k, val[k]);
