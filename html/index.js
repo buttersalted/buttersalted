@@ -64,6 +64,20 @@ const formSet = function(frm, val) {
 const formKv = function(frm, katt, vatt, val) {
   console.log('formKv');
   var Nodes = {}, n = 0;
+  const keyval = function(key, val, fn) {
+    const onkey = function() {
+      const k = this.value;
+      if(k && !key) CREATE();
+      if(!k && key) DETETE();
+      key = k;
+    };
+    const onval = function() {
+      val = this.value;
+    };
+  };
+  const add = function(i, key, val) {
+
+  };
   const onkey = function() {
     const k = this.parentElement.getAttribute('key');
     const key = this.value, okey = Nodes[k].key;
