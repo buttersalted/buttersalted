@@ -97,6 +97,7 @@ const formKv = function(frm, katt, vatt, val) {
   val = Object.assign(val||{}, {'': ''});
   for(var k in val)
     newKv(k, val[k]);
+  console.log('render', frm, Inp.length);
   m.render(frm, Inp);
 };
 
