@@ -37,7 +37,7 @@ const ansRender = function(ans) {
 };
 
 const ansError = function(err) {
-  console.log('ansError');
+  console.log('ansError', err);
   // 1. clear table
   m.render(Thead, null);
   m.render(Tbody, null);
