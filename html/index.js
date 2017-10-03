@@ -17,6 +17,12 @@ const Forms = {
   'unit': document.querySelector('#unit form')
 };
 
+const locationSet = function(pth) {
+  const fn = window.onhashchange;
+  window.onhashchange = function() { window.onhashchange = fn; };
+  location.href = location.origin+pth;
+};
+
 const ansRender = function(ans) {
   console.log('ansRender');
   // 1. set table head, body from data
@@ -104,7 +110,7 @@ const formSql = function() {
   Html.classList.add('query');
   const value = Editor.getValue();
   // 2. update location, and make ajax request
-  location.href = location.origin+'/#!/?value='+value;
+  locationSet('/#!/?'+m.buildQueryString({'value': value}));
   m.request({'method': 'GET', 'url': '/sql/'+value}).then(ansRender, ansError);
   return false;
 };
@@ -116,7 +122,7 @@ const formJson = function() {
   const data = formGet(this);
   const id = this.parentElement.id;
   // 2. update location, and make ajax request
-  location.href = location.origin+`/#!/${id}?${m.buildQueryString(data)}`;
+  locationSet('/#!/'+id+'?'+m.buildQueryString(data));
   m.request({'method': 'GET', 'url': `/json/${id}`, 'data': data}).then(ansRender, ansError);
   return false;
 };
@@ -134,12 +140,11 @@ const setupPage = function(e) {
   // 3. update html class list (updates ui)
   Html.classList.value = pre;
   if(sqry) Html.classList.add('query');
-  if(e) return;
-  // 3. prepare forms if just loaded
+  // 4. prepare forms if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
   else if(pre!=='food') formSet(Forms[pre], qry);
   formKv(FoodInputs, katt, vatt, pre==='food'? qry : {});
-  // 4. submit form if have query
+  // 5. submit form if have query
   if(sqry) Forms[pre].onsubmit();
 };
 
@@ -162,7 +167,7 @@ const setup = function() {
   for(var k in Forms)
     Forms[k].onsubmit = formJson;
   // 4. setup page
-  window.addEventListener('hashchange', setupPage);
+  window.onhashchange = setupPage;
   setupPage();
 };
 
