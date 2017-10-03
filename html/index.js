@@ -70,18 +70,16 @@ const formKv = function(frm, katt, vatt, val) {
     console.log('newKv', key, val, Inp, Fn);
     // a. define key, onchange function
     const fn = () => key;
-    const vkey = m('input', Object.assign({'value': key, 'onchange': onchange}, katt));
-    const vval = m('input', Object.assign({'name': key, 'value': val}, vatt));
     const onchange = function() {
       // i. update key from key input
       key = this.value;
-      vval.attributes.name = key;
+      const i = Fn.indexOf(fn);
+      Inp[i].chilren[1].attributes.name = key;
       console.log('onchange', key, val, Inp, Fn);
       // ii. add new key-value if last filled up
       if(key && Fn[Fn.length-1]()) newKv('', '');
       // iii. remove key-value if key empty and not last
       if(!key && Fn.length>1) {
-        const i = Fn.indexOf(fn);
         Inp.splice(i, 1);
         Fn.splice(i, 1);
       }
@@ -89,7 +87,10 @@ const formKv = function(frm, katt, vatt, val) {
       m.render(frm, Inp);
     };
     // b. push vnode for key-value
-    Inp.push(m('div.input', [vkey, vval]));
+    Inp.push(m('div.input', [
+      m('input', Object.assign({'value': key, 'onchange': onchange}, katt)),
+      m('input', Object.assign({'name': key, 'value': val}, vatt))
+    ]));
     // c. push key function
     Fn.push(fn);
   };
