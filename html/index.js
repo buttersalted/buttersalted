@@ -65,7 +65,7 @@ const formKv = function(frm, katt, vatt, val) {
   console.log('formKv');
   var Nodes = {}, n = 0;
   const onkey = function() {
-    const k = this.parentElement.key;
+    const k = this.parentElement.getAttribute('key');
     const key = this.value, okey = Nodes[k].key;
     if(key && !okey) Nodes[''+(n++)] = {'key': '', 'val': ''};
     if(!key && okey) delete Nodes[k];
