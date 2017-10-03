@@ -74,7 +74,8 @@ const formKv = function(frm, katt, vatt, val) {
       // i. update key from key input
       key = this.value;
       const i = Fn.indexOf(fn);
-      Inp[i].chilren[1].attributes.name = key;
+      console.log('Fn', Fn, 'fn', fn, 'i', i);
+      Inp[i].chilren[1].attrs.name = key;
       console.log('onchange', key, val, Inp, Fn);
       // ii. add new key-value if last filled up
       if(key && Fn[Fn.length-1]()) newKv('', '');
