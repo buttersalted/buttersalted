@@ -49,6 +49,10 @@ html.sql:not(.query) #logo {
 @media (max-height: 32rem) {
   #logo { margin-top: 0; }
 }
+html.query:not(.sql) form > div {
+  display: inline-block;
+  width: 50%;
+}
 #sql-value {
   font-size: 1.44em;
   position: absolute;
