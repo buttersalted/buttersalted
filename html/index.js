@@ -80,6 +80,9 @@ const formKv = function(frm, katt, vatt, val) {
     m('input', Object.assign({'value': Nodes[k].key, 'onchange': onkey}, katt)),
     m('input', Object.assign({'name': Nodes[k].key, 'value': Nodes[k].val, 'onchange': onval}, vatt))
   ]));
+  val = Object.assign(val||{}, {'': ''});
+  for(var k in val)
+    Nodes[''+(n++)] = {'key': k, 'val': val[k]};
   m.mount(frm, {'view': view});
 };
 
