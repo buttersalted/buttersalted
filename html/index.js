@@ -121,8 +121,8 @@ const setupPage = function(e) {
   const katt = {'list': 'types', 'placeholder': 'Column name, like: Id'};
   const vatt = {'type': 'text', 'placeholder': 'Column name, like: %'};
   // 2. get path, prefix, and query
-  const path = stringAfter(location.hash.replace(/\/?#?\!?\/?/, ''), '/');
-  const pre = stringBefore(path, /[\/\?]/).toLowerCase()||'sql';
+  const path = location.hash.replace(/#?\!?\/?/, '')
+  const pre = path.split(/[\/\?]/)[0].toLowerCase()||'sql';
   const sqry = path.split('?')[1]||'';
   const qry = sqry? m.parseQueryString(sqry) : {};
   // 3. update html class list (updates ui)
