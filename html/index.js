@@ -17,13 +17,6 @@ const Forms = {
   'unit': document.querySelector('#unit form')
 };
 
-const locationSet = function(pth) {
-  console.log('locationSet');
-  // const fn = window.onhashchange;
-  // window.onhashchange = function() { console.log('locationSet.onhashchange'); window.onhashchange = fn; };
-  location.href = location.origin+pth;
-};
-
 const ansRender = function(ans) {
   console.log('ansRender');
   // 1. set table head, body from data
@@ -111,7 +104,7 @@ const formSql = function() {
   Html.classList.add('query');
   const value = Editor.getValue();
   // 2. update location, and make ajax request
-  locationSet('/#!/?'+m.buildQueryString({'value': value}));
+  location.href = location.origin+'/#!/?'+m.buildQueryString({'value': value});
   m.request({'method': 'GET', 'url': '/sql/'+value}).then(ansRender, ansError);
   return false;
 };
@@ -123,7 +116,7 @@ const formJson = function() {
   const data = formGet(this);
   const id = this.parentElement.id;
   // 2. update location, and make ajax request
-  locationSet('/#!/'+id+'?'+m.buildQueryString(data));
+  location.href = location.origin+'/#!/'+id+'?'+m.buildQueryString(data);
   m.request({'method': 'GET', 'url': `/json/${id}`, 'data': data}).then(ansRender, ansError);
   return false;
 };
