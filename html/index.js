@@ -87,7 +87,7 @@ const formKv = function(frm, katt, vatt, val) {
   };
   val = Object.assign(val||{}, {'': ''});
   for(var k in val)
-    Comps.add(inpKv(e, key, val, katt, vatt));
+    Comps.add(inpKv(e, k, val[k], katt, vatt));
   m.mount(frm, {'view': function() {
     var z = [];
     for(var c of Comps)
