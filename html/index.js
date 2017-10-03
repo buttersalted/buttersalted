@@ -85,7 +85,6 @@ const formKv = function(frm, katt, vatt, val) {
       if(key && Fn[Fn.length-1]()) newKv('', '');
       // iii. remove key-value if key empty and not last
       if(!key && Fn.length>1) {
-        var i = Fn.indexOf(fn);
         Inp.splice(i, 1);
         Fn.splice(i, 1);
       }
