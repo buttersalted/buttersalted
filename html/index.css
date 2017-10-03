@@ -49,7 +49,7 @@ html.sql:not(.query) #logo {
 @media (max-height: 32rem) {
   #logo { margin-top: 0; }
 }
-html.query:not(.sql) form > div {
+html.query:not(.sql) form fieldset {
   display: inline-block;
   width: 50%;
 }
