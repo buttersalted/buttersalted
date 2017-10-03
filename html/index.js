@@ -18,8 +18,9 @@ const Forms = {
 };
 
 const locationSet = function(pth) {
+  console.log('locationSet');
   const fn = window.onhashchange;
-  window.onhashchange = function() { window.onhashchange = fn; };
+  window.onhashchange = function() { console.log('locationSet.onhashchange'); window.onhashchange = fn; };
   location.href = location.origin+pth;
 };
 
