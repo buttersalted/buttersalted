@@ -63,44 +63,24 @@ const formSet = function(frm, val) {
 
 const formKv = function(frm, katt, vatt, val) {
   console.log('formKv');
-  // 1. setup input vnodes, key functions
-  const Inp = [], Fn = [];
-  // 2. define a new key-value generator
-  const newKv = function(key, val) {
-    console.log('newKv', key, val, Inp, Fn);
-    // a. define key, onchange function
-    const fn = () => key;
-    const onchange = function() {
-      // i. update key from key input
-      key = this.value;
-      const i = Fn.indexOf(fn);
-      console.log('Fn', Fn, 'Inp', Inp, 'fn', fn, 'i', i);
-      Inp[i].children[1].attrs.name = key;
-      console.log('onchange', key, val, Inp, Fn);
-      // ii. add new key-value if last filled up
-      if(key && Fn[Fn.length-1]()) newKv('', '');
-      // iii. remove key-value if key empty and not last
-      if(!key && Fn.length>1) {
-        Inp.splice(i, 1);
-        Fn.splice(i, 1);
-      }
-      console.log('render', frm, window.a=Inp);
-      m.render(frm, Inp.map(v => v));
-    };
-    // b. push vnode for key-value
-    Inp.push(m('div.input', [
-      m('input', Object.assign({'value': key, 'onchange': onchange}, katt)),
-      m('input', Object.assign({'name': key, 'value': val}, vatt))
-    ]));
-    // c. push key function
-    Fn.push(fn);
+  var Nodes = {}, n = 0;
+  const onkey = function() {
+    const k = this.parentElement.key;
+    const key = this.value, okey = Nodes[k].key;
+    if(key && !okey) Nodes[''+(n++)] = {'key': '', 'val': ''};
+    if(!key && okey) delete Nodes[k];
+    Nodes[k].key = key;
+    m.redraw(frm); // might not be needed
   };
-  // 3. load key-values based on object, and render
-  val = Object.assign(val||{}, {'': ''});
-  for(var k in val)
-    newKv(k, val[k]);
-  console.log('renderOnce', frm, Inp);
-  m.render(frm, Inp);
+  const onval = function() {
+    const k = this.parentElement.key;
+    Nodes[k].val = this.value;
+  };
+  const view = () => Object.keys(Nodes).map((k) => m('div.input', {'key': k}, [
+    m('input', Object.assign({'value': Nodes[k].key, 'onchange': onkey}, katt)),
+    m('input', Object.assign({'name': Nodes[k].key, 'value': Nodes[k].val, 'onchange': onval}, vatt))
+  ]));
+  m.mount(frm, {'view': view});
 };
 
 const formSql = function() {
