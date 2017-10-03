@@ -167,9 +167,9 @@ const setup = function() {
   Editor.getSession().setMode('ace/mode/pgsql');
   Editor.focus();
   // 3. setup sql interface
-  Forms.sql.onsubmit = formSql;
   for(var k in Forms)
     Forms[k].onsubmit = formJson;
+  Forms.sql.onsubmit = formSql;
   // 4. setup page
   window.onhashchange = setupPage;
   setupPage();
