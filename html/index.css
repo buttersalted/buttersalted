@@ -31,6 +31,9 @@ html.type section:not(#type),
 html.unit section:not(#unit) {
   display: none;
 }
+form {
+  margin: auto;
+}
 html:not(.query) section form {
   max-width: 70rem;
 }
