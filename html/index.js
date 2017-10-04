@@ -10,6 +10,7 @@ var Types = document.querySelector('#types');
 var FoodInputs = document.querySelector('#food form .inputs');
 var Forms = {
   'sql': document.querySelector('#sql form'),
+  'pipe': document.querySelector('#sql pipe'),
   'food': document.querySelector('#food form'),
   'group': document.querySelector('#group form'),
   'term': document.querySelector('#term form'),
@@ -145,6 +146,20 @@ var formSql = function() {
   // 2. update location, and make ajax request
   locationSet('#!/?'+m.buildQueryString({'value': value}));
   m.request({'method': 'GET', 'url': '/sql/'+value}).then(ansRender, ansError);
+  return false;
+};
+
+var formPipe = function() {
+  console.log('formPipe');
+  // 1. switch to query mode, and get form data
+  Html.classList.add('query');
+  var data = formGet(this);
+  var sbt = this.submitted;
+  // 2.
+  locationSet('#!/?'+m.buildQueryString(data));
+  var req = (h) => m.request({'method': h, 'url': '/pipe', 'data': data});
+  if(sbt==='get') req('GET');
+  else if(sbt==='post') req('POST');
   return false;
 };
 
