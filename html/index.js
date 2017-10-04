@@ -138,7 +138,7 @@ const formJson = function() {
   const data = formGet(this);
   const sbt = this.submitted;
   const id = this.parentElement.id;
-  // 2. update location, and make ajax request
+  // 2. update location, and make ajax request (4 options)
   locationSet('#!/'+id+'?'+m.buildQueryString(data));
   const req = (h, u) => m.request({'method': h, 'url': '/json/'+u, 'data': data});
   if(sbt==='select') req('GET', id).then(ansRender, ansError);
