@@ -98,7 +98,7 @@ const inpKv = function(e, key, val, katt, vatt) {
   ]); }});
 };
 
-const formKv = function(frm, katt, vatt, val) {
+const formKv = function(el, katt, vatt, val) {
   console.log('formKv');
   // 1. define components
   const Comps = new Set();
@@ -111,19 +111,21 @@ const formKv = function(frm, katt, vatt, val) {
   val = Object.assign(val||{}, {'': ''});
   for(var k in val)
     Comps.add(inpKv(e, k, val[k], katt, vatt));
-  // 4. handle form reset
-  frm.onreset = function() {
-    Comps.clear();
-    e.create();
-    m.redraw(this);
+  // 4. mount combined component to form
+  const z = {
+    'view': function() {
+      var z = [];
+      for(var c of Comps)
+        z.push(c.view());
+      return z;
+    },
+    'onreset': function() {
+      Comps.clear();
+      e.create();
+    }
   };
-  // 5. mount combined component to form
-  m.mount(frm, {'view': function() {
-    var z = [];
-    for(var c of Comps)
-      z.push(c.view());
-    return z;
-  }});
+  m.mount(el, z);
+  return z;
 };
 
 const formSql = function() {
@@ -171,7 +173,8 @@ const setupPage = function(e) {
   // 4. prepare forms if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
   else if(pre!=='food') formSet(Forms[pre], qry);
-  formKv(FoodInputs, katt, vatt, pre==='food'? qry : {});
+  var kv = formKv(FoodInputs, katt, vatt, pre==='food'? qry : {});
+  Forms.food.onreset = kv.onreset;
   // 5. submit form if have query
   if(sqry) Forms[pre].onsubmit();
 };
