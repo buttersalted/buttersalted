@@ -10,7 +10,7 @@ var Types = document.querySelector('#types');
 var FoodInputs = document.querySelector('#food form .inputs');
 var Forms = {
   'sql': document.querySelector('#sql form'),
-  'pipe': document.querySelector('#sql pipe'),
+  'pipe': document.querySelector('#pipe form'),
   'food': document.querySelector('#food form'),
   'group': document.querySelector('#group form'),
   'term': document.querySelector('#term form'),
