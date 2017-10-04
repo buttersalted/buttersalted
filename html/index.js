@@ -33,16 +33,28 @@ const ansRender = function(ans) {
   m.render(Thead, ans.length? m('tr', Object.keys(ans[0]).map((k) => m('th', k))) : null);
   m.render(Tbody, ans.length? ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))) : null);
   // 3. show toast message (if empty)
-  if(!ans.length) iziToast.info({'title': 'Empty Query', 'message': 'no values returned'});
+  if(!ans.length) iziToast.warning({'title': 'Empty Query', 'message': 'no values returned'});
 };
 
 const ansError = function(err) {
-  console.log('ansError', err);
+  console.log('ansError');
   // 1. clear table
   m.render(Thead, null);
   m.render(Tbody, null);
   // 2. show toast message
   iziToast.error({'title': 'Query Error', 'message': err.message});
+};
+
+const actRender = function(ans) {
+  console.log('actRender');
+  // 1. show toast message
+  iziToast.info({'title': 'Action successful', 'message': ans});
+};
+
+const actError = function(err) {
+  console.log('actError');
+  // 1. show toast message
+  iziToast.error({'title': 'Action failed', 'message': err.message});
 };
 
 const formGet = function(frm) {
@@ -124,10 +136,15 @@ const formJson = function() {
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
   const data = formGet(this);
+  const sbt = this.submitted;
   const id = this.parentElement.id;
   // 2. update location, and make ajax request
   locationSet('#!/'+id+'?'+m.buildQueryString(data));
-  m.request({'method': 'GET', 'url': `/json/${id}`, 'data': data}).then(ansRender, ansError);
+  const req = (m, u) => m.request({'method': m, 'url': '/json/'+u, 'data': data});
+  if(sbt==='select') req('GET', id).then(ansRender, ansError);
+  else if(sbt==='insert') req('POST', id).then(actRender, actError);
+  else if(sbt==='update') req('PATCH', id+'/'+data.id).then(actRender, actError);
+  else if(sbt==='delete') req('DELETE', id+'/'+data.id).then(actRender, actError);
   return false;
 };
 
