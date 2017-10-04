@@ -174,19 +174,20 @@ var formPipe = function() {
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
   var data = formGet(this), z = [];
+  var url = '/pipe/'+data.source+'/';
   var sbt = this.submitted;
   // 2. update location
   locationSet('#!/?'+m.buildQueryString(data));
   // 3. if submit is get, render results (yay async)
   if(sbt==='get') loopAsync(function(i) {
-    return ajaxReq('GET', '/pipe/'+i).then(function(ans) {
+    return ajaxReq('GET', url+i).then(function(ans) {
       z.push(ans);
       ansRender(z);
     });
   }, parseInt(data.start), parseInt(data.stop));
   // 4. if submit is post, render status (yay async again)
   else if(sbt==='post') loopAsync(function(i) {
-    return ajaxReq('POST', '/pipe/'+i).then(function(ans) {
+    return ajaxReq('POST', url+i).then(function(ans) {
       z.push({'id': i, 'status': ans});
       ansRender(z);
     }, function(err) {
