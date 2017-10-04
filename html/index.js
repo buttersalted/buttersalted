@@ -192,7 +192,7 @@ var formPipe = function() {
   // 4. if submit is get, render results (yay async)
   else loopAsync(function(i) {
     return ajaxReq('GET', url+i).then(function(ans) {
-      z.push({'Id': ans.Id, 'Name': ans.Name});
+      z.push(ans);
       ansRender(z);
       console.log(JSON.stringify(z));
     }, ansError);
