@@ -43,19 +43,27 @@ var ajaxReq = function(mth, url, dat) {
 
 var ansRender = function(ans) {
   console.log('ansRender');
-  // 1. set table head, body from data
-  var zk = [], zv = [];
-  for(var k in ans[0])
-    zk.push(m('th', k));
-  for(var r=0, R=ans.length; r<R; r++) {
-    var rv = [];
+  // 1. get set of all columns
+  var cs = new Set(), ca = [], zc = [], zv = [];
+  for(var r=0, R=ans.length; r<R; r++)
     for(var c in ans[r])
-      rv.push(m('td', ans[r][c]));
-    zv.push(m('tr', {'key': r}, rv));
+      cs.add(c);
+  // 2. generate table head
+  for(var c of cs) {
+    ca.push(c);
+    zc.push(m('th', c));
   }
-  m.render(Thead, ans.length? m('tr', zk) : null);
+  // 3. generate table body
+  for(var r=0; r<R; r++) {
+    var zr = [];
+    for(var d=0, D=ca.length; d<D; d++)
+      zr.push(m('td', ans[r][ca[d]]));
+    zv.push(m('tr', {'key': r}, zr));
+  }
+  // 4. update table head, body
+  m.render(Thead, ans.length? m('tr', zc) : null);
   m.render(Tbody, ans.length? zv : null);
-  // 2. show toast message (if empty)
+  // 5. show toast message (if empty)
   if(!ans.length) iziToast.warning({'title': 'Empty Query', 'message': 'no values returned'});
 };
 
