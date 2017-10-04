@@ -47,7 +47,8 @@ var ansRender = function(ans) {
   var zk = [], zv = [];
   for(var k in ans[0])
     zk.push(m('th', k));
-  for(var r=0, rv=[], R=ans.length; r<R; r++) {
+  for(var r=0, R=ans.length; r<R; r++) {
+    var rv = [];
     for(var c in ans[r])
       rv.push(m('td', ans[r][c]));
     zv.push(m('tr', {'key': r}, rv));
