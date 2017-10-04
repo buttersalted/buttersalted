@@ -1,14 +1,14 @@
 // 1. define global variables
-const Html = document.querySelector('html');
-const Editor = ace.edit('sql-value');
-const Header = document.querySelector('header');
-const Navs = document.querySelectorAll('nav li > a');
-const Sections = document.querySelectorAll('section');
-const Thead = document.querySelector('#ans thead');
-const Tbody = document.querySelector('#ans tbody');
-const Types = document.querySelector('#types');
-const FoodInputs = document.querySelector('#food form .inputs');
-const Forms = {
+var Html = document.querySelector('html');
+var Editor = ace.edit('sql-value');
+var Header = document.querySelector('header');
+var Navs = document.querySelectorAll('nav li > a');
+var Sections = document.querySelectorAll('section');
+var Thead = document.querySelector('#ans thead');
+var Tbody = document.querySelector('#ans tbody');
+var Types = document.querySelector('#types');
+var FoodInputs = document.querySelector('#food form .inputs');
+var Forms = {
   'sql': document.querySelector('#sql form'),
   'food': document.querySelector('#food form'),
   'group': document.querySelector('#group form'),
@@ -17,17 +17,17 @@ const Forms = {
   'unit': document.querySelector('#unit form')
 };
 
-const objTruthy = function(a) {
+var objTruthy = function(a) {
   // 1. get object with only truthy values
-  const z = {};
+  var z = {};
   for(var k in a)
     if(a[k]) z[k] = a[k];
   return z;
 };
 
-const locationSet = function(hsh) {
+var locationSet = function(hsh) {
   // 1. replace temp handler only if hash changed
-  const fn = window.onhashchange;
+  var fn = window.onhashchange;
   if(hsh!==location.hash) window.onhashchange = function() {
     window.onhashchange = fn;
   };
@@ -35,7 +35,7 @@ const locationSet = function(hsh) {
   location.href = location.origin+'/'+hsh;
 };
 
-const ansRender = function(ans) {
+var ansRender = function(ans) {
   console.log('ansRender');
   // 1. set table head, body from data
   m.render(Thead, ans.length? m('tr', Object.keys(ans[0]).map((k) => m('th', k))) : null);
@@ -44,7 +44,7 @@ const ansRender = function(ans) {
   if(!ans.length) iziToast.warning({'title': 'Empty Query', 'message': 'no values returned'});
 };
 
-const ansError = function(err) {
+var ansError = function(err) {
   console.log('ansError');
   // 1. clear table
   m.render(Thead, null);
@@ -53,41 +53,41 @@ const ansError = function(err) {
   iziToast.error({'title': 'Query Error', 'message': err.message});
 };
 
-const actRender = function(ans) {
+var actRender = function(ans) {
   console.log('actRender');
   // 1. show toast message
   iziToast.info({'title': 'Action successful', 'message': ans});
 };
 
-const actError = function(err) {
+var actError = function(err) {
   console.log('actError');
   // 1. show toast message
   iziToast.error({'title': 'Action failed', 'message': err.message});
 };
 
-const formGet = function(frm) {
+var formGet = function(frm) {
   // 1. set object from form elements
-  const E = frm.elements, z = {};
+  var E = frm.elements, z = {};
   for(var i=0, I=E.length; i<I; i++)
     if(E[i].name) z[E[i].name] = E[i].value;
   return z;
 };
 
-const formSet = function(frm, val) {
+var formSet = function(frm, val) {
   // 1. set form elements from object
-  const E = frm.elements;
+  var E = frm.elements;
   for(var i=0, I=E.length; i<I; i++)
     if(E[i].name && val[E[i].name]) E[i].value = val[E[i].name];
   return frm;
 };
 
-const inpKv = function(e, key, val, katt, vatt) {
+var inpKv = function(e, key, val, katt, vatt) {
   // 1. setup component (empty, yet need to refer it)
-  const comp = {};
+  var comp = {};
   // 2. this handles key change
-  const onkey = function() {
+  var onkey = function() {
     // a. get new key
-    const k = this.value;
+    var k = this.value;
     // b. created if filled, delete if emptied
     if(k && !key) e.create(comp);
     if(!k && key) e.delete(comp);
@@ -95,7 +95,7 @@ const inpKv = function(e, key, val, katt, vatt) {
     key = k;
   };
   // 3. this handles value change
-  const onval = function() {
+  var onval = function() {
     // a. update value
     val = this.value;
   };
@@ -106,12 +106,12 @@ const inpKv = function(e, key, val, katt, vatt) {
   ]); }});
 };
 
-const formKv = function(el, katt, vatt, val) {
+var formKv = function(el, katt, vatt, val) {
   console.log('formKv');
   // 1. define components
-  const Comps = new Set();
+  var Comps = new Set();
   // 2. handle create and delete of components
-  const e = {
+  var e = {
     'create': function(c) { Comps.add(inpKv(e, '', '', katt, vatt)); },
     'delete': function(c) { Comps.delete(c); }
   };
@@ -120,7 +120,7 @@ const formKv = function(el, katt, vatt, val) {
   for(var k in val)
     Comps.add(inpKv(e, k, val[k], katt, vatt));
   // 4. mount combined component to form
-  const z = {
+  var z = {
     'view': function() {
       var z = [];
       for(var c of Comps)
@@ -137,28 +137,28 @@ const formKv = function(el, katt, vatt, val) {
   return z;
 };
 
-const formSql = function() {
+var formSql = function() {
   console.log('formSql');
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
-  const value = Editor.getValue();
+  var value = Editor.getValue();
   // 2. update location, and make ajax request
   locationSet('#!/?'+m.buildQueryString({'value': value}));
   m.request({'method': 'GET', 'url': '/sql/'+value}).then(ansRender, ansError);
   return false;
 };
 
-const formJson = function() {
+var formJson = function() {
   console.log('formJson');
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
-  const data = formGet(this);
-  const sbt = this.submitted;
-  const tab = this.parentElement.id;
-  const id = data.id||data.Id;
+  var data = formGet(this);
+  var sbt = this.submitted;
+  var tab = this.parentElement.id;
+  var id = data.id||data.Id;
   // 2. update location, and make ajax request (4 options)
   locationSet('#!/'+tab+'?'+m.buildQueryString(data));
-  const req = (h, u) => m.request({'method': h, 'url': '/json/'+u, 'data': data});
+  var req = (h, u) => m.request({'method': h, 'url': '/json/'+u, 'data': data});
   if(sbt==='select') req('GET', tab).then(ansRender, ansError);
   else if(sbt==='insert') req('POST', tab).then(actRender, actError);
   else if(sbt==='update') req('PATCH', tab+'/'+id).then(actRender, actError);
@@ -166,16 +166,16 @@ const formJson = function() {
   return false;
 };
 
-const setupPage = function(e) {
+var setupPage = function(e) {
   console.log('setupPage');
   // 1. define food key, value attributes
-  const katt = {'list': 'types', 'placeholder': 'Column name, like: Id'};
-  const vatt = {'type': 'text', 'placeholder': 'Value, like: 1001'};
+  var katt = {'list': 'types', 'placeholder': 'Column name, like: Id'};
+  var vatt = {'type': 'text', 'placeholder': 'Value, like: 1001'};
   // 2. get path, prefix, and query
-  const path = location.hash.replace(/#?\!?\/?/, '')
-  const pre = path.split(/[\/\?]/)[0].toLowerCase()||'sql';
-  const sqry = path.split('?')[1]||'';
-  const qry = sqry? m.parseQueryString(sqry) : {};
+  var path = location.hash.replace(/#?\!?\/?/, '')
+  var pre = path.split(/[\/\?]/)[0].toLowerCase()||'sql';
+  var sqry = path.split('?')[1]||'';
+  var qry = sqry? m.parseQueryString(sqry) : {};
   // 3. update html class list (updates ui)
   Html.classList.value = pre;
   if(sqry) Html.classList.add('query');
@@ -188,10 +188,10 @@ const setupPage = function(e) {
   if(sqry) Forms[pre].onsubmit();
 };
 
-const setup = function() {
+var setup = function() {
   console.log('setup');
   // 1. enable form multi submit
-  const submit = document.querySelectorAll('form [type=submit]');
+  var submit = document.querySelectorAll('form [type=submit]');
   for(var i=0, I=submit.length; i<I; i++)
     submit[i].onclick = function() { this.form.submitted = this.value; };
   // 2. setup types data list
