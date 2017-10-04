@@ -49,7 +49,7 @@ var ansRender = function(ans) {
     zk.push(m('th', k));
   for(var r=0, rv=[], R=ans.length; r<R; r++) {
     for(var c in ans[r])
-      rv.push(m('td', {'key': r+','+c}, ans[r][c]));
+      rv.push(m('td', ans[r][c]));
     zv.push(m('tr', {'key': r}, rv));
   }
   m.render(Thead, ans.length? m('tr', zk) : null);
