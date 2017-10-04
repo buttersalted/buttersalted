@@ -122,6 +122,7 @@ const formKv = function(el, katt, vatt, val) {
     'onreset': function() {
       Comps.clear();
       e.create();
+      m.redraw(this);
     }
   };
   m.mount(el, z);
