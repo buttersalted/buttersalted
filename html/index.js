@@ -17,6 +17,14 @@ const Forms = {
   'unit': document.querySelector('#unit form')
 };
 
+const objTruthy = function(a) {
+  // 1. get object with only truthy values
+  const z = {};
+  for(var k in a)
+    if(a[k]) z[k] = a[k];
+  return z;
+};
+
 const locationSet = function(hsh) {
   // 1. replace temp handler only if hash changed
   const fn = window.onhashchange;
