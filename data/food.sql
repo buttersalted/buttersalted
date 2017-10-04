@@ -47,3 +47,14 @@ CREATE OR REPLACE FUNCTION "food_selectone" (JSONB)
 RETURNS SETOF "food" AS $$
   SELECT * FROM "food" WHERE "Id"=(food_tobase($1)->>'Id')::INT;
 $$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION "food_upsertone" (_a JSONB)
+RETURNS VOID AS $$
+DECLARE
+  _r JSONB := row_to_json(food_selectone(_a))::JSONB;
+BEGIN
+  food_deleteone(_a);
+  food_insertone(_r||_a);
+END;
+$$ LANGUAGE plpgsql;
