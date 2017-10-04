@@ -225,18 +225,18 @@ var setupPage = function(e) {
   // 2. get path, prefix, and query
   var path = location.hash.replace(/#?\!?\/?/, '')
   var pre = path.split(/[\/\?]/)[0].toLowerCase()||'sql';
-  var sqry = path.split('?')[1]||'';
-  var qry = sqry? m.parseQueryString(sqry) : {};
+  var qis = path.indexOf('?')>=0;
+  var qry = qis? m.parseQueryString(path.split('?')[1]) : {};
   // 3. update html class list (updates ui)
   Html.classList.value = pre;
-  if(sqry) Html.classList.add('query');
+  if(qis) Html.classList.add('query');
   // 4. prepare forms if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
   else if(pre!=='food') formSet(Forms[pre], qry);
   var kv = formKv(FoodInputs, katt, vatt, pre==='food'? qry : {});
   Forms.food.onreset = kv.onreset;
   // 5. submit form if have query
-  if(sqry) Forms[pre].onsubmit();
+  if(qis) Forms[pre].onsubmit();
 };
 
 var setup = function() {
