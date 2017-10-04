@@ -54,7 +54,7 @@ RETURNS VOID AS $$
 DECLARE
   _r JSONB := row_to_json(food_selectone(_a))::JSONB;
 BEGIN
-  food_deleteone(_a);
-  food_insertone(_r||_a);
+  PERFORM food_deleteone(_a);
+  PERFORM food_insertone(_r||_a);
 END;
 $$ LANGUAGE plpgsql;
