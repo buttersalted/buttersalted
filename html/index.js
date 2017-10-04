@@ -140,7 +140,7 @@ const formJson = function() {
   const id = this.parentElement.id;
   // 2. update location, and make ajax request
   locationSet('#!/'+id+'?'+m.buildQueryString(data));
-  const req = (m, u) => m.request({'method': m, 'url': '/json/'+u, 'data': data});
+  const req = (h, u) => m.request({'method': h, 'url': '/json/'+u, 'data': data});
   if(sbt==='select') req('GET', id).then(ansRender, ansError);
   else if(sbt==='insert') req('POST', id).then(actRender, actError);
   else if(sbt==='update') req('PATCH', id+'/'+data.id).then(actRender, actError);
