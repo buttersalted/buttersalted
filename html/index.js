@@ -115,6 +115,7 @@ const formKv = function(frm, katt, vatt, val) {
   frm.onreset = function() {
     Comps.clear();
     e.create();
+    m.redraw(this);
   };
   // 5. mount combined component to form
   m.mount(frm, {'view': function() {
