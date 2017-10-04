@@ -111,7 +111,12 @@ const formKv = function(frm, katt, vatt, val) {
   val = Object.assign(val||{}, {'': ''});
   for(var k in val)
     Comps.add(inpKv(e, k, val[k], katt, vatt));
-  // 4. mount combined component to form
+  // 4. handle form reset
+  frm.onreset = function() {
+    Comps.clear();
+    e.create();
+  };
+  // 5. mount combined component to form
   m.mount(frm, {'view': function() {
     var z = [];
     for(var c of Comps)
