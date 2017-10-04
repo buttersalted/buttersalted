@@ -156,6 +156,7 @@ var formJson = function() {
   var sbt = this.submitted;
   var tab = this.parentElement.id;
   var id = data.id||data.Id;
+  data = tab!=='food'? objTruthy(data) : data;
   // 2. update location, and make ajax request (4 options)
   locationSet('#!/'+tab+'?'+m.buildQueryString(data));
   var req = (h, u) => m.request({'method': h, 'url': '/json/'+u, 'data': data});
