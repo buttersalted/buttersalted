@@ -24,6 +24,7 @@ html:not(.query) main {
 }
 html:not([class]) section,
 html.sql section:not(#sql),
+html.pipe section:not(#pipe),
 html.food section:not(#food),
 html.group section:not(#group),
 html.term section:not(#term),

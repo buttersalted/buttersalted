@@ -50,6 +50,37 @@
 
 
 <!-- 2. food interface -->
+<section id="pipe">
+<form>
+  <p txt="j" hidden>
+    Pipe is a way to obtain food data from various reputed sources.
+  </p>
+  <div class="inputs">
+  <fieldset>
+    <label>source</label>
+    <input list="sources" name="source" placeholder="Select a source, like: usda-ndb">
+  </fieldset>
+  <fieldset>
+    <label>start</label>
+    <input type="text" name="start" placeholder="Start id, like: 1">
+  </fieldset>
+  <fieldset>
+    <label>stop</label>
+    <input type="text" name="stop" placeholder="Stop id, like: 10">
+  </fieldset>
+  </div>
+  <p txt="c">
+    <button type="submit" value="pipe" primary>Pipe</button>
+    <button type="reset">Reset</button>
+  </p>
+  <datalist id="sources">
+    <option value="usda-ndb">
+  </datalist>
+</form>
+</section>
+
+
+<!-- 3. food interface -->
 <section id="food">
 <form>
   <p txt="j" hidden>
@@ -76,7 +107,7 @@
 </section>
 
 
-<!-- 3. group interface -->
+<!-- 4. group interface -->
 <section id="group">
 <form>
   <p txt="j" hidden>
@@ -129,7 +160,7 @@
 </section>
 
 
-<!-- 4. term interface -->
+<!-- 5. term interface -->
 <section id="term">
 <form>
   <p txt="j" hidden>
@@ -166,7 +197,7 @@
 </section>
 
 
-<!-- 5. type interface -->
+<!-- 6. type interface -->
 <section id="type">
 <form>
   <p txt="j" hidden>
@@ -200,7 +231,7 @@
 </section>
 
 
-<!-- 6. unit interface -->
+<!-- 7. unit interface -->
 <section id="unit">
 <form>
   <p txt="j" hidden>
@@ -246,7 +277,7 @@
 </section>
 
 
-<!-- 7. results interface -->
+<!-- 8. results interface -->
 <div id="ans">
 <table>
   <thead></thead>
