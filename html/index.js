@@ -36,6 +36,11 @@ var locationSet = function(hsh) {
   location.href = location.origin+'/'+hsh;
 };
 
+var ajaxReq = function(mth, url, dat) {
+  // 1. make an ajax request
+  return m.request({'method': mth, 'url': url, 'data': dat});
+};
+
 var ansRender = function(ans) {
   console.log('ansRender');
   // 1. set table head, body from data
@@ -145,7 +150,7 @@ var formSql = function() {
   var value = Editor.getValue();
   // 2. update location, and make ajax request
   locationSet('#!/?'+m.buildQueryString({'value': value}));
-  m.request({'method': 'GET', 'url': '/sql/'+value}).then(ansRender, ansError);
+  ajaxReq('GET', '/sql/'+value).then(ansRender, ansError);
   return false;
 };
 
@@ -155,11 +160,10 @@ var formPipe = function() {
   Html.classList.add('query');
   var data = formGet(this);
   var sbt = this.submitted;
-  // 2.
+  // 2. update location, and make ajax requests
   locationSet('#!/?'+m.buildQueryString(data));
-  var req = (h) => m.request({'method': h, 'url': '/pipe', 'data': data});
-  if(sbt==='get') req('GET');
-  else if(sbt==='post') req('POST');
+  if(sbt==='get') ajaxReq('GET', '/pipe/'+data.start);
+  else if(sbt==='post') ajaxReq('POST', '/pipe/'+data.start);
   return false;
 };
 
@@ -174,11 +178,10 @@ var formJson = function() {
   data = tab!=='food'? objTruthy(data) : data;
   // 2. update location, and make ajax request (4 options)
   locationSet('#!/'+tab+'?'+m.buildQueryString(data));
-  var req = (h, u) => m.request({'method': h, 'url': '/json/'+u, 'data': data});
-  if(sbt==='select') req('GET', tab).then(ansRender, ansError);
-  else if(sbt==='insert') req('POST', tab).then(actRender, actError);
-  else if(sbt==='update') req('PATCH', tab+'/'+id).then(actRender, actError);
-  else if(sbt==='delete') req('DELETE', tab+'/'+id).then(actRender, actError);
+  if(sbt==='select') ajaxReq('GET', '/json/'+tab, data).then(ansRender, ansError);
+  else if(sbt==='insert') ajaxReq('POST', '/json/'+tab, data).then(actRender, actError);
+  else if(sbt==='update') ajaxReq('PATCH', '/json/'+tab+'/'+id, data).then(actRender, actError);
+  else if(sbt==='delete') ajaxReq('DELETE', '/json/'+tab+'/'+id, data).then(actRender, actError);
   return false;
 };
 
@@ -211,7 +214,7 @@ var setup = function() {
   for(var i=0, I=submit.length; i<I; i++)
     submit[i].onclick = function() { this.form.submitted = this.value; };
   // 2. setup types data list
-  m.request({'method': 'GET', 'url': '/json/type'}).then((ans) => {
+  ajaxReq('GET', '/json/type').then((ans) => {
     m.render(Types, ans.map((r) => m('option', r.id)));
   });
   // 2. setup ace editor
