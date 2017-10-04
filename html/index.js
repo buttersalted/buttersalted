@@ -157,7 +157,7 @@ const setup = function() {
   // 1. enable form multi submit
   const submit = document.querySelectorAll('form [type=submit]');
   for(var i=0, I=submit.length; i<I; i++)
-    submit[i].onclick = function() { this.form.submitted = this.name; };
+    submit[i].onclick = function() { this.form.submitted = this.value; };
   // 2. setup types data list
   m.request({'method': 'GET', 'url': '/json/type'}).then((ans) => {
     m.render(Types, ans.map((r) => m('option', r.id)));
