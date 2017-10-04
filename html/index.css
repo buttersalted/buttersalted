@@ -9,6 +9,7 @@ html:not([class]) header,
 html.sql:not(.query) header {
   visibility: hidden;
 }
+html.pipe nav:not([class]) a.pipe,
 html.food nav:not([class]) a.food,
 html.group nav:not([class]) a.group,
 html.term nav:not([class]) a.term,
