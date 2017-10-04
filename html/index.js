@@ -162,16 +162,38 @@ var formSql = function() {
   return false;
 };
 
+var loopAsync = function(fn, bgn, end) {
+  // 1. an asynchronous begin to end loop
+  if(bgn<end) fn(bgn).then(function() {
+    loopAsync(fn, ++bgn, end);
+  });
+};
+
 var formPipe = function() {
   console.log('formPipe');
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
-  var data = formGet(this);
+  var data = formGet(this), z = [];
   var sbt = this.submitted;
-  // 2. update location, and make ajax requests
+  // 2. update location
   locationSet('#!/?'+m.buildQueryString(data));
-  if(sbt==='get') ajaxReq('GET', '/pipe/'+data.start);
-  else if(sbt==='post') ajaxReq('POST', '/pipe/'+data.start);
+  // 3. if submit is get, render results (yay async)
+  if(sbt==='get') loopAsync(function(i) {
+    ajaxReq('GET', '/pipe/'+i).then(function(ans) {
+      z.push(ans);
+      ansRender(z);
+    });
+  }, parseInt(data.start), parseInt(data.stop));
+  // 4. if submit is post, render status (yay async again)
+  else if(sbt==='post') loopAsync(function(i) {
+    ajaxReq('POST', '/pipe/'+i).then(function(ans) {
+      z.push({'id': i, 'status': ans});
+      ansRender(z);
+    }, function(err) {
+      z.push({'id': i, 'status': err.message});
+      ansRender(z);
+    });
+  }, parseInt(data.start), parseInt(data.stop));
   return false;
 };
 
