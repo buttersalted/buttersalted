@@ -137,14 +137,15 @@ const formJson = function() {
   Html.classList.add('query');
   const data = formGet(this);
   const sbt = this.submitted;
-  const id = this.parentElement.id;
+  const tab = this.parentElement.id;
+  const id = data.id||data.Id;
   // 2. update location, and make ajax request (4 options)
-  locationSet('#!/'+id+'?'+m.buildQueryString(data));
+  locationSet('#!/'+tab+'?'+m.buildQueryString(data));
   const req = (h, u) => m.request({'method': h, 'url': '/json/'+u, 'data': data});
-  if(sbt==='select') req('GET', id).then(ansRender, ansError);
-  else if(sbt==='insert') req('POST', id).then(actRender, actError);
-  else if(sbt==='update') req('PATCH', id+'/'+data.id).then(actRender, actError);
-  else if(sbt==='delete') req('DELETE', id+'/'+data.id).then(actRender, actError);
+  if(sbt==='select') req('GET', tab).then(ansRender, ansError);
+  else if(sbt==='insert') req('POST', tab).then(actRender, actError);
+  else if(sbt==='update') req('PATCH', tab+'/'+id).then(actRender, actError);
+  else if(sbt==='delete') req('DELETE', tab+'/'+id).then(actRender, actError);
   return false;
 };
 
