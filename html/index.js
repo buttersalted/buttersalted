@@ -44,9 +44,17 @@ var ajaxReq = function(mth, url, dat) {
 var ansRender = function(ans) {
   console.log('ansRender');
   // 1. set table head, body from data
-  m.render(Thead, ans.length? m('tr', Object.keys(ans[0]).map((k) => m('th', k))) : null);
-  m.render(Tbody, ans.length? ans.map((r) => m('tr', Object.values(r).map((v) => m('td', v)))) : null);
-  // 3. show toast message (if empty)
+  var zk = [], zv = [];
+  for(var k in ans[0])
+    zk.push(m('th', k));
+  for(var r=0, rv=[], R=ans.length; r<R; r++) {
+    for(var c in ans[r])
+      rv.push(m('td', ans[r][c]));
+    zv.push(m('tr', rv));
+  }
+  m.render(Thead, ans.length? m('tr', zk) : null);
+  m.render(Tbody, ans.length? zv : null);
+  // 2. show toast message (if empty)
   if(!ans.length) iziToast.warning({'title': 'Empty Query', 'message': 'no values returned'});
 };
 
@@ -214,8 +222,10 @@ var setup = function() {
   for(var i=0, I=submit.length; i<I; i++)
     submit[i].onclick = function() { this.form.submitted = this.value; };
   // 2. setup types data list
-  ajaxReq('GET', '/json/type').then((ans) => {
-    m.render(Types, ans.map((r) => m('option', r.id)));
+  ajaxReq('GET', '/json/type').then(function(ans) {
+    for(var i=0, z=[], I=ans.length; i<I; i++)
+      z[i] = m('option', ans[i].id);
+    m.render(Types, z);
   });
   // 2. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
