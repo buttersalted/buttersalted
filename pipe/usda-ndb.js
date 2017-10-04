@@ -5,10 +5,10 @@ const body = (req) => Object.assign(req.body, req.query, req.params);
 
 const convert = function(a) {
   // 1. convert object to row format
-  const k = Object.keys(a)[0], v = a[k];
-  v['Id'] = parseInt(k.substring(0, k.indexOf(',')));
-  v['Name'] = k.substring(k.indexOf(',')+1).trim();
-  return v;
+  const k = Object.keys(a)[0];
+  const Id = parseInt(k.substring(0, k.indexOf(',')));
+  const Name = k.substring(k.indexOf(',')+1).trim();
+  return Object.assign({Id, Name}, a[k]);
 };
 
 module.exports = function(dst) {
