@@ -178,16 +178,8 @@ var formPipe = function() {
   var sbt = this.submitted;
   // 2. update location
   locationSet('#!/pipe?'+m.buildQueryString(data));
-  // 3. if submit is get, render results (yay async)
-  if(sbt==='get') loopAsync(function(i) {
-    return ajaxReq('GET', url+i).then(function(ans) {
-      z.push(ans);
-      ansRender(z);
-      console.log(JSON.stringify(z));
-    }, ansError);
-  }, parseInt(data.start), parseInt(data.stop));
-  // 4. if submit is post, render status (yay async again)
-  else if(sbt==='post') loopAsync(function(i) {
+  // 3. if submit is post, render status (yay async again)
+  if(sbt==='post') loopAsync(function(i) {
     return ajaxReq('POST', url+i).then(function(ans) {
       z.push({'id': i, 'status': ans});
       ansRender(z);
@@ -195,6 +187,14 @@ var formPipe = function() {
       z.push({'id': i, 'status': err.message});
       ansRender(z);
     });
+  }, parseInt(data.start), parseInt(data.stop));
+  // 4. if submit is get, render results (yay async)
+  else loopAsync(function(i) {
+    return ajaxReq('GET', url+i).then(function(ans) {
+      z.push(ans);
+      ansRender(z);
+      console.log(JSON.stringify(z));
+    }, ansError);
   }, parseInt(data.start), parseInt(data.stop));
   return false;
 };
@@ -210,10 +210,10 @@ var formJson = function() {
   data = tab!=='food'? objTruthy(data) : data;
   // 2. update location, and make ajax request (4 options)
   locationSet('#!/'+tab+'?'+m.buildQueryString(data));
-  if(sbt==='select') ajaxReq('GET', '/json/'+tab, data).then(ansRender, ansError);
-  else if(sbt==='insert') ajaxReq('POST', '/json/'+tab, data).then(actRender, actError);
+  if(sbt==='insert') ajaxReq('POST', '/json/'+tab, data).then(actRender, actError);
   else if(sbt==='update') ajaxReq('PATCH', '/json/'+tab+'/'+id, data).then(actRender, actError);
   else if(sbt==='delete') ajaxReq('DELETE', '/json/'+tab+'/'+id, data).then(actRender, actError);
+  else ajaxReq('GET', '/json/'+tab, data).then(ansRender, ansError);
   return false;
 };
 
