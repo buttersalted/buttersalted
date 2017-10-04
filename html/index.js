@@ -257,6 +257,7 @@ var setup = function() {
   for(var k in Forms)
     Forms[k].onsubmit = formJson;
   Forms.sql.onsubmit = formSql;
+  Forms.pipe.onsubmit = formPipe;
   // 4. setup page
   window.onhashchange = setupPage;
   setupPage();
