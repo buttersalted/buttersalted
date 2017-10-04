@@ -183,6 +183,7 @@ var formPipe = function() {
     return ajaxReq('GET', url+i).then(function(ans) {
       z.push(ans);
       ansRender(z);
+      console.log(JSON.stringify(z));
     }, ansError);
   }, parseInt(data.start), parseInt(data.stop));
   // 4. if submit is post, render status (yay async again)
