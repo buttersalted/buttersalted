@@ -177,7 +177,7 @@ var formPipe = function() {
   var url = '/pipe/'+data.source+'/';
   var sbt = this.submitted;
   // 2. update location
-  locationSet('#!/?'+m.buildQueryString(data));
+  locationSet('#!/pipe?'+m.buildQueryString(data));
   // 3. if submit is get, render results (yay async)
   if(sbt==='get') loopAsync(function(i) {
     return ajaxReq('GET', url+i).then(function(ans) {
