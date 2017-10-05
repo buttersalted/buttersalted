@@ -204,7 +204,6 @@ var formPipe = function() {
     return ajaxReq('GET', url+i).then(function(ans) {
       z.push(ans);
       ansRender(z);
-      console.log(JSON.stringify(z));
     }, ansError);
   }, start, stop);
   return false;
