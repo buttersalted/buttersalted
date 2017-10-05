@@ -184,6 +184,8 @@ var formPipe = function() {
   Html.classList.add('query');
   var data = formGet(this), z = [];
   var url = '/pipe/'+data.source+'/';
+  var start = parseInt(data.start)||0;
+  var stop = parseInt(data.stop)||(start+1);
   var sbt = this.submitted;
   // 2. update location
   locationSet('#!/pipe?'+m.buildQueryString(data));
@@ -196,7 +198,7 @@ var formPipe = function() {
       z.push({'id': i, 'status': err.message});
       ansRender(z);
     });
-  }, parseInt(data.start), parseInt(data.stop));
+  }, start, stop);
   // 4. if submit is get, render results (yay async)
   else loopAsync(function(i) {
     return ajaxReq('GET', url+i).then(function(ans) {
@@ -204,7 +206,7 @@ var formPipe = function() {
       ansRender(z);
       console.log(JSON.stringify(z));
     }, ansError);
-  }, parseInt(data.start), parseInt(data.stop));
+  }, start, stop);
   return false;
 };
 
