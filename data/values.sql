@@ -242,7 +242,7 @@ SELECT x('20:3 undifferentiated', 'Eicosatrienoic acid');
 SELECT x('20:3 n-6', 'Eicosatrienoic n-6 acid');
 SELECT x('18:4', 'Octadecatetraenoic acid');
 SELECT x('20:4 undifferentiated', 'Eicosatetraenoic acid');
-SELECT x('20:4 n-6', 'Eicosatetraenoic n-6 acid')
+SELECT x('20:4 n-6', 'Eicosatetraenoic n-6 acid');
 SELECT x('22:4', 'Docosatetraenoic acid');
 SELECT x('20:5 n-3 (EPA)', 'Eicosapentaenoic n-3 acid');
 SELECT x('21:5', 'Uncosapentaenoic acid');
