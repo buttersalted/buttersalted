@@ -167,7 +167,7 @@ var formSql = function() {
   var value = Editor.getValue();
   // 2. update location, and make ajax request
   locationSet('#!/?'+m.buildQueryString({'value': value}));
-  ajaxReq('GET', '/sql/'+value).then(ansRender, ansError);
+  ajaxReq('GET', '/sql/'+encodeURIComponent(value)).then(ansRender, ansError);
   return false;
 };
 
