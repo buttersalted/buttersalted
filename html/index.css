@@ -79,7 +79,7 @@ html.query form fieldset {
   z-index: 2;
   position: absolute;
   right: 0;
-  margin: 4rem 2rem;
+  margin: 3rem 2rem;
 }
 #sql p {
   margin-top: 2rem;
