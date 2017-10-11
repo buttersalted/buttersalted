@@ -33,7 +33,7 @@ var locationSet = function(hsh) {
     window.onhashchange = fn;
   };
   // 2. update location
-  location.href = location.origin+'/'+hsh;
+  location.href = location.origin+location.pathname+hsh;
 };
 
 var ajaxReq = function(mth, url, dat) {
