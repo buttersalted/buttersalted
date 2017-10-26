@@ -183,9 +183,10 @@ var formPipe = function() {
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
   var data = formGet(this), z = [];
-  var url = '/pipe/'+data.source+'/';
+  var source = data.source||'usda-ndb';
   var start = parseInt(data.start)||0;
   var stop = parseInt(data.stop)||(start+1);
+  var url = '/pipe/'+source+'/';
   var sbt = this.submitted;
   // 2. update location
   locationSet('#!/pipe?'+m.buildQueryString(data));
