@@ -54,3 +54,14 @@ These alternative terms can be used in an <code>query</code>, or in <code>food</
 search. Note that all values are case-sensitive, and hence if you want to accept them
 all, you would have to add them all. If you find anything here confusing, consider
 messaging to <a href="mailto:wolfram77@gmail.com">wolfram77@gmail.com</a>.
+
+## Type
+
+<code>Type</code> is the definition of every column in <code>food</code>. Any change
+made here alters the table, and may also result in loss of data. This has 2 columns
+<code>id</code> which is the name of a (new) column, and <code>value</code> which is
+the SQL datatype of that column. An example would be like <code>id = Vitamin A</code>,
+and <code>value = REAL</code>. Once a <code>type</code> is added, a column is created
+in <code>food</code>, along with an index. Deleting a <code>type</code> deletes the
+column, and the associated index. In case of the sligtest doubt, send a message at
+<a href="mailto:wolfram77@gmail.com">wplfram77@gmail.com</a>.
