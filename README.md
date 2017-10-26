@@ -40,3 +40,17 @@ selected by the SQL query in <code>value</code>. If any new rows are added
 <code>&gt;key&lt;</code>can have the same tags (like <code>salty, sweet</code>),
 and they are separated using a comma. Deleting a group deletes the associated
 view, and the tags from all <code>food</code>.
+
+## Term
+
+<code>Term</code> describes alternative terms for columns in <code>food</code>.
+Each column in <code>food</code> is case-sensitive, descriptive and long. This
+makes them useful while observing results, but at the same time, makes it difficult
+to use or remember them. Each <code>term</code> has an <code>id</code>, which is the
+alternative term, and a <code>value</code>, which is the actual column name in
+<code>food</code>. Examples would be like, <code>id = id</code>, <code>value = Id</code>,
+or like, <code>id = carbs</code>, <code>value = Carbohydrate, by difference</code>.
+These alternative terms can be used in an <code>query</code>, or in <code>food</code>
+search. Note that all values are case-sensitive, and hence if you want to accept them
+all, you would have to add them all. If you find anything here confusing, consider
+messaging to <a href="mailto:wolfram77@gmail.com">wolfram77@gmail.com</a>.
