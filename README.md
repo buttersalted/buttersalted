@@ -52,8 +52,7 @@ alternative term, and a `value`, which is the actual column name in
 or like, `id = carbs`, `value = Carbohydrate, by difference`.
 These alternative terms can be used in an `query`, or in `food`
 search. Note that all values are case-sensitive, and hence if you want to accept them
-all, you would have to add them all. If you find anything here confusing, consider
-messaging to <a href="mailto:wolfram77@gmail.com">wolfram77@gmail.com</a>.
+all, you would have to add them all.
 
 ## Type
 
@@ -63,8 +62,7 @@ made here alters the table, and may also result in loss of data. This has 2 colu
 the SQL datatype of that column. An example would be like `id = Vitamin A`,
 and `value = REAL`. Once a `type` is added, a column is created
 in `food`, along with an index. Deleting a `type` deletes the
-column, and the associated index. In case of the sligtest doubt, send a message at
-<a href="mailto:wolfram77@gmail.com">wplfram77@gmail.com</a>.
+column, and the associated index.
 
 ## Unit
 
@@ -86,5 +84,4 @@ as `id`, and the column specific conversion factor as `value`.
 An example would be `id = Vitamin A`, `value = 1.66e+6` (assuming
 beta-carotene). Now, if `Vitamin A` is written in `mcg` then it
 will first be converted to `g`, and finally to `IU`. Thanks
-for making it this far. If still in doubt post your question to
-<a href="mailto:wolfram77@gmail.com">wolfram77@gmail.com</a>.
+for making it this far.
