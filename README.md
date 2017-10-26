@@ -32,12 +32,12 @@ to which this `group` belongs, `tag` is the name of the
 tag used to represent this `group` within the `key` column,
 and last yet not the least, `value`, which is an SQL query which
 returns all rows to which this `group` belongs. Once a new
-`group` is inserted, two columns namely `&lt;key&gt;` and
-`#&lt;key&gt;` are created (with index), and `tag` is added
-all the rows in `&lt;key&gt;` and `#&lt;key&gt;` which are
+`group` is inserted, two columns namely `<key>` and
+`#<key>` are created (with index), and `tag` is added
+all the rows in `<key>` and `#<key>` which are
 selected by the SQL query in `value`. If any new rows are added
 `food`, they can be refreshed later. A single row within the same
-`&gt;key&lt;`can have the same tags (like `salty, sweet`),
+`>key<`can have the same tags (like `salty, sweet`),
 and they are separated using a comma. Deleting a group deletes the associated
 view, and the tags from all `food`.
 
@@ -70,8 +70,8 @@ column, and the associated index. In case of the sligtest doubt, send a message 
 
 `Unit` is used to remember unit conversion factors (to base unit).
 These values are put to use when adding a new `food`, where a
-quantity is written as `&lt;magnitude&gt; &lt;unit&gt;`, or even
-`&lt;magnitude&gt;&lt;unit&gt;`. There are 2 columns, `id`
+quantity is written as `<magnitude> <unit>`, or even
+`<magnitude><unit>`. There are 2 columns, `id`
 is the name of the unit, and `value` is its conversion factor to base
 unit. Base unit is `Cal` for `Energy`, `IU` for
 `Vitamin A`, `Vitamin C` and `Vitamin D`, and
