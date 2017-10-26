@@ -85,10 +85,11 @@ supported for the **value** field. Examples for **unit** would be like:
 - `id = KG`, `value = 1e-3`
 - `id = tsp`, `value = 4`.
 
-For special base units like `IU`, it is possible
-to mention a different conversion factor for each column by using the name of the column
-as `id`, and the column specific conversion factor as `value`.
-An example would be `id = Vitamin A`, `value = 1.66e+6` (assuming
-beta-carotene). Now, if `Vitamin A` is written in `mcg` then it
-will first be converted to `g`, and finally to `IU`. Thanks
-for making it this far.
+For special base units like `IU`, it is possible to mention a different
+conversion factor for each column by using the name of the column as **id**,
+and the column specific conversion factor as **value**. Now, if `Vitamin A` is
+written in `mcg` then it will first be converted to `g`, and finally to `IU`.
+An example would be:
+- `id = Vitamin A`, `value = 1.66e+6` (assuming beta-carotene).
+
+Congratulations on making it this far.
