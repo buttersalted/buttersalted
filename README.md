@@ -64,21 +64,28 @@ and `value = REAL`. Once a `type` is added, a column is created
 in `food`, along with an index. Deleting a `type` deletes the
 column, and the associated index.
 
-## Unit
+## unit
 
-`Unit` is used to remember unit conversion factors (to base unit).
-These values are put to use when adding a new `food`, where a
-quantity is written as `<magnitude> <unit>`, or even
-`<magnitude><unit>`. There are 2 columns, `id`
-is the name of the unit, and `value` is its conversion factor to base
-unit. Base unit is `Cal` for `Energy`, `IU` for
-`Vitamin A`, `Vitamin C` and `Vitamin D`, and
-`g` for the rest. Examples would be like `id = kg`,
-`value = 0.001` or `id = tsp`, `value = 4`.
-Please note that the `id` is case-sensitive, and so if you want to
-recognize `KG` as kilogram, it must also be added like so `id = KG`,
-`value = 0.001`. Scientific notation is supported for the `value`
-field like `1e-3`. For special base units like `IU`, it is possible
+A *Table* that is used to store *unit conversion factors* to **base unit**.
+These values are put to use when adding a new **food**, where a quantity is
+written as `<magnitude> <unit>`. It has the following columns:
+- **id**: name of the unit
+- **value**: conversion factor to base unit
+
+The base unit for a column is:
+- **Cal**: for `Energy`.
+- **IU**: for `Vitamin A`, `Vitamin C` and `Vitamin D`.
+- **g**: for the rest.
+
+Please note that the **id** field is **case-sensitive**, and so if you want to
+recognize `Kg` as kilogram, it must also be added. Scientific notation is
+supported for the **value** field. Examples for **unit** would be like:
+- `id = kg`, `value = 0.001`.
+- `id = Kg`, `value = 0.001`
+- `id = KG`, `value = 1e-3`
+- `id = tsp`, `value = 4`.
+
+For special base units like `IU`, it is possible
 to mention a different conversion factor for each column by using the name of the column
 as `id`, and the column specific conversion factor as `value`.
 An example would be `id = Vitamin A`, `value = 1.66e+6` (assuming
