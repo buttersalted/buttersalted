@@ -19,27 +19,27 @@ is the time my friends, when Rico Rodriguez come jumping down a plane to Manaea 
 friend Frigo and etcetra, and heal Medici by destryoing all Bavarium plants and weapons
 and re-enriching the soil with Bavarium. Viva Medici.
 
-## Group
 
-`Group` is used to create and maintain groups or classifications of
-`food`. This can be used as a method of filtering and aggregating
-`food`. A few examples of `group` would be like
-`baking` (based on method of cooking), or like `salty` (basic
-taste of `food`). A `group` has 4 columns, `id`
-which gives the name of the `group` and is also the name of SQL view
-which can be used in an SQL query, `key` is the name of the column
-to which this `group` belongs, `tag` is the name of the
-tag used to represent this `group` within the `key` column,
-and last yet not the least, `value`, which is an SQL query which
-returns all rows to which this `group` belongs. Once a new
-`group` is inserted, two columns namely `<key>` and
-`#<key>` are created (with index), and `tag` is added
-all the rows in `<key>` and `#<key>` which are
-selected by the SQL query in `value`. If any new rows are added
-`food`, they can be refreshed later. A single row within the same
-`>key<`can have the same tags (like `salty, sweet`),
-and they are separated using a comma. Deleting a group deletes the associated
-view, and the tags from all `food`.
+## group
+
+A *Table* that is used to store groups or classifications of **food**. This can
+be used as a method of **filtering** and **aggregating** **food**. A few types
+of **group** could be like:
+- **baking**: based on method of cooking.
+- **salty**: basic taste of **food**.
+
+It has the following columns:
+- **id**: name of the **group** and *SQL view*.
+- **key**: name of the column to which this **group** belongs.
+- **tag**: name of the tag used to represent this **group** within **key**.
+- **value**: *SQL query* which returns all rows to which this **group** belongs.
+
+Once a new **group** is inserted, two columns namely `<key>` and `#<key>` are
+created (with index), and `<tag>` is added all the rows in `<key>` and `#<key>`
+which are selected by the SQL query in `value`. If any new rows are added to
+**food**, they can be refreshed later. A single row within the same `<key>` can
+have multiple tags (like `salty, sweet`), and they are separated using a comma.
+Deleting a **group** deletes the associated view, and the tags from all **food**.
 
 
 ## term
@@ -48,8 +48,8 @@ A *Table* that is used to store *alternative terms* for columns in **food**.
 Each column in **food** is *case-sensitive*, *descriptive* and *long*. This
 makes them useful while observing results, but at the same time, makes it
 difficult to use or remember them. It has the following columns:
-- **id**: the alternative term.
-- **value**: the actual column name in **food**.
+- **id**: alternative term.
+- **value**: actual column name in **food**.
 
 These alternative terms can be used in an *query*, or in *food search*. Note
 that all values are *case-sensitive*, and hence if you want to accept them all,
