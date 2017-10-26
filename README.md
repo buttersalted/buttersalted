@@ -41,18 +41,21 @@ selected by the SQL query in `value`. If any new rows are added
 and they are separated using a comma. Deleting a group deletes the associated
 view, and the tags from all `food`.
 
-## Term
 
-`Term` describes alternative terms for columns in `food`.
-Each column in `food` is case-sensitive, descriptive and long. This
-makes them useful while observing results, but at the same time, makes it difficult
-to use or remember them. Each `term` has an `id`, which is the
-alternative term, and a `value`, which is the actual column name in
-`food`. Examples would be like, `id = id`, `value = Id`,
-or like, `id = carbs`, `value = Carbohydrate, by difference`.
-These alternative terms can be used in an `query`, or in `food`
-search. Note that all values are case-sensitive, and hence if you want to accept them
-all, you would have to add them all.
+## term
+
+A *Table* that is used to store *alternative terms* for columns in **food**.
+Each column in **food** is *case-sensitive*, *descriptive* and *long*. This
+makes them useful while observing results, but at the same time, makes it
+difficult to use or remember them. It has the following columns:
+- **id**: the alternative term.
+- **value**: the actual column name in **food**.
+
+These alternative terms can be used in an *query*, or in *food search*. Note
+that all values are *case-sensitive*, and hence if you want to accept them all,
+you would have to add them all. Examples would be like:
+- `id = id`, `value = Id`.
+- `id = carbs`, `value = Carbohydrate, by difference`.
 
 
 ## type
