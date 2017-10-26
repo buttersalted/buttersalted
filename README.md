@@ -54,23 +54,28 @@ These alternative terms can be used in an `query`, or in `food`
 search. Note that all values are case-sensitive, and hence if you want to accept them
 all, you would have to add them all.
 
-## Type
 
-`Type` is the definition of every column in `food`. Any change
-made here alters the table, and may also result in loss of data. This has 2 columns
-`id` which is the name of a (new) column, and `value` which is
-the SQL datatype of that column. An example would be like `id = Vitamin A`,
-and `value = REAL`. Once a `type` is added, a column is created
-in `food`, along with an index. Deleting a `type` deletes the
-column, and the associated index.
+## type
+
+A *Table* that is used to store the *definition* of **every column** in
+**food**. Any change made here **alters** the table, and may also result in
+**loss of data**. It has the following columns:
+- **id**: name of a the column.
+- **value**: *SQL datatype* of that column.
+
+Once a **type** is added, a column is created in **food**, along with an
+*index*. Deleting a **type** deletes the column, and the associated index.
+An example would be like:
+- `id = Vitamin A`, `value = REAL`.
+
 
 ## unit
 
 A *Table* that is used to store *unit conversion factors* to **base unit**.
 These values are put to use when adding a new **food**, where a quantity is
 written as `<magnitude> <unit>`. It has the following columns:
-- **id**: name of the unit
-- **value**: conversion factor to base unit
+- **id**: name of the unit.
+- **value**: conversion factor to base unit.
 
 The base unit for a column is:
 - **Cal**: for `Energy`.
