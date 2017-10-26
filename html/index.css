@@ -5,6 +5,17 @@ nav:not([class]) {
 nav:not([class]) label {
   max-width: none;
 }
+nav:not([class]) header a,
+nav:not([class]) ul a {
+  font-family: 'Righteous', cursive;
+  font-weight: bolder;
+}
+label, input, textarea, select, button, footer {
+  font-family: 'Righteous', cursive;
+}
+form label:not([class]) {
+  font-size: 1.4rem;
+}
 html:not([class]) header,
 html.sql:not(.query) header {
   visibility: hidden;
