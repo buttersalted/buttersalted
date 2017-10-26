@@ -23,6 +23,7 @@ module.exports = function(dst) {
   x.get('/:id', get);
   // 2. setup insert using usda-ndb
   const post = (req, res, next) => usdaNdb(body(req).id).then((ans) => {
+    if(!Object.keys(ans).length) return next(new Error('not available'));
     dst.insertOne(convert(ans)).then((ans) => res.json(ans), next);
   }, next);
   x.post('/', post);
