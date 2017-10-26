@@ -10,7 +10,7 @@ nav:not([class]) ul a {
   font-family: 'Righteous', cursive;
   font-weight: bolder;
 }
-label, input, textarea, select, button, footer {
+label, input, textarea, select, button, table, footer {
   font-family: 'Righteous', cursive;
 }
 form label:not([class]) {
