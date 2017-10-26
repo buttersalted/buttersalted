@@ -64,7 +64,7 @@ var ansRender = function(ans) {
   m.render(Thead, ans.length? m('tr', zc) : null);
   m.render(Tbody, ans.length? zv : null);
   // 5. show toast message (if empty)
-  if(!ca.length) iziToast.warning({'title': 'Empty Query', 'message': 'no values returned'});
+  if(!ans.length) iziToast.warning({'title': 'Empty Query', 'message': 'no values returned'});
 };
 
 var ansError = function(err) {
