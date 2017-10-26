@@ -3,11 +3,12 @@
 A new way to understand food through queries.
 
 
-## Pipe
+## pipe
 
 Pipe is a way to obtain food data from various reputed sources.
 
-## Food
+
+## food
 
 Food is available in Medici day and night under the ruthless general Di Ravello.
 But every weird truth comes, with a bad buy one get one free truth. The food at
