@@ -65,3 +65,26 @@ and <code>value = REAL</code>. Once a <code>type</code> is added, a column is cr
 in <code>food</code>, along with an index. Deleting a <code>type</code> deletes the
 column, and the associated index. In case of the sligtest doubt, send a message at
 <a href="mailto:wolfram77@gmail.com">wplfram77@gmail.com</a>.
+
+## Unit
+
+<code>Unit</code> is used to remember unit conversion factors (to base unit).
+These values are put to use when adding a new <code>food</code>, where a
+quantity is written as <code>&lt;magnitude&gt; &lt;unit&gt;</code>, or even
+<code>&lt;magnitude&gt;&lt;unit&gt;</code>. There are 2 columns, <code>id</code>
+is the name of the unit, and <code>value</code> is its conversion factor to base
+unit. Base unit is <code>Cal</code> for <code>Energy</code>, <code>IU</code> for
+<code>Vitamin A</code>, <code>Vitamin C</code> and <code>Vitamin D</code>, and
+<code>g</code> for the rest. Examples would be like <code>id = kg</code>,
+<code>value = 0.001</code> or <code>id = tsp</code>, <code>value = 4</code>.
+Please note that the <code>id</code> is case-sensitive, and so if you want to
+recognize <code>KG</code> as kilogram, it must also be added like so <code>id = KG</code>,
+<code>value = 0.001</code>. Scientific notation is supported for the <code>value</code>
+field like <code>1e-3</code>. For special base units like <code>IU</code>, it is possible
+to mention a different conversion factor for each column by using the name of the column
+as <code>id</code>, and the column specific conversion factor as <code>value</code>.
+An example would be <code>id = Vitamin A</code>, <code>value = 1.66e+6</code> (assuming
+beta-carotene). Now, if <code>Vitamin A</code> is written in <code>mcg</code> then it
+will first be converted to <code>g</code>, and finally to <code>IU</code>. Thanks
+for making it this far. If still in doubt post your question to
+<a href="mailto:wolfram77@gmail.com">wolfram77@gmail.com</a>.
