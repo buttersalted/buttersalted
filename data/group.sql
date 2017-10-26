@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS "group" (
     ("key"=NULL OR "key"<>'') AND
     ("tag"=NULL OR "tag"<>'') AND
     "key" NOT LIKE '#%' AND
+    "tag" NOT LIKE '%,%' AND
     "value" NOT LIKE '%;%' AND
     lower("value") LIKE 'select %' AND
     lower("value") NOT LIKE '% into %'
