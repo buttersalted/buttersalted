@@ -5,7 +5,8 @@ const body = (req) => Object.assign(req.body, req.query, req.params);
 module.exports = function(db) {
   const x = express();
   const fn = (req, res, next) => {
-    var qry = (body(req).value||'').split(';')[0];
+    const value = body(req).value||'';
+    var qry = value.split(';')[0];
     if(!qry.toUpperCase().startsWith('SELECT ') ||
       qry.toUpperCase().includes('INTO'))
       throw new Error('bad query');
