@@ -69,5 +69,4 @@ X.use((err, req, res, next) => {
 - ABILITY TO SEE STATUS OF QUERY (AND STOP)
 - REPLACE TERMS SQL
 - USE LIMITS
-- FACE THE ROOKIES
 */
