@@ -35,6 +35,7 @@ X.use((err, req, res, next) => {
   res.status(400).send(err.message);
   console.error(err);
 });
+console.log('server: setup');
 // product
 // ingredient
 /*
