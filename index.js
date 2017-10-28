@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
+const uuidv1 = require('uuid/v1');
 const express = require('express');
 const bodyParser = require('body-parser');
 const pg = require('pg');
@@ -23,8 +24,14 @@ const pipe = Pipe(data);
 const sql = new Sql(dbpool);
 
 function reqLog(req, res) {
-  const {method, url, } = req;
-  console.log(``);
+  // 1. log request details
+  const {port, family, address} = req.socket.address();
+  const from = req.headers['x-forwarded-for']||`${address}:${port} (${family})`;
+  const proto = req.headers['x-forwarded-proto']||'http';
+  const start = req.headers['x-request-start']||`${Date.now()}`;
+  const length = req.headers['content-length']||'?';
+  req.id = req.headers['x-request-id']||uuidv1();
+  console.log(`T${start}: id:${req.id} ${from} -> ${proto} ${req.method} ${req.url} length:${length}`);
 };
 
 // II. setup server
