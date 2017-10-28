@@ -9,6 +9,5 @@ module.exports = function Json(src) {
   x.use('/term', JsonTable(src.term));
   x.use('/type', JsonTable(src.type));
   x.use('/unit', JsonTable(src.unit));
-  console.log('json: setup');
   return x;
 };

@@ -14,6 +14,5 @@ module.exports = function(db) {
   };
   x.get('/', fn);
   x.get('/:value', fn);
-  console.log('sql: setup');
   return x;
 };
