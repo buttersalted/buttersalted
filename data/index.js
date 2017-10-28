@@ -43,17 +43,17 @@ const _ = $.prototype;
 
 _.setup = function() {
   // 1. setup in sequence (order, order)
-  return this.utility.setup().then(() => console.log('data:utility setup')||
-    this.type.setup()).then(() => console.log('data:type setup')||
-    this.unit.setup()).then(() => console.log('data:unit setup')||
-    this.term.setup()).then(() => console.log('data:term setup')||
-    this.food.setup()).then(() => console.log('data:food setup')||
-    this.group.setup()).then(() => console.log('data:group setup')||
-    this.values.setup()).then(() => console.log('data:values setup')||
+  return this.utility.setup().then(() =>
+    this.type.setup()).then(() =>
+    this.unit.setup()).then(() =>
+    this.term.setup()).then(() =>
+    this.food.setup()).then(() =>
+    this.group.setup()).then(() =>
+    this.values.setup()).then(() =>
   // 2. fill up the maps (order, uhunhh)
-    this.type.select({})).then(() => console.log('data:type selected')||
-    this.unit.select({})).then(() => console.log('data:unit selected')||
-    this.term.select({}).then(() => console.log('data:term selected')||
-    console.log('data setup'))
+    this.type.select({})).then(() =>
+    this.unit.select({})).then(() =>
+    this.term.select({})).then(() =>
+    console.log('data: setup')
   );
 };
