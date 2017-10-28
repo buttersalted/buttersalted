@@ -53,7 +53,6 @@ _.setup = function() {
   // 2. fill up the maps (order, uhunhh)
     this.type.select({})).then(() =>
     this.unit.select({})).then(() =>
-    this.term.select({})).then(() =>
-    console.log('data: setup')
+    this.term.select({})
   );
 };

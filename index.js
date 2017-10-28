@@ -21,8 +21,10 @@ const json = Json(data);
 const pipe = Pipe(data);
 const sql = new Sql(dbpool);
 server.listen(E.PORT||80);
-data.setup().catch((err) => {
-  console.error(err);
+data.setup().then(() => {
+  console.log('data: setup done');
+}, (err) => {
+  console.error('data:', err);
 });
 
 X.use(bodyParser.json());
