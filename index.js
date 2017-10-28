@@ -21,11 +21,14 @@ const json = Json(data);
 const pipe = Pipe(data);
 const sql = new Sql(dbpool);
 server.listen(E.PORT||80);
-data.setup().then(() => {
-  console.log('data: setup done');
-}, (err) => {
-  console.error('data:', err);
+server.on('listening', () => {
+  const {port, family, address} = server.address();
+  console.log(`server: listening on ${address}:${port} (${family})`);
 });
+data.setup().then(
+  () => console.log('data: setup done'),
+  (err) => console.error('data:', err)
+);
 
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
