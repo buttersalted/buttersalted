@@ -49,6 +49,7 @@ data.setup().then(
 );
 
 // IV. setup express
+X.use(reqLog);
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
 X.use('/json', json);
