@@ -57,6 +57,18 @@ section:not([class]),
 html.query form {
   max-width: none;
 }
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+html.query form fieldset {
+  display: inline-block;
+  width: 24%;
+}
+form p:not([class]):not([empty]) {
+  margin-top: 2rem;
+}
 #logo {
   display: none;
 }
@@ -70,15 +82,6 @@ html.sql:not(.query) #logo {
 }
 @media (max-height: 32rem) {
   #logo { margin-top: 0; }
-}
-fieldset {
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-html.query form fieldset {
-  display: inline-block;
-  width: 24%;
 }
 #sql-value {
   font-size: 1.44em;
