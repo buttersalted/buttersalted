@@ -23,7 +23,7 @@ const json = Json(data);
 const pipe = Pipe(data);
 const sql = new Sql(dbpool);
 
-function reqLog(req, res) {
+function reqLog(req, res, next) {
   // 1. log request details
   const {port, family, address} = req.socket.address();
   const from = req.headers['x-forwarded-for']||`${address}:${port} (${family})`;
@@ -32,6 +32,7 @@ function reqLog(req, res) {
   const length = req.headers['content-length']||'?';
   req.id = req.headers['x-request-id']||uuidv1();
   console.log(`T${start}: id:${req.id} ${from} -> ${proto} ${req.method} ${req.url} length:${length}`);
+  next();
 };
 
 // II. setup server
