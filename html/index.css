@@ -95,9 +95,6 @@ html.sql:not(.query) #logo {
   right: 0;
   margin: 3rem 2rem;
 }
-#sql p {
-  margin-top: 2rem;
-}
 #ans {
   overflow-x: auto;
 }
