@@ -5,7 +5,7 @@ const body = (req) => Object.assign(req.body, req.query, req.params);
 module.exports = function(db) {
   const x = express();
   const fn = (req, res, next) => {
-    const value = body(req).value||'';
+    const value = body(req).value||'SELECT * FROM "food"';
     var qry = value.split(';')[0];
     if(!qry.toUpperCase().startsWith('SELECT ') ||
       qry.toUpperCase().includes('INTO'))
