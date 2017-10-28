@@ -11,6 +11,7 @@ const Json = require('./json');
 const Pipe = require('./pipe')
 const Sql = require('./sql');
 
+// I. global variables
 const E = process.env;
 const X = express();
 const HTML = path.join(__dirname, 'html');
@@ -20,16 +21,21 @@ const data = new Data(dbpool);
 const json = Json(data);
 const pipe = Pipe(data);
 const sql = new Sql(dbpool);
+
+// II. setup server
 server.listen(E.PORT||80);
 server.on('listening', () => {
   const {port, family, address} = server.address();
   console.log(`server: listening on ${address}:${port} (${family})`);
 });
+
+// III. setup database
 data.setup().then(
   () => console.log('data: setup done'),
   (err) => console.error('data:', err)
 );
 
+// IV. setup express
 X.use(bodyParser.json());
 X.use(bodyParser.urlencoded({'extended': true}));
 X.use('/json', json);
@@ -40,6 +46,7 @@ X.use((err, req, res, next) => {
   res.status(400).send(err.message);
   console.error(err);
 });
+
 // product
 // ingredient
 /*
