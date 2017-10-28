@@ -22,6 +22,11 @@ const json = Json(data);
 const pipe = Pipe(data);
 const sql = new Sql(dbpool);
 
+function reqLog(req, res) {
+  const {method, url, } = req;
+  console.log(``);
+};
+
 // II. setup server
 server.listen(E.PORT||80);
 server.on('listening', () => {
