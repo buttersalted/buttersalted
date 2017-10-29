@@ -10,8 +10,8 @@ function sqlDecomment(txt) {
   return txt.trim();
 };
 
-function sqlRename(val, map) {
-  // 1. rename value using a map
+function strRename(val, map) {
+  // 1. rename string using a map
   val = val.toLowerCase();
   return map.get(val)||val;
 };
@@ -19,24 +19,34 @@ function sqlRename(val, map) {
 function sqlRenameId(ast, map) {
   // 1. rename identifier using a map
   if(ast.db) ast.db = null;
-  if(ast.table) ast.table = sqlRename(ast.table, map);
-  if(ast.column) ast.column = sqlRename(ast.column, map);
+  if(ast.table) ast.table = strRename(ast.table, map);
+  if(ast.column) ast.column = strRename(ast.column, map);
   return ast;
 };
 
 function sqlRenameExp(ast, map) {
   // 1. rename expression using a map
   if(!ast || typeof ast!=='object') return ast;
-  if(ast instanceof Array) {
-    for(var a of ast)
-      sqlRenameExp(a, map);
-  }
-  else if(!ast.table) {
-    for(var k in ast)
-      sqlRenameExp(ast[k], map);
-  }
+  if(ast instanceof Array) for(var a of ast)
+    sqlRenameExp(a, map);
+  else if(!ast.table) for(var k in ast)
+    sqlRenameExp(ast[k], map);
   else sqlRenameId(ast, map);
   return ast;
+};
+
+function sqlRename(ast, map) {
+  // 1. rename sql statement using map
+  if(typeof ast.columns!=='string') for(var a of ast)
+    sqlRenameExp(a.expr, map);
+  if(ast.from) for(var a of ast.from)
+    sqlRenameExp(a, map);
+  if(ast.where) sqlRenameExp(ast.where);
+  if(ast.having) sqlRenameExp(ast.having);
+  if(ast.orderby) for(var a of ast.orderby)
+    sqlRenameExp(a.expr, map);
+  if(ast.groupby) for(var a of ast.groupby)
+    sqlRenameExp(a, map);
 };
 
 function sqlUpdate(txt) {
