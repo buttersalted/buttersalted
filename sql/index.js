@@ -17,7 +17,9 @@ function sqlUpdate(txt) {
   if(txt.includes(';')) throw new Error('too many queries');
   const p = new Parser(), ast = p.parse(txt);
   if(ast.type!=='select') throw new Error('only SELECT query supported');
-  
+  // 2. return a limited number of rows
+  if(ast.limit && ast.limit[1].value>64) ast.limit[1].value = 64;
+  else ast.limit = [{'type': 'number', 'value': 0}, {'type': 'number', 'value': 0}];
 };
 
 module.exports = function(db) {
