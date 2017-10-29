@@ -2,6 +2,10 @@
 const express = require('express');
 const body = (req) => Object.assign(req.body, req.query, req.params);
 
+function sqlUpdate() {
+  
+};
+
 module.exports = function(db) {
   const x = express();
   const fn = (req, res, next) => {
