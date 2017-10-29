@@ -10,6 +10,19 @@ function sqlDecomment(txt) {
   return txt.trim();
 };
 
+function sqlRename(val, map) {
+  // 1. rename value using a map
+  val = val.toLowerCase();
+  return map.get(val)||val;
+};
+
+function sqlRenameId(ast, map) {
+  // 1. rename identifier using a map
+  if(ast.db) ast.db = null;
+  if(ast.table) ast.table = sqlRename(ast.table, map);
+  if(ast.column) ast.column = sqlRename(ast.column, map);
+};
+
 function sqlUpdate(txt) {
   // 1. make sure its a select query
   txt = sqlDecomment(txt);
