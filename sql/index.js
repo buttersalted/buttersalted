@@ -21,6 +21,22 @@ function sqlRenameId(ast, map) {
   if(ast.db) ast.db = null;
   if(ast.table) ast.table = sqlRename(ast.table, map);
   if(ast.column) ast.column = sqlRename(ast.column, map);
+  return ast;
+};
+
+function sqlRenameExp(ast, map) {
+  // 1. rename expression using a map
+  if(!ast || typeof ast!=='object') return ast;
+  if(ast instanceof Array) {
+    for(var a of ast)
+      sqlRenameExp(a, map);
+  }
+  else if(!ast.table) {
+    for(var k in ast)
+      sqlRenameExp(ast[k], map);
+  }
+  else sqlRenameId(ast, map);
+  return ast;
 };
 
 function sqlUpdate(txt) {
