@@ -94,4 +94,16 @@ X.use((err, req, res, next) => {
 - ABILITY TO SEE STATUS OF QUERY (AND STOP)
 - REPLACE TERMS SQL
 - USE LIMITS
+
+USE TITLE CASE FOR TABLE NAMES AND COLUMNS
++ Good view to user, even data is title case
+- Every table needs some translation before inserting
+
+USE LOWER CASE FOR TABLE NAMES AND COLUMNS
++ Many terms not required for translation to title case
++ For new groups, no need to add terms for each new group
++ URL, JSON keys are by default lowercase
++ It might be confusing to use different case for URL and table name
+- Not a good view to user, loss of case information
+
 */

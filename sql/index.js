@@ -9,6 +9,10 @@ function sqlDecomment(txt) {
   return txt.trim();
 };
 
+function sqlPrefix(txt) {
+  if()
+};
+
 function sqlUpdate(txt) {
   // 1. remove single and multi-line comments
 };
