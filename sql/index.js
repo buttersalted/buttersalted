@@ -21,7 +21,6 @@ function sqlRenameId(ast, map) {
   if(ast.db) ast.db = null;
   if(ast.table) ast.table = strRename(ast.table, map);
   if(ast.column) ast.column = strRename(ast.column, map);
-  return ast;
 };
 
 function sqlRenameExp(ast, map) {
@@ -32,7 +31,6 @@ function sqlRenameExp(ast, map) {
   else if(!ast.table) for(var k in ast)
     sqlRenameExp(ast[k], map);
   else sqlRenameId(ast, map);
-  return ast;
 };
 
 function sqlRename(ast, map) {
@@ -49,6 +47,12 @@ function sqlRename(ast, map) {
     sqlRenameExp(a, map);
 };
 
+function sqlLimit(sql, val) {
+  // 1. set limit to a maximum value
+  if(ast.limit && ast.limit[1].value>64) ast.limit[1].value = 64;
+  else ast.limit = [{'type': 'number', 'value': 0}, {'type': 'number', 'value': 0}];
+};
+
 function sqlUpdate(txt) {
   // 1. make sure its a select query
   txt = sqlDecomment(txt);
@@ -56,9 +60,6 @@ function sqlUpdate(txt) {
   if(txt.includes(';')) throw new Error('too many queries');
   const p = new Parser(), ast = p.parse(txt);
   if(ast.type!=='select') throw new Error('only SELECT query supported');
-  // 2. return a limited number of rows
-  if(ast.limit && ast.limit[1].value>64) ast.limit[1].value = 64;
-  else ast.limit = [{'type': 'number', 'value': 0}, {'type': 'number', 'value': 0}];
 };
 
 module.exports = function(db) {
