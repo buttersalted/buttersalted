@@ -2,8 +2,15 @@
 const express = require('express');
 const body = (req) => Object.assign(req.body, req.query, req.params);
 
-function sqlUpdate() {
-  
+function sqlDecomment(txt) {
+  // 1. remove multi-line, single-line comments
+  txt = txt.replace(/\/\*.*?\*\//g, '');
+  txt = txt.replace(/--.*/gm, '');
+  return txt.trim();
+};
+
+function sqlUpdate(txt) {
+  // 1. remove single and multi-line comments
 };
 
 module.exports = function(db) {
