@@ -47,19 +47,20 @@ function sqlRename(ast, map) {
     sqlRenameExp(a, map);
 };
 
-function sqlLimit(sql, val) {
+function sqlLimit(ast, val) {
   // 1. set limit to a maximum value
   if(ast.limit && ast.limit[1].value>64) ast.limit[1].value = 64;
   else ast.limit = [{'type': 'number', 'value': 0}, {'type': 'number', 'value': 0}];
 };
 
-function sqlUpdate(txt) {
-  // 1. make sure its a select query
+function sqlParse(txt) {
+  // 1. parse a select sql query
   txt = sqlDecomment(txt);
   txt = txt.endsWith(';')? txt.slice(0, -1) : txt;
   if(txt.includes(';')) throw new Error('too many queries');
   const p = new Parser(), ast = p.parse(txt);
   if(ast.type!=='select') throw new Error('only SELECT query supported');
+  return ast;
 };
 
 module.exports = function(db) {
