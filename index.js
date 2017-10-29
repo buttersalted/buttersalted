@@ -61,6 +61,9 @@ X.use((err, req, res, next) => {
   console.error(err);
 });
 
+const Parser = require('flora-sql-parser').Parser;
+const p = new Parser();
+console.log(p.parse('SELECT * FROM "food" WHERE "Id">0 LIMIT 2'));
 // product
 // ingredient
 /*
