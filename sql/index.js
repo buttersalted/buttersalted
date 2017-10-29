@@ -1,6 +1,7 @@
 'use strict';
 const express = require('express');
 const Parser = require('flora-sql-parser').Parser;
+const astToSQL = require('flora-sql-parser').util.astToSQL;
 const body = (req) => Object.assign(req.body, req.query, req.params);
 
 function sqlDecomment(txt) {
@@ -53,25 +54,25 @@ function sqlLimit(ast, val) {
   else ast.limit = [{'type': 'number', 'value': 0}, {'type': 'number', 'value': 0}];
 };
 
-function sqlParse(txt) {
-  // 1. parse a select sql query
+function sqlUpdate(txt, map, lim) {
+  // 1. make sure its a single query
   txt = sqlDecomment(txt);
   txt = txt.endsWith(';')? txt.slice(0, -1) : txt;
   if(txt.includes(';')) throw new Error('too many queries');
+  // 2. modify query, if necessary
   const p = new Parser(), ast = p.parse(txt);
   if(ast.type!=='select') throw new Error('only SELECT query supported');
-  return ast;
+  sqlRename(ast, map);
+  sqlLimit(ast, lim);
+  return astToSQL(ast);
 };
 
-module.exports = function(db) {
+module.exports = function(db, data) {
   const x = express();
   const fn = (req, res, next) => {
-    const value = body(req).value||'SELECT * FROM "food"';
-    var qry = value.split(';')[0];
-    if(!qry.toUpperCase().startsWith('SELECT ') ||
-      qry.toUpperCase().includes('INTO'))
-      throw new Error('bad query');
-    db.query(qry).then((ans) => res.send(ans.rows||[]), next)
+    var txt = body(req).value;
+    txt = sqlUpdate(txt, data.term._map, 64);
+    db.query(txt).then((ans) => res.send(ans.rows||[]), next);
   };
   x.get('/', fn);
   x.get('/:value', fn);
