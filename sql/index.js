@@ -17,6 +17,7 @@ function sqlUpdate(txt) {
   if(txt.includes(';')) throw new Error('too many queries');
   const p = new Parser(), ast = p.parse(txt);
   if(ast.type!=='select') throw new Error('only SELECT query supported');
+  
 };
 
 module.exports = function(db) {
