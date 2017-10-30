@@ -1,4 +1,4 @@
-// 1. define global variables
+// I. define global variables
 var Html = document.querySelector('html');
 var Editor = ace.edit('sql-value');
 var Header = document.querySelector('header');
@@ -18,7 +18,7 @@ var Forms = {
   'unit': document.querySelector('#unit form')
 };
 
-var objTruthy = function(a) {
+function objTruthy(a) {
   // 1. get object with only truthy values
   var z = {};
   for(var k in a)
@@ -26,7 +26,7 @@ var objTruthy = function(a) {
   return z;
 };
 
-var locationSet = function(hsh) {
+function locationSet(hsh) {
   // 1. replace temp handler only if hash changed
   var fn = window.onhashchange;
   if(hsh!==location.hash) window.onhashchange = function() {
@@ -36,12 +36,12 @@ var locationSet = function(hsh) {
   location.href = location.origin+location.pathname+hsh;
 };
 
-var ajaxReq = function(mth, url, dat) {
+function ajaxReq(mth, url, dat) {
   // 1. make an ajax request
   return m.request({'method': mth, 'url': url, 'data': dat});
 };
 
-var ansRender = function(ans) {
+function ansRender(ans) {
   console.log('ansRender');
   // 1. get set of all columns
   var cs = new Set(), ca = [], zc = [], zv = [];
@@ -67,7 +67,7 @@ var ansRender = function(ans) {
   if(!ca.length) iziToast.warning({'title': 'Empty Query', 'message': 'no values returned'});
 };
 
-var ansError = function(err) {
+function ansError(err) {
   console.log('ansError');
   // 1. clear table
   m.render(Thead, null);
@@ -76,19 +76,19 @@ var ansError = function(err) {
   iziToast.error({'title': 'Query Error', 'message': err.message});
 };
 
-var actRender = function(ans) {
+function actRender(ans) {
   console.log('actRender');
   // 1. show toast message
   iziToast.info({'title': 'Action successful', 'message': ans});
 };
 
-var actError = function(err) {
+function actError(err) {
   console.log('actError');
   // 1. show toast message
   iziToast.error({'title': 'Action failed', 'message': err.message});
 };
 
-var formGet = function(frm) {
+function formGet(frm) {
   // 1. set object from form elements
   var E = frm.elements, z = {};
   for(var i=0, I=E.length; i<I; i++)
@@ -96,7 +96,7 @@ var formGet = function(frm) {
   return z;
 };
 
-var formSet = function(frm, val) {
+function formSet(frm, val) {
   // 1. set form elements from object
   var E = frm.elements;
   for(var i=0, I=E.length; i<I; i++)
@@ -104,11 +104,11 @@ var formSet = function(frm, val) {
   return frm;
 };
 
-var inpKv = function(e, key, val, katt, vatt) {
+function inpKv(e, key, val, katt, vatt) {
   // 1. setup component (empty, yet need to refer it)
   var comp = {};
   // 2. this handles key change
-  var onkey = function() {
+  function onkey() {
     // a. get new key
     var k = this.value;
     // b. created if filled, delete if emptied
@@ -118,7 +118,7 @@ var inpKv = function(e, key, val, katt, vatt) {
     key = k;
   };
   // 3. this handles value change
-  var onval = function() {
+  function onval() {
     // a. update value
     val = this.value;
   };
@@ -129,7 +129,7 @@ var inpKv = function(e, key, val, katt, vatt) {
   ]); }});
 };
 
-var formKv = function(el, katt, vatt, val) {
+function formKv(el, katt, vatt, val) {
   console.log('formKv');
   // 1. define components
   var Comps = new Set();
@@ -160,7 +160,7 @@ var formKv = function(el, katt, vatt, val) {
   return z;
 };
 
-var formSql = function() {
+function formSql() {
   console.log('formSql');
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
@@ -171,14 +171,14 @@ var formSql = function() {
   return false;
 };
 
-var loopAsync = function(fn, bgn, end) {
+function loopAsync(fn, bgn, end) {
   // 1. an asynchronous begin to end loop
   if(bgn<end) fn(bgn).then(function() {
     loopAsync(fn, ++bgn, end);
   });
 };
 
-var formPipe = function() {
+function formPipe() {
   console.log('formPipe');
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
@@ -210,7 +210,7 @@ var formPipe = function() {
   return false;
 };
 
-var formJson = function() {
+function formJson() {
   console.log('formJson');
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
@@ -228,7 +228,7 @@ var formJson = function() {
   return false;
 };
 
-var setupPage = function(e) {
+function setupPage(e) {
   console.log('setupPage');
   // 1. define food key, value attributes
   var katt = {'list': 'types', 'placeholder': 'Column name, like: Id'};
@@ -250,7 +250,7 @@ var setupPage = function(e) {
   if(qis) Forms[pre].onsubmit();
 };
 
-var setup = function() {
+function setup() {
   console.log('setup');
   // 1. enable form multi submit
   var submit = document.querySelectorAll('form [type=submit]');
