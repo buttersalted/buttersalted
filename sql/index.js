@@ -71,7 +71,7 @@ module.exports = function(db, data) {
   const x = express();
   const fn = (req, res, next) => {
     var txt = body(req).value;
-    txt = sqlUpdate(txt, data.term._map, 64);
+    txt = sqlUpdate(txt, data.term._map, 16);
     db.query(txt).then((ans) => res.send(ans.rows||[]), next);
   };
   x.get('/', fn);
