@@ -6,6 +6,7 @@ var Navs = document.querySelectorAll('nav li > a');
 var Sections = document.querySelectorAll('section');
 var Thead = document.querySelector('#ans thead');
 var Tbody = document.querySelector('#ans tbody');
+var Tdiv = document.createElement('div');
 var Types = document.querySelector('#types');
 var FoodInputs = document.querySelector('#food form .inputs');
 var Forms = {
@@ -83,6 +84,7 @@ function ansRender(ans) {
   // 4. update table head, body
   m.render(Thead, ans.length? m('tr', zc) : null);
   m.render(Tbody, ans.length? zv : null);
+  Tdiv.height = Thead.height;
   // 5. show toast message (if empty)
   if(!ca.length) toast('warning', 'Empty Query', 'No values returned');
 };
@@ -283,16 +285,31 @@ function setup() {
       z[i] = m('option', ans[i].id);
     m.render(Types, z);
   });
-  // 2. setup ace editor
+  // 3. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
   Editor.focus();
-  // 4. setup sql interface
+  // 4. enable sticky table head
+  var theadVis = false;
+  window.onscroll = function() {
+    var wny = window.pageYOffset, tby = Tbody.getBoundingClientRect().top;
+    if(wny>=tby && !theadVis) {
+      Thead.classList.add('sticky');
+      Thead.parentElement.insertBefore(Tdiv, Thead);
+      theadVis = true;
+    }
+    else if(wny<tby && theadVis) {
+      Thead.classList.remove('sticky');
+      Thead.parentElement.removeChild(Tdiv);
+      theadVis = false;
+    }
+  };
+  // 5. setup sql interface
   for(var k in Forms)
     Forms[k].onsubmit = formJson;
   Forms.sql.onsubmit = formSql;
   Forms.pipe.onsubmit = formPipe;
-  // 5. setup page
+  // 6. setup page
   window.onhashchange = setupPage;
   setupPage();
 };

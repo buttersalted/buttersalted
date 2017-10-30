@@ -109,6 +109,12 @@ html.query #sql p,
 html:not(.query) #ans {
   display: none;
 }
+.sticky {
+  position: fixed;
+  top: 0;
+  background: white;
+  z-index: 2;
+}
 .iziToast {
   font-family: 'Righteous', cursive;
 }
