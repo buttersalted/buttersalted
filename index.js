@@ -60,10 +60,6 @@ X.use((err, req, res, next) => {
   res.status(400).send(err.message);
   console.error(err);
 });
-
-const Parser = require('flora-sql-parser').Parser;
-const p = new Parser();
-console.log(p.parse('SELECT "a", b FROM "food" WHERE "Id">0 GROUP BY "a" LIMIT 2'));
 // product
 // ingredient
 /*
