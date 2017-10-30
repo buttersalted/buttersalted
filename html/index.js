@@ -26,6 +26,17 @@ function objTruthy(a) {
   return z;
 };
 
+function titleSet(msg, val) {
+  // 1. set document title
+  var z = '';
+  for(var k in val)
+    z += k+'='+val[k];
+  msg = msg? msg[0].toUpperCase()+msg.substring(1) : '';
+  msg += z? ': '+z : '';
+  msg += msg? ' - ' : '';
+  document.title = msg+'FoodSQL';
+};
+
 function locationSet(hsh) {
   // 1. replace temp handler only if hash changed
   var fn = window.onhashchange;
@@ -162,8 +173,11 @@ function formSql() {
   // 1. switch to query mode, and get form data
   Html.classList.add('query');
   var value = Editor.getValue();
-  // 2. update location, and make ajax request
-  locationSet('#!/?'+m.buildQueryString({'value': value}));
+  var data = {'value': value};
+  // 2. update location, title
+  locationSet('#!/?'+m.buildQueryString(data));
+  titleSet('', data);
+  // 3. make ajax request
   ajaxReq('GET', '/sql/'+encodeURIComponent(value)).then(ansRender, ansError);
   return false;
 };
@@ -185,8 +199,9 @@ function formPipe() {
   var stop = parseInt(data.stop)||(start+1);
   var url = '/pipe/'+source+'/';
   var sbt = this.submitted;
-  // 2. update location
+  // 2. update location, title
   locationSet('#!/pipe?'+m.buildQueryString(data));
+  titleSet('pipe', data);
   // 3. if submit is post, render status (yay async again)
   if(sbt==='post') loopAsync(function(i) {
     return ajaxReq('POST', url+i).then(function(ans) {
@@ -219,8 +234,10 @@ function formJson() {
   // 2. report completion, error
   function onDone() { toast('info', 'Action Successful', sbt+' '+id); };
   function onError(err) { toast('error', 'Action Failed', sbt+' '+id+': '+err.message); };
-  // 2. update location, and make ajax request (4 options)
+  // 2. update location, title
   locationSet('#!/'+tab+'?'+m.buildQueryString(data));
+  titleSet(tab, data);
+  // 3. make ajax request (4 options)
   if(sbt==='insert') ajaxReq('POST', '/json/'+tab, data).then(onDone, onError);
   else if(sbt==='update') ajaxReq('PATCH', '/json/'+tab+'/'+id, data).then(onDone, onError);
   else if(sbt==='delete') ajaxReq('DELETE', '/json/'+tab+'/'+id, data).then(onDone, onError);
@@ -234,23 +251,24 @@ function setupPage(e) {
   var katt = {'list': 'types', 'placeholder': 'Column name, like: Id'};
   var vatt = {'type': 'text', 'placeholder': 'Value, like: 1001'};
   // 2. get path, prefix, and query
-  var path = location.hash.replace(/#?\!?\/?/, '')
-  var pre = path.split(/[\/\?]/)[0].toLowerCase()||'sql';
-  var qis = path.indexOf('?')>=0;
+  var path = location.hash.replace(/#?\!?\/?/, '');
+  var pre = path.split(/[\/\?]/)[0].toLowerCase();
+  var mod=pre||'sql', qis = path.indexOf('?')>=0;
   var qry = qis? m.parseQueryString(path.split('?')[1]) : {};
-  // 3. clear result tables
+  // 3. set title, clear result tables
+  titleSet(pre, qry);
   m.render(Thead, null);
   m.render(Tbody, null);
   // 4. update html class list (updates ui)
-  Html.classList.value = pre;
+  Html.classList.value = mod;
   if(qis) Html.classList.add('query');
   // 5. prepare forms if just loaded
-  if(pre==='sql') Editor.setValue(qry.value||'');
-  else if(pre!=='food') formSet(Forms[pre], qry);
-  var kv = formKv(FoodInputs, katt, vatt, pre==='food'? qry : {});
+  if(mod==='sql') Editor.setValue(qry.value||'');
+  else if(mod!=='food') formSet(Forms[mod], qry);
+  var kv = formKv(FoodInputs, katt, vatt, mod==='food'? qry : {});
   Forms.food.onreset = kv.onreset;
   // 6. submit form if have query
-  if(qis) Forms[pre].onsubmit();
+  if(qis) Forms[mod].onsubmit();
 };
 
 function setup() {
