@@ -109,6 +109,9 @@ html.query #sql p,
 html:not(.query) #ans {
   display: none;
 }
+.iziToast {
+  font-family: 'Righteous', cursive;
+}
 
 
 /* 3. footer sundarization */

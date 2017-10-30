@@ -224,7 +224,7 @@ function formJson() {
   if(sbt==='insert') ajaxReq('POST', '/json/'+tab, data).then(onDone, onError);
   else if(sbt==='update') ajaxReq('PATCH', '/json/'+tab+'/'+id, data).then(onDone, onError);
   else if(sbt==='delete') ajaxReq('DELETE', '/json/'+tab+'/'+id, data).then(onDone, onError);
-  else ajaxReq('GET', '/json/'+tab, data).then(onDone, onError);
+  else ajaxReq('GET', '/json/'+tab, data).then(ansRender, ansError);
   return false;
 };
 
@@ -269,12 +269,12 @@ function setup() {
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
   Editor.focus();
-  // 3. setup sql interface
+  // 4. setup sql interface
   for(var k in Forms)
     Forms[k].onsubmit = formJson;
   Forms.sql.onsubmit = formSql;
   Forms.pipe.onsubmit = formPipe;
-  // 4. setup page
+  // 5. setup page
   window.onhashchange = setupPage;
   setupPage();
 };
