@@ -304,6 +304,7 @@ function setup() {
       theadVis = false;
     }
   };
+  window.onscroll = null;
   // 5. setup sql interface
   for(var k in Forms)
     Forms[k].onsubmit = formJson;
