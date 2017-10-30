@@ -21,7 +21,7 @@ const dbpool = new pg.Pool(pgconfig(E.DATABASE_URL));
 const data = new Data(dbpool);
 const json = Json(data);
 const pipe = Pipe(data);
-const sql = new Sql(dbpool);
+const sql = new Sql(dbpool, data);
 
 function reqLog(req, res, next) {
   // 1. log request details
