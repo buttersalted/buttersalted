@@ -26,6 +26,20 @@ function objTruthy(a) {
   return z;
 };
 
+function ajaxReq(mth, url, dat) {
+  // 1. make an ajax request
+  return m.request({'method': mth, 'url': url, 'data': dat});
+};
+
+function toast(mod, ttl, msg) {
+  // 1. show a toast
+  iziToast[mod]({
+    'title': ttl,
+    'message': msg,
+    'position': 'bottomCenter'
+  });
+};
+
 function titleSet(msg, val) {
   // 1. set document title
   var z = '';
@@ -45,20 +59,6 @@ function locationSet(hsh) {
   };
   // 2. update location
   location.href = location.origin+location.pathname+hsh;
-};
-
-function ajaxReq(mth, url, dat) {
-  // 1. make an ajax request
-  return m.request({'method': mth, 'url': url, 'data': dat});
-};
-
-function toast(mod, ttl, msg) {
-  // 1. show a toast
-  iziToast[mod]({
-    'title': ttl,
-    'message': msg,
-    'position': 'bottomCenter'
-  });
 };
 
 function ansRender(ans) {
