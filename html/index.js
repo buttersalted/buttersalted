@@ -41,6 +41,15 @@ function ajaxReq(mth, url, dat) {
   return m.request({'method': mth, 'url': url, 'data': dat});
 };
 
+function toast(mod, ttl, msg) {
+  // 1. show a toast
+  iziToast[mod]({
+    'title': ttl,
+    'message': msg,
+    'position': 'bottomCenter'
+  });
+};
+
 function ansRender(ans) {
   console.log('ansRender');
   // 1. get set of all columns
@@ -64,7 +73,7 @@ function ansRender(ans) {
   m.render(Thead, ans.length? m('tr', zc) : null);
   m.render(Tbody, ans.length? zv : null);
   // 5. show toast message (if empty)
-  if(!ca.length) iziToast.warning({'title': 'Empty Query', 'message': 'No values returned'});
+  if(!ca.length) toast('warning', 'Empty Query', 'No values returned');
 };
 
 function ansError(err) {
@@ -73,19 +82,7 @@ function ansError(err) {
   m.render(Thead, null);
   m.render(Tbody, null);
   // 2. show toast message
-  iziToast.error({'title': 'Query Error', 'message': err.message});
-};
-
-function actRender(ans) {
-  console.log('actRender');
-  // 1. show toast message
-  iziToast.info({'title': 'Action successful', 'message': ans});
-};
-
-function actError(err) {
-  console.log('actError');
-  // 1. show toast message
-  iziToast.error({'title': 'Action failed', 'message': err.message});
+  toast('error', 'Query Error', err.message);
 };
 
 function formGet(frm) {
@@ -219,12 +216,15 @@ function formJson() {
   var tab = this.parentElement.id;
   var id = data.id||data.Id;
   data = tab!=='food'? objTruthy(data) : data;
+  // 2. report completion, error
+  function onDone() { toast('info', 'Action Successful', sbt+' '+id); };
+  function onError(err) { toast('error', 'Action Failed', sbt+' '+id+': '+err.message); };
   // 2. update location, and make ajax request (4 options)
   locationSet('#!/'+tab+'?'+m.buildQueryString(data));
-  if(sbt==='insert') ajaxReq('POST', '/json/'+tab, data).then(actRender, actError);
-  else if(sbt==='update') ajaxReq('PATCH', '/json/'+tab+'/'+id, data).then(actRender, actError);
-  else if(sbt==='delete') ajaxReq('DELETE', '/json/'+tab+'/'+id, data).then(actRender, actError);
-  else ajaxReq('GET', '/json/'+tab, data).then(ansRender, ansError);
+  if(sbt==='insert') ajaxReq('POST', '/json/'+tab, data).then(onDone, onError);
+  else if(sbt==='update') ajaxReq('PATCH', '/json/'+tab+'/'+id, data).then(onDone, onError);
+  else if(sbt==='delete') ajaxReq('DELETE', '/json/'+tab+'/'+id, data).then(onDone, onError);
+  else ajaxReq('GET', '/json/'+tab, data).then(onDone, onError);
   return false;
 };
 
