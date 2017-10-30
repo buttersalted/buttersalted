@@ -50,18 +50,18 @@ function sqlRename(ast, map) {
 
 function sqlLimit(ast, val) {
   // 1. set limit to a maximum value
-  if(ast.limit && ast.limit[1].value>val) ast.limit[1].value = val;
-  else ast.limit = [{'type': 'number', 'value': 0}, {'type': 'number', 'value': val}];
+  const lim = ast.limit? ast.limit[1].value : val;
+  ast.limit = [{'type': 'number', 'value': (lim>val? val : lim)}];
 };
 
 function sqlUpdate(txt, map, lim) {
   // 1. make sure its a single query
   txt = sqlDecomment(txt);
   txt = txt.endsWith(';')? txt.slice(0, -1) : txt;
-  if(txt.includes(';')) throw new Error('too many queries');
+  if(txt.includes(';')) throw new Error('Too many queries');
   // 2. modify query, if necessary
   const p = new Parser(), ast = p.parse(txt);
-  if(ast.type!=='select') throw new Error('only SELECT query supported');
+  if(ast.type!=='select') throw new Error('Only SELECT query supported');
   sqlRename(ast, map);
   sqlLimit(ast, lim);
   return astToSQL(ast);
