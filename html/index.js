@@ -47,7 +47,7 @@ function titleSet(msg, val) {
   for(var k in val)
     z += k+'='+val[k];
   msg = msg? msg[0].toUpperCase()+msg.substring(1) : '';
-  msg += msg? ': '+z : z;
+  msg += msg && z? ': '+z : z;
   msg += msg? ' - ' : '';
   document.title = msg+'FoodSQL';
 };
