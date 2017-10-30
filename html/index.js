@@ -64,7 +64,7 @@ function ansRender(ans) {
   m.render(Thead, ans.length? m('tr', zc) : null);
   m.render(Tbody, ans.length? zv : null);
   // 5. show toast message (if empty)
-  if(!ca.length) iziToast.warning({'title': 'Empty Query', 'message': 'no values returned'});
+  if(!ca.length) iziToast.warning({'title': 'Empty Query', 'message': 'No values returned'});
 };
 
 function ansError(err) {
@@ -238,15 +238,18 @@ function setupPage(e) {
   var pre = path.split(/[\/\?]/)[0].toLowerCase()||'sql';
   var qis = path.indexOf('?')>=0;
   var qry = qis? m.parseQueryString(path.split('?')[1]) : {};
-  // 3. update html class list (updates ui)
+  // 3. clear result tables
+  m.render(Thead, null);
+  m.render(Tbody, null);
+  // 4. update html class list (updates ui)
   Html.classList.value = pre;
   if(qis) Html.classList.add('query');
-  // 4. prepare forms if just loaded
+  // 5. prepare forms if just loaded
   if(pre==='sql') Editor.setValue(qry.value||'');
   else if(pre!=='food') formSet(Forms[pre], qry);
   var kv = formKv(FoodInputs, katt, vatt, pre==='food'? qry : {});
   Forms.food.onreset = kv.onreset;
-  // 5. submit form if have query
+  // 6. submit form if have query
   if(qis) Forms[pre].onsubmit();
 };
 
