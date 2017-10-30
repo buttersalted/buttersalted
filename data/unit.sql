@@ -10,16 +10,22 @@ CREATE TABLE IF NOT EXISTS "unit" (
 CREATE OR REPLACE FUNCTION "unit_value" (TEXT)
 RETURNS REAL AS $$
   SELECT "value" FROM "unit" WHERE "id"=$1;
-$$ LANGUAGE SQL;
+$$ LANGUAGE SQL STABLE;
+
+
+CREATE OR REPLACE FUNCTION "unit_lvalue" (TEXT)
+RETURNS REAL AS $$
+  SELECT coalesce(unit_value($1), unit_value(lower($1)));
+$$ LANGUAGE SQL STABLE;
 
 
 CREATE OR REPLACE FUNCTION "unit_tobase" (TEXT, TEXT)
 RETURNS REAL AS $$
   -- 1. number * unit factor * column factor
   SELECT (real_get($1)::REAL)*
-  coalesce(unit_value(btrim(replace($1, real_get($1), ''))), 1)*
-  coalesce(unit_value($2), 1);
-$$ LANGUAGE SQL;
+  coalesce(unit_lvalue(btrim(replace($1, real_get($1), ''))), 1)*
+  coalesce(unit_lvalue($2), 1);
+$$ LANGUAGE SQL STABLE;
 
 
 CREATE OR REPLACE FUNCTION "unit_convert" (TEXT, TEXT)
@@ -27,7 +33,7 @@ RETURNS TEXT AS $$
   -- 1. convert only real numbers
   SELECT CASE WHEN type_value($2)='REAL'
   THEN unit_tobase($1, $2)::TEXT ELSE $1 END;
-$$ LANGUAGE SQL;
+$$ LANGUAGE SQL STABLE;
 
 
 CREATE OR REPLACE FUNCTION "unit_insertone" (JSONB)
