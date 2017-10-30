@@ -50,8 +50,8 @@ function sqlRename(ast, map) {
 
 function sqlLimit(ast, val) {
   // 1. set limit to a maximum value
-  if(ast.limit && ast.limit[1].value>64) ast.limit[1].value = 64;
-  else ast.limit = [{'type': 'number', 'value': 0}, {'type': 'number', 'value': 0}];
+  if(ast.limit && ast.limit[1].value>val) ast.limit[1].value = val;
+  else ast.limit = [{'type': 'number', 'value': 0}, {'type': 'number', 'value': val}];
 };
 
 function sqlUpdate(txt, map, lim) {
