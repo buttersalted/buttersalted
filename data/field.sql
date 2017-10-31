@@ -12,6 +12,12 @@ CREATE INDEX IF NOT EXISTS "field_unit_idx"
 ON "field" ("unit");
 
 
+CREATE OR REPLACE FUNCTION "field_selectone" (JSONB)
+RETURNS SETOF "field" AS $$
+  SELECT * FROM "field" WHERE "id"=$1->>'id';
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION "field_insertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
@@ -51,12 +57,6 @@ BEGIN
   PERFORM type_insertone(_a);
 END;
 $$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION "type_selectone" (JSONB)
-RETURNS SETOF "type" AS $$
-  SELECT * FROM "type" WHERE "id"=$1->>'id';
-$$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION "type_insertoneifnotexists" (TEXT, TEXT)
