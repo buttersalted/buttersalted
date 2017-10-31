@@ -11,6 +11,13 @@ CREATE INDEX IF NOT EXISTS "fillin_field_idx"
 ON "fillin" ("field");
 
 
+CREATE OR REPLACE FUNCTION "fillin_field" (TEXT)
+RETURNS TEXT AS $$
+  SELECT coalesce(c."field", l."field") FROM "fillin" c, "fillin" l
+  WHERE c."id"=$1 AND l."id"=lower($1);
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION "term_insertone" (JSONB)
 RETURNS VOID AS $$
   INSERT INTO "term" VALUES ($1->>'id', $1->>'value');
