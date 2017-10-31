@@ -55,9 +55,15 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "field_upsertone" (_a JSONB)
 RETURNS VOID AS $$
+DECLARE
+  _r JSONB := row_to_json(field_selectone(_a))::JSONB;
+  _z JSONB := _a||_r;
 BEGIN
-  PERFORM type_deleteone(_a);
-  PERFORM type_insertone(_a);
+  IF _r IS NOT NULL THEN
+    EXECUTE format('ALTER TABLE "food" MODIFY COLUMN ');
+  END IF;
+  unit_deleteone(_a);
+  unit_insertone(_a||_r);
 END;
 $$ LANGUAGE plpgsql;
 
