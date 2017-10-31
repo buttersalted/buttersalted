@@ -36,10 +36,12 @@ RETURNS VOID AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_upsertone" (JSONB)
+CREATE OR REPLACE FUNCTION "fillin_updateone" (JSONB, JSONB)
 RETURNS VOID AS $$
-  INSERT INTO "term" VALUES ($1->>'id', $1->>'value')
-  ON CONFLICT ("id") DO UPDATE SET "value"=$1->>'value';
+  UPDATE "fillin" SET "id"=coalesce($2->>'id', r."id"),
+  "field"=coalesce(($2->>'field'), r."field")
+  FROM (SELECT * FROM "fillin" WHERE "id"=$1->>'id') r
+  WHERE "id"=$1->'id';
 $$ LANGUAGE SQL;
 
 
