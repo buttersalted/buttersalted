@@ -41,6 +41,15 @@ RETURNS VOID AS $$
 $$ LANGUAGE SQL;
 
 
+CREATE OR REPLACE FUNCTION "unit_updateone" (JSONB, JSONB)
+RETURNS VOID AS $$
+  UPDATE "unit" SET "id"=coalesce($2->>'id', r."id"),
+  "factor"=coalesce(($2->>'factor')::REAL, r."factor"),
+  "offset"=coalesce(($2->>'offset')::REAL, r."offset")
+  WHERE "id"=$1->'id';
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION "unit_upsertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
