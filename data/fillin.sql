@@ -1,14 +1,14 @@
 -- 1. create table to store fill-ins for fields
-CREATE TABLE IF NOT EXISTS "term" (
+CREATE TABLE IF NOT EXISTS "fillin" (
   "id"    TEXT NOT NULL,
   "field" TEXT NOT NULL,
   PRIMARY KEY ("id"),
-  CHECK ("id"<>'' AND "value"<>''),
+  CHECK ("id"<>''),
   FOREIGN KEY ("field") REFERENCES "field" ("id")
   ON DELETE NO ACTION ON UPDATE CASCADE
 );
-CREATE INDEX IF NOT EXISTS "term_field_idx"
-ON "term" ("field");
+CREATE INDEX IF NOT EXISTS "fillin_field_idx"
+ON "fillin" ("field");
 
 
 CREATE OR REPLACE FUNCTION "term_value" (TEXT)
