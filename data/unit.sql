@@ -46,5 +46,6 @@ RETURNS VOID AS $$
   UPDATE "unit" SET "id"=coalesce($2->>'id', r."id"),
   "factor"=coalesce(($2->>'factor')::REAL, r."factor"),
   "offset"=coalesce(($2->>'offset')::REAL, r."offset")
+  FROM (SELECT * FROM "unit" WHERE "id"=$1->>'id') r
   WHERE "id"=$1->'id';
 $$ LANGUAGE SQL;
