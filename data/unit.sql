@@ -1,7 +1,8 @@
 -- 1. create table to store unit conversion factors
 CREATE TABLE IF NOT EXISTS "unit" (
-  "id"    TEXT NOT NULL,
-  "value" REAL NOT NULL,
+  "id"     TEXT NOT NULL,
+  "factor" REAL NOT NULL DEFAULT 1,
+  "offset" REAL NOT NULL DEFAULT 0,
   PRIMARY KEY ("id"),
   CHECK ("id"<>'')
 );
