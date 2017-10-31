@@ -53,6 +53,16 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION "field_updateone" (_f JSONB, _t JSONB)
+RETURNS VOID AS $$
+  _r JSONB := row_to_json(field_selectone(_f));
+  _z JSONB := _t||_r;
+BEGIN
+  UPDATE "field" SET "id"=_z->>'id'
+END;
+$$ LANGUAGE plpgsql;
+
+
 CREATE OR REPLACE FUNCTION "field_upsertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
