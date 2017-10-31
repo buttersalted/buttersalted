@@ -32,7 +32,7 @@ BEGIN
   INSERT INTO "field" SELECT * FROM
     jsonb_populate_record(NULL::"field", table_default('field')||_a);
   -- 3. add column id to food table with index (if column)
-  IF _value<>'TABLE' THEN
+  IF _type<>'TABLE' THEN
     EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s',
       _id, _type);
     EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON "food" USING %s (%I)',
