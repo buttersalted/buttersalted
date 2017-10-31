@@ -15,12 +15,12 @@ CREATE OR REPLACE FUNCTION "fillin_field" (TEXT)
 RETURNS TEXT AS $$
   SELECT coalesce(c."field", l."field") FROM "fillin" c, "fillin" l
   WHERE c."id"=$1 AND l."id"=lower($1);
-$$ LANGUAGE SQL;
+$$ LANGUAGE SQL STABLE;
 
 
-CREATE OR REPLACE FUNCTION "term_insertone" (JSONB)
+CREATE OR REPLACE FUNCTION "fillin_insertone" (JSONB)
 RETURNS VOID AS $$
-  INSERT INTO "term" VALUES ($1->>'id', $1->>'value');
+  INSERT INTO "fillin" VALUES ($1->>'id', $1->>'field');
 $$ LANGUAGE SQL;
 
 
