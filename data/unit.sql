@@ -22,9 +22,16 @@ RETURNS REAL AS $$
 $$ LANGUAGE SQL STABLE;
 
 
+CREATE OR REPLACE FUNCTION "unit_selectone" (JSONB)
+RETURNS SETOF "unit" AS $$
+  SELECT * FROM "unit" WHERE "id"=$1->>'id';
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION "unit_insertone" (JSONB)
 RETURNS VOID AS $$
-  INSERT INTO "unit" VALUES($1->>'id', ($1->>'value')::REAL);
+  INSERT INTO "unit" SELECT * FROM
+  jsonb_populate_record(NULL::"unit", table_default('unit')||$1);
 $$ LANGUAGE SQL;
 
 
@@ -34,14 +41,12 @@ RETURNS VOID AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "unit_upsertone" (JSONB)
+CREATE OR REPLACE FUNCTION "unit_upsertone" (_a JSONB)
 RETURNS VOID AS $$
-  INSERT INTO "unit" VALUES($1->>'id', ($1->>'value')::REAL)
-  ON CONFLICT ("id") DO UPDATE SET "value"=($1->>'value')::REAL;
-$$ LANGUAGE SQL;
-
-
-CREATE OR REPLACE FUNCTION "unit_selectone" (JSONB)
-RETURNS SETOF "unit" AS $$
-  SELECT * FROM "unit" WHERE "id"=$1->>'id';
-$$ LANGUAGE SQL;
+DECLARE
+  _r JSONB := row_to_json(unit_selectone(_a))::JSONB;
+BEGIN
+  unit_deleteone(_a);
+  unit_insertone(_a||_r);
+END;
+$$ LANGUAGE plpgsql;
