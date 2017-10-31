@@ -28,13 +28,11 @@ DECLARE
   _type  TEXT := upper(_a->>'type');
   _index TEXT := coalesce(_a->>'index', 'btree');
 BEGIN
-  -- 2. insert into table (fail early)
+  -- 2. insert into table, and add column to food, if column
   INSERT INTO "field" SELECT * FROM
     jsonb_populate_record(NULL::"field", table_default('field')||_a);
-  -- 3. add column id to food table with index (if column)
   IF _type<>'TABLE' THEN
-    EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s',
-      _id, _type);
+    EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s', _id, _type);
     EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON "food" USING %s (%I)',
       'food_'||_id||'_idx', _index, _id);
   END IF;
