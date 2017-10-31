@@ -1,23 +1,23 @@
 -- 1. create table for view based groups
 CREATE TABLE IF NOT EXISTS "group" (
   "id"    TEXT NOT NULL,
-  "key"   TEXT NULL,
-  "tag"   TEXT NULL,
-  "value" TEXT NOT NULL DEFAULT 'SELECT NULL LIMIT 0',
+  "field" TEXT NULL,
+  "value" TEXT NULL,
+  "query" TEXT NOT NULL DEFAULT 'SELECT NULL LIMIT 0',
   PRIMARY KEY ("id"),
-  UNIQUE ("key", "tag"),
+  UNIQUE ("field", "value"),
 -- 2. to make sure its just select
   CHECK (
     "id"<>'' AND
-    ("key"=NULL OR "key"<>'') AND
-    ("tag"=NULL OR "tag"<>'') AND
-    "value" NOT LIKE '%;%'
+    ("field"=NULL OR "field"<>'') AND
+    ("value"=NULL OR "value"<>'') AND
+    "query" NOT LIKE '%;%'
   )
 );
-CREATE INDEX IF NOT EXISTS "group_key_idx"
-ON "group" ("key");
-CREATE INDEX IF NOT EXISTS "group_tag_idx"
-ON "group" ("tag");
+CREATE INDEX IF NOT EXISTS "group_field_idx"
+ON "group" ("field");
+CREATE INDEX IF NOT EXISTS "group_value_idx"
+ON "group" ("value");
 
 
 CREATE OR REPLACE FUNCTION "group_startone" (_id TEXT)
