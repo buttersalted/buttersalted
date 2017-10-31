@@ -22,23 +22,6 @@ RETURNS REAL AS $$
 $$ LANGUAGE SQL STABLE;
 
 
-CREATE OR REPLACE FUNCTION "unit_tobase" (TEXT, TEXT)
-RETURNS REAL AS $$
-  -- 1. number * unit factor * column factor
-  SELECT (real_get($1)::REAL)*
-  coalesce(unit_lvalue(btrim(replace($1, real_get($1), ''))), 1)*
-  coalesce(unit_lvalue($2), 1);
-$$ LANGUAGE SQL STABLE;
-
-
-CREATE OR REPLACE FUNCTION "unit_convert" (TEXT, TEXT)
-RETURNS TEXT AS $$
-  -- 1. convert only real numbers
-  SELECT CASE WHEN type_value($2)='REAL'
-  THEN unit_tobase($1, $2)::TEXT ELSE $1 END;
-$$ LANGUAGE SQL STABLE;
-
-
 CREATE OR REPLACE FUNCTION "unit_insertone" (JSONB)
 RETURNS VOID AS $$
   INSERT INTO "unit" VALUES($1->>'id', ($1->>'value')::REAL);
