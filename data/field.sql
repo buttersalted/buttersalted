@@ -34,11 +34,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION "type_deleteone" (_a JSONB)
+CREATE OR REPLACE FUNCTION "field_deleteone" (_a JSONB)
 RETURNS VOID AS $$
 BEGIN
   -- 1. delete from table and drop column
-  DELETE FROM "type" WHERE "id"=_a->>'id';
+  DELETE FROM "field" WHERE "id"=_a->>'id';
   EXECUTE format('ALTER TABLE "food" DROP COLUMN IF EXISTS %I', _a->>'id');
 END;
 $$ LANGUAGE plpgsql;
