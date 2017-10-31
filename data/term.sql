@@ -1,4 +1,4 @@
--- 1. create table to store alternate terms for "type"
+-- 1. create table to store fill-ins for fields
 CREATE TABLE IF NOT EXISTS "term" (
   "id"    TEXT NOT NULL,
   "field" TEXT NOT NULL,
