@@ -45,8 +45,8 @@ RETURNS VOID AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_insertoneifnotexists" (TEXT, TEXT)
+CREATE OR REPLACE FUNCTION "fillin_insertoneifnotexists" (TEXT, TEXT)
 RETURNS VOID AS $$
-  SELECT term_insertone(jsonb_build_object('id', $1, 'value', $2))
-  WHERE NOT EXISTS (SELECT "id" FROM "term" WHERE "id"=$1);
+  SELECT fillin_insertone(jsonb_build_object('id', $1, 'value', $2))
+  WHERE NOT EXISTS (SELECT "id" FROM "fillin" WHERE "id"=$1);
 $$ LANGUAGE SQL;
