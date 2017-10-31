@@ -1,14 +1,14 @@
 -- 1. create table to store alternate terms for "type"
 CREATE TABLE IF NOT EXISTS "term" (
   "id"    TEXT NOT NULL,
-  "value" TEXT NOT NULL,
+  "field" TEXT NOT NULL,
   PRIMARY KEY ("id"),
   CHECK ("id"<>'' AND "value"<>''),
-  FOREIGN KEY ("value") REFERENCES "type" ("id")
+  FOREIGN KEY ("field") REFERENCES "field" ("id")
   ON DELETE NO ACTION ON UPDATE CASCADE
 );
-CREATE INDEX IF NOT EXISTS "term_value_idx"
-ON "term" ("value");
+CREATE INDEX IF NOT EXISTS "term_field_idx"
+ON "term" ("field");
 
 
 CREATE OR REPLACE FUNCTION "term_value" (TEXT)
