@@ -44,9 +44,14 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION "unit_upsertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
-  _r JSONB := row_to_json(unit_selectone(_a))::JSONB;
+  _r JSONB := row_to_json(unit_selectone(_a));
+  _z JSONB := _a||_r;
 BEGIN
-  unit_deleteone(_a);
-  unit_insertone(_a||_r);
+  IF _r IS NULL THEN
+    PERFORM unit_insertone(_a);
+  ELSE
+    UPDATE "unit" SET "id"=_z->>'id', "factor"=_z->>'factor', "offset"=_z->>'offset'
+    WHERE "id"=_a->>'id';
+  END IF;
 END;
 $$ LANGUAGE plpgsql;
