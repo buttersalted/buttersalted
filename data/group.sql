@@ -27,14 +27,15 @@ DECLARE
   _tag   TEXT;
   _value TEXT;
 BEGIN
-  -- 1. create view
+  -- 1. get key, tag, value
   SELECT "key", "tag", "value" INTO _key, _tag, _value
   FROM "group" WHERE "id"=_id;
+  -- 2. create view
   EXECUTE format('CREATE OR REPLACE VIEW %I AS %s', _id, _value);
-  -- 2. add tag to key column, if known
+  -- 3. add tag to key column, if known
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
-    EXECUTE format('UPDATE %I SET %I=array_sort(array_append(%I, %L)) '||
-      'WHERE NOT %I @> \'[%L]\::JSONB', _id, _key, _key, _tag, _key, _tag);
+    EXECUTE format('UPDATE %I SET %I=array_sort(array_append(%I, %L))',
+      _id, _key, _key, _tag, _key, _tag);
   END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -44,17 +45,15 @@ CREATE OR REPLACE FUNCTION "group_stopone" (_id TEXT)
 RETURNS VOID AS $$
 DECLARE
   _key   TEXT;
-  _keyh  TEXT;
   _tag   TEXT;
 BEGIN
-  -- 1. get key, keyh, tag
-  SELECT "key", '#'||"key", "tag" INTO _key, _keyh, _tag
+  -- 1. get key, tag
+  SELECT "key", "tag" INTO _key, _tag
   FROM "group" WHERE "id"=_id;
   -- 2. remove tag from key column, if known
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
-    EXECUTE format('UPDATE %I SET %I=array_remove(%I, %L), '||
-      '%I=array_to_string(array_remove(%I, %L), %L)',
-      _id, _keyh, _keyh, _tag, _key, _keyh, _tag, ', ', _keyh, _tag);
+    EXECUTE format('UPDATE %I SET %I=array_remove(%I, %L)',
+      _id, _key, _key, _tag);
   END IF;
   -- 3. drop view
   EXECUTE format('DROP VIEW IF EXISTS %I RESTRICT', _id);
@@ -65,7 +64,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION "group_insertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
--- 1. get id, key, value from input
+  -- 1. get id, key, value
   _id    TEXT := _a->>'id';
   _key   TEXT := _a->>'key';
   _value TEXT := _a->>'value';
@@ -74,16 +73,13 @@ BEGIN
   -- 2. insert record into table
   INSERT INTO "group" SELECT * FROM
   jsonb_populate_record(NULL::"group", table_default('group')||_a);
-  -- 4. is this the first group with that key?
+  -- 3. insert type key, if first group with that key
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
-  -- 5. insert types key, #key
     PERFORM type_insertone(jsonb_build_object('id', _key,
-      'value', E'TEXT NOT NULL DEFAULT \'\''::TEXT));
-    PERFORM type_insertone(jsonb_build_object('id', '#'||_key,
-      'value', E'TEXT[] NOT NULL DEFAULT \'{}\'', 'index', 'gin'));
+      'value', E'TEXT[] NOT NULL DEFAULT \'{}\'', 'index', 'jsonb_path_ops'));
   END IF;
-  -- 7. create view and add tag to key
+  -- 4. create view and add tag to key
   PERFORM group_startone(_id);
 END;
 $$ LANGUAGE plpgsql;
@@ -92,21 +88,19 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION "group_deleteone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
--- 1. get id, key
+  -- 1. get id, key
   _id  TEXT := _a->>'id';
   _key TEXT := _a->>'key';
   _oid TEXT;
 BEGIN
   -- 2. drop view and remove tag from key
   PERFORM group_stopone(_id);
-  -- 3. is this the last group with that key?
+  -- 3. delete type key, if last group iwth that key
   SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
   IF _key IS NOT NULL AND _oid IS NULL THEN
-  -- 4. delete types key, #key
     PERFORM type_deleteone(jsonb_build_object('id', _key));
-    PERFORM type_deleteone(jsonb_build_object('id', '#'||_key));
   END IF;
-  -- 5. delete row
+  -- 4. delete row
   DELETE FROM "group" WHERE "id"=_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -117,10 +111,13 @@ RETURNS VOID AS $$
 DECLARE
   _len INT;
 BEGIN
+  -- 1. get input key count
   SELECT count(*) INTO _len FROM jsonb_object_keys(_a);
+  -- 2. if only 1 key (id), just refresh it
   IF _len = 1 THEN
     PERFORM group_stopone(_a->>'id');
     PERFORM group_startone(_a->>'id');
+  -- 3. if multiple keys, update row as well
   ELSE
     SELECT row_to_json(group_selectone(_a))::JSONB||_a INTO _a;
     PERFORM group_deleteone(_a);
@@ -135,6 +132,7 @@ RETURNS VOID AS $$
 DECLARE
   _r "group";
 BEGIN
+  -- 1. update all groups as specified by json
   FOR _r IN EXECUTE query_selectlike('group', _a) LOOP
     PERFORM group_stopone(_r.id);
     PERFORM group_startone(_r.id);
