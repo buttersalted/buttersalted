@@ -4,7 +4,9 @@ CREATE TABLE IF NOT EXISTS "field" (
   "type" TEXT NOT NULL,
   "unit" TEXT NOT NULL DEFAULT '',
   PRIMARY KEY ("id"),
-  CHECK ("id"<>'' AND "type"<>'')
+  CHECK ("id"<>'' AND "type"<>''),
+  FOREIGN KEY "unit" REFERENCES "unit" ("id")
+  ON DELETE NO ACTION ON UPDATE CASCADE
 );
 CREATE INDEX IF NOT EXISTS "field_type_idx"
 ON "field" ("type");
