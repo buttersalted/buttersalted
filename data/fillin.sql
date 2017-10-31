@@ -18,6 +18,12 @@ RETURNS TEXT AS $$
 $$ LANGUAGE SQL STABLE;
 
 
+CREATE OR REPLACE FUNCTION "fillin_selectone" (JSONB)
+RETURNS SETOF "fillin" AS $$
+  SELECT * FROM "fillin" WHERE "id"=$1->>'id';
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION "fillin_insertone" (JSONB)
 RETURNS VOID AS $$
   INSERT INTO "fillin" VALUES ($1->>'id', $1->>'field');
@@ -34,12 +40,6 @@ CREATE OR REPLACE FUNCTION "term_upsertone" (JSONB)
 RETURNS VOID AS $$
   INSERT INTO "term" VALUES ($1->>'id', $1->>'value')
   ON CONFLICT ("id") DO UPDATE SET "value"=$1->>'value';
-$$ LANGUAGE SQL;
-
-
-CREATE OR REPLACE FUNCTION "term_selectone" (JSONB)
-RETURNS SETOF "term" AS $$
-  SELECT * FROM "term" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
 
 
