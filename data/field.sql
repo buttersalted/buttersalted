@@ -1,12 +1,15 @@
--- 1. create table to store data types
-CREATE TABLE IF NOT EXISTS "type" (
-  "id"    TEXT NOT NULL,
-  "value" TEXT NOT NULL,
+-- 1. create table to store field data
+CREATE TABLE IF NOT EXISTS "field" (
+  "id"   TEXT NOT NULL,
+  "type" TEXT NOT NULL,
+  "unit" TEXT NOT NULL DEFAULT '',
   PRIMARY KEY ("id"),
-  CHECK ("id"<>'' AND "value"<>'')
+  CHECK ("id"<>'' AND "type"<>'')
 );
-CREATE INDEX IF NOT EXISTS "type_value_idx"
-ON "type" ("value");
+CREATE INDEX IF NOT EXISTS "field_type_idx"
+ON "field" ("type");
+CREATE INDEX IF NOT EXISTS "field_unit_idx"
+ON "field" ("unit");
 
 
 CREATE OR REPLACE FUNCTION "type_value" (TEXT)
