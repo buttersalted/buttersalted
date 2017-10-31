@@ -11,11 +11,7 @@ CREATE TABLE IF NOT EXISTS "group" (
     "id"<>'' AND
     ("key"=NULL OR "key"<>'') AND
     ("tag"=NULL OR "tag"<>'') AND
-    "key" NOT LIKE '#%' AND
-    "tag" NOT LIKE '%,%' AND
-    "value" NOT LIKE '%;%' AND
-    lower("value") LIKE 'select %' AND
-    lower("value") NOT LIKE '% into %'
+    "value" NOT LIKE '%;%'
   )
 );
 CREATE INDEX IF NOT EXISTS "group_key_idx"
@@ -28,20 +24,17 @@ CREATE OR REPLACE FUNCTION "group_startone" (_id TEXT)
 RETURNS VOID AS $$
 DECLARE
   _key   TEXT;
-  _keyh  TEXT;
   _tag   TEXT;
   _value TEXT;
 BEGIN
-  -- 1. get key, keyh, tag, value
-  SELECT "key", '#'||"key", "tag", "value" INTO _key, _keyh, _tag, _value
+  -- 1. create view
+  SELECT "key", "tag", "value" INTO _key, _tag, _value
   FROM "group" WHERE "id"=_id;
-  -- 2. create view
   EXECUTE format('CREATE OR REPLACE VIEW %I AS %s', _id, _value);
-  -- 3. add tag to key column, if known
+  -- 2. add tag to key column, if known
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
-    EXECUTE format('UPDATE %I SET %I=array_sort(array_append(%I, %L)), '||
-      '%I=array_to_string(array_sort(array_append(%I, %L)), %L)',
-      _id, _keyh, _keyh, _tag, _key, _keyh, _tag, ', ', _keyh, _tag);
+    EXECUTE format('UPDATE %I SET %I=array_sort(array_append(%I, %L)) '||
+      'WHERE NOT %I @> \'[%L]\::JSONB', _id, _key, _key, _tag, _key, _tag);
   END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -56,8 +49,8 @@ DECLARE
 BEGIN
   -- 1. get key, keyh, tag
   SELECT "key", '#'||"key", "tag" INTO _key, _keyh, _tag
-  -- 2. remove tag from key column, if known
   FROM "group" WHERE "id"=_id;
+  -- 2. remove tag from key column, if known
   IF _key IS NOT NULL AND _tag IS NOT NULL THEN
     EXECUTE format('UPDATE %I SET %I=array_remove(%I, %L), '||
       '%I=array_to_string(array_remove(%I, %L), %L)',
