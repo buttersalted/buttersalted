@@ -12,12 +12,6 @@ CREATE INDEX IF NOT EXISTS "field_unit_idx"
 ON "field" ("unit");
 
 
-CREATE OR REPLACE FUNCTION "type_value" (TEXT)
-RETURNS TEXT AS $$
-  SELECT "value" FROM "type" WHERE "id"=$1;
-$$ LANGUAGE SQL;
-
-
 CREATE OR REPLACE FUNCTION "type_insertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
