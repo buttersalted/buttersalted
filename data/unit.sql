@@ -8,10 +8,17 @@ CREATE TABLE IF NOT EXISTS "unit" (
 );
 
 
+CREATE OR REPLACE FUNCTION "unit_get" (TEXT)
+RETURNS "unit" AS $$
+  SELECT * FROM "unit" WHERE "id"=$1 UNION ALL
+  SELECT * FROM "unit" WHERE "id"=lower($1) LIMIT 1;
+$$ LANGUAGE SQL STABLE;
+
+
 CREATE OR REPLACE FUNCTION "unit_convert" (REAL, TEXT, TEXT)
 RETURNS REAL AS $$
-  SELECT ($1*f."factor"+f."offset"-t."offset")/t."factor" AS "value"
-  FROM "unit" f, "unit" t WHERE f."id"=$2 AND t."id"=$3;
+  SELECT ($1*f."factor"+f."offset"-t."offset")/t."factor"
+  FROM unit_get($2) f, unit_get($3) t;
 $$ LANGUAGE SQL STABLE;
 
 
