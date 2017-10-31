@@ -12,20 +12,21 @@ CREATE INDEX IF NOT EXISTS "field_unit_idx"
 ON "field" ("unit");
 
 
-CREATE OR REPLACE FUNCTION "type_insertone" (_a JSONB)
+CREATE OR REPLACE FUNCTION "field_insertone" (_a JSONB)
 RETURNS VOID AS $$
 DECLARE
--- 1. get id, value, index
+  -- 1. get id, type, index
   _id    TEXT := _a->>'id';
-  _value TEXT := upper(_a->>'value');
+  _type  TEXT := upper(_a->>'type');
   _index TEXT := coalesce(_a->>'index', 'btree');
 BEGIN
   -- 2. insert into table (fail early)
-  INSERT INTO "type" VALUES (_id, _value);
+  INSERT INTO "field" SELECT * FROM
+    jsonb_populate_record(NULL::"field", table_default('field')||_a);
   -- 3. add column id to food table with index (if column)
   IF _value<>'TABLE' THEN
     EXECUTE format('ALTER TABLE "food" ADD COLUMN IF NOT EXISTS %I %s',
-      _id, _value);
+      _id, _type);
     EXECUTE format('CREATE INDEX IF NOT EXISTS %I ON "food" USING %s (%I)',
       'food_'||_id||'_idx', _index, _id);
   END IF;
