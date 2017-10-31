@@ -8,6 +8,13 @@ CREATE TABLE IF NOT EXISTS "unit" (
 );
 
 
+CREATE OR REPLACE FUNCTION "unit_convert" (REAL, TEXT, TEXT)
+RETURNS REAL AS $$
+  SELECT ($1*f."factor"+f."offset"-t."offset")/t."factor" AS "value"
+  FROM "unit" f, "unit" t WHERE f."id"=$2 AND t."id"=$3;
+$$ LANGUAGE SQL STABLE;
+
+
 CREATE OR REPLACE FUNCTION "unit_value" (TEXT)
 RETURNS REAL AS $$
   SELECT "value" FROM "unit" WHERE "id"=$1;
