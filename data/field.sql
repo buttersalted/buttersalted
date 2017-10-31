@@ -55,10 +55,28 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "field_updateone" (_f JSONB, _t JSONB)
 RETURNS VOID AS $$
+  -- 1. get current, final rows
   _r JSONB := row_to_json(field_selectone(_f));
   _z JSONB := _t||_r;
 BEGIN
-  UPDATE "field" SET "id"=_z->>'id'
+  -- 2. update row
+  UPDATE "field" SET "id"=_z->>'id', "type"=_z->>'type', "unit"=_z->>'unit'
+  WHERE "id"=_f->>'id';
+  -- 3. rename column if id changed
+  IF _r->>'id'<>_z->>'id' THEN
+    EXECUTE format('ALTER TABLE "food" RENAME COLUMN %I TO %I',
+    _r->>'id', _z->>'id');
+  END IF;
+  -- 4. alter type if type changed
+  IF _r->>'type'<>_z->>'type' THEN
+    EXECUTE format('ALTER TABLE "food" ALTER COLUMN %I TYPE %s',
+    _z->>'id', _z->>'type');
+  END IF;
+  -- 5. convert value if unit changed
+  IF _r->>'unit'<>_z->>'unit' AND _z->>'unit'<>'' THEN
+    EXECUTE format('UPDATE "food" SET %I=unit_convert(%I, %L, %L)',
+    _z->>'id', _z->>'id', _r->>'unit', _z->>'unit');
+  END IF;
 END;
 $$ LANGUAGE plpgsql;
 
