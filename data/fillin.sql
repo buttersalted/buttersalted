@@ -24,9 +24,9 @@ RETURNS VOID AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION "term_deleteone" (JSONB)
+CREATE OR REPLACE FUNCTION "fillin_deleteone" (JSONB)
 RETURNS VOID AS $$
-  DELETE FROM "term" WHERE "id"=$1->>'id';
+  DELETE FROM "fillin" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
 
 
