@@ -45,13 +45,13 @@ _.setup = function() {
   // 1. setup in sequence (order, order)
   return this.utility.setup().then(() =>
     this.unit.setup()).then(() =>
-    //this.field.setup()).then(() =>
+    this.field.setup()).then(() =>
     //this.fillin.setup()).then(() =>
     //this.food.setup()).then(() =>
     //this.group.setup()).then(() =>
     //this.values.setup()).then(() =>
   // 2. fill up the maps (order, uhunhh)
-    //this.unit.select({})).then(() =>
+    this.unit.select({})).then(() =>
     //this.field.select({})).then(() =>
     //this.fillin.select({})
     {}

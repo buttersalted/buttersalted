@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS "field" (
   "unit" TEXT NOT NULL DEFAULT '',
   PRIMARY KEY ("id"),
   CHECK ("id"<>'' AND "type"<>''),
-  FOREIGN KEY "unit" REFERENCES "unit" ("id")
+  FOREIGN KEY ("unit") REFERENCES "unit" ("id")
   ON DELETE NO ACTION ON UPDATE CASCADE
 );
 CREATE INDEX IF NOT EXISTS "field_type_idx"
@@ -67,6 +67,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "field_updateone" (_f JSONB, _t JSONB)
 RETURNS VOID AS $$
+DECLARE
   -- 1. get current, final rows
   _r JSONB := row_to_json(field_selectone(_f));
   _z JSONB := _t||_r;
