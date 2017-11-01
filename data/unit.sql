@@ -94,3 +94,9 @@ SELECT x('cup', 0.24, 0);
 SELECT x('pint', 0.473176, 0);
 SELECT x('quart', 0.946353, 0);
 SELECT x('gallon', 3.78541, 0);
+-- 6. short energy units
+SELECT x('j', 1, 0);
+SELECT x('kj', 1e+3, 0);
+SELECT x('cal', 4.184, 0);
+SELECT x('kcal', 4.184e+3, 0);
+SELECT x('Cal', 4.184e+3, 0)
