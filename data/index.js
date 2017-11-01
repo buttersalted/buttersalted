@@ -48,12 +48,11 @@ _.setup = function() {
     this.field.setup()).then(() =>
     this.fillin.setup()).then(() =>
     this.group.setup()).then(() =>
-    //this.food.setup()).then(() =>
-    //this.values.setup()).then(() =>
+    this.food.setup()).then(() =>
+    this.values.setup()).then(() =>
   // 2. fill up the maps (order, uhunhh)
     this.unit.select({})).then(() =>
     this.field.select({})).then(() =>
-    //this.fillin.select({})
-    {}
+    this.fillin.select({})
   );
 };

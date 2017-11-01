@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS "field" (
   "id"   TEXT NOT NULL,
   "type" TEXT NOT NULL,
-  "unit" TEXT NOT NULL DEFAULT '',
+  "unit" TEXT NULL,
   PRIMARY KEY ("id"),
   CHECK ("id"<>'' AND "type"<>''),
   FOREIGN KEY ("unit") REFERENCES "unit" ("id")
