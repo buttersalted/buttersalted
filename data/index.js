@@ -9,13 +9,13 @@ const $ = function Data(db) {
     'setup': rstream('group.sql')
   });
   // 2. we can store some alternate terms here
-  this.term = new DbTable('term', db, {
-    'setup': rstream('term.sql'),
+  this.fillin = new DbTable('fillin', db, {
+    'setup': rstream('fillin.sql'),
     'map': true
   });
   // 3. to store basic data type info
-  this.type = new DbTable('type', db, {
-    'setup': rstream('type.sql'),
+  this.field = new DbTable('field', db, {
+    'setup': rstream('field.sql'),
     'map': true
   });
   // 4. units to convert input to food
@@ -30,7 +30,7 @@ const $ = function Data(db) {
   // 6. setup food table (this is the big one)
   this.food = new DbTable('food', db, {
     'setup': rstream('food.sql'),
-    'rename': this.term._map
+    'rename': this.fillin._map
   });
   // 7. all the default values
   this.values = new DbTable('values', db, {
@@ -44,15 +44,15 @@ const _ = $.prototype;
 _.setup = function() {
   // 1. setup in sequence (order, order)
   return this.utility.setup().then(() =>
-    this.type.setup()).then(() =>
     this.unit.setup()).then(() =>
-    this.term.setup()).then(() =>
+    this.field.setup()).then(() =>
+    this.fillin.setup()).then(() =>
     this.food.setup()).then(() =>
     this.group.setup()).then(() =>
     this.values.setup()).then(() =>
   // 2. fill up the maps (order, uhunhh)
-    this.type.select({})).then(() =>
     this.unit.select({})).then(() =>
-    this.term.select({})
+    this.field.select({})).then(() =>
+    this.fillin.select({})
   );
 };
