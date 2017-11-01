@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS "group" (
     ("value"=NULL OR "value"<>'') AND
     "query" NOT LIKE '%;%'
   )
+  FOREIGN KEY "field" REFERENCES "field" ("id")
+  ON DELETE NO ACTION ON UPDATE CASCADE
 );
 CREATE INDEX IF NOT EXISTS "group_field_idx"
 ON "group" ("field");
@@ -23,19 +25,19 @@ ON "group" ("value");
 CREATE OR REPLACE FUNCTION "group_startone" (_id TEXT)
 RETURNS VOID AS $$
 DECLARE
-  _key   TEXT;
-  _tag   TEXT;
+  _field TEXT;
   _value TEXT;
+  _query TEXT;
 BEGIN
-  -- 1. get key, tag, value
-  SELECT "key", "tag", "value" INTO _key, _tag, _value
+  -- 1. get field, value, query
+  SELECT "field", "value", "query" INTO _field, _value, _query
   FROM "group" WHERE "id"=_id;
   -- 2. create view
-  EXECUTE format('CREATE OR REPLACE VIEW %I AS %s', _id, _value);
-  -- 3. add tag to key column, if known
-  IF _key IS NOT NULL AND _tag IS NOT NULL THEN
+  EXECUTE format('CREATE OR REPLACE VIEW %I AS %s', _id, _query);
+  -- 3. add value to field, if known
+  IF _field IS NOT NULL AND _value IS NOT NULL THEN
     EXECUTE format('UPDATE %I SET %I=array_sort(array_append(%I, %L))',
-      _id, _key, _key, _tag, _key, _tag);
+      _id, _field, _field, _value);
   END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -44,99 +46,19 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION "group_stopone" (_id TEXT)
 RETURNS VOID AS $$
 DECLARE
-  _key   TEXT;
-  _tag   TEXT;
+  _field TEXT;
+  _value TEXT;
 BEGIN
-  -- 1. get key, tag
-  SELECT "key", "tag" INTO _key, _tag
+  -- 1. get field, value
+  SELECT "field", "value" INTO _field, _value
   FROM "group" WHERE "id"=_id;
-  -- 2. remove tag from key column, if known
-  IF _key IS NOT NULL AND _tag IS NOT NULL THEN
+  -- 2. remove value from field, if known
+  IF _field IS NOT NULL AND _value IS NOT NULL THEN
     EXECUTE format('UPDATE %I SET %I=array_remove(%I, %L)',
-      _id, _key, _key, _tag);
+      _id, _field, _field, _value);
   END IF;
   -- 3. drop view
   EXECUTE format('DROP VIEW IF EXISTS %I RESTRICT', _id);
-END;
-$$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION "group_insertone" (_a JSONB)
-RETURNS VOID AS $$
-DECLARE
-  -- 1. get id, key, value
-  _id    TEXT := _a->>'id';
-  _key   TEXT := _a->>'key';
-  _value TEXT := _a->>'value';
-  _oid   TEXT;
-BEGIN
-  -- 2. insert record into table
-  INSERT INTO "group" SELECT * FROM
-  jsonb_populate_record(NULL::"group", table_default('group')||_a);
-  -- 3. insert type key, if first group with that key
-  SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
-  IF _key IS NOT NULL AND _oid IS NULL THEN
-    PERFORM type_insertone(jsonb_build_object('id', _key,
-      'value', E'TEXT[] NOT NULL DEFAULT \'{}\'', 'index', 'jsonb_path_ops'));
-  END IF;
-  -- 4. create view and add tag to key
-  PERFORM group_startone(_id);
-END;
-$$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION "group_deleteone" (_a JSONB)
-RETURNS VOID AS $$
-DECLARE
-  -- 1. get id, key
-  _id  TEXT := _a->>'id';
-  _key TEXT := _a->>'key';
-  _oid TEXT;
-BEGIN
-  -- 2. drop view and remove tag from key
-  PERFORM group_stopone(_id);
-  -- 3. delete type key, if last group iwth that key
-  SELECT "id" INTO _oid FROM "group" WHERE "key"=_key AND "id"<>_id LIMIT 1;
-  IF _key IS NOT NULL AND _oid IS NULL THEN
-    PERFORM type_deleteone(jsonb_build_object('id', _key));
-  END IF;
-  -- 4. delete row
-  DELETE FROM "group" WHERE "id"=_id;
-END;
-$$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION "group_upsertone" (_a JSONB)
-RETURNS VOID AS $$
-DECLARE
-  _len INT;
-BEGIN
-  -- 1. get input key count
-  SELECT count(*) INTO _len FROM jsonb_object_keys(_a);
-  -- 2. if only 1 key (id), just refresh it
-  IF _len = 1 THEN
-    PERFORM group_stopone(_a->>'id');
-    PERFORM group_startone(_a->>'id');
-  -- 3. if multiple keys, update row as well
-  ELSE
-    SELECT row_to_json(group_selectone(_a))::JSONB||_a INTO _a;
-    PERFORM group_deleteone(_a);
-    PERFORM group_insertone(_a);
-  END IF;
-END;
-$$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION "group_refresh" (_a JSONB)
-RETURNS VOID AS $$
-DECLARE
-  _r "group";
-BEGIN
-  -- 1. update all groups as specified by json
-  FOR _r IN EXECUTE query_selectlike('group', _a) LOOP
-    PERFORM group_stopone(_r.id);
-    PERFORM group_startone(_r.id);
-  END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -145,3 +67,66 @@ CREATE OR REPLACE FUNCTION "group_selectone" (JSONB)
 RETURNS SETOF "group" AS $$
   SELECT * FROM "group" WHERE "id"=$1->>'id';
 $$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION "group_insertone" (_a JSONB)
+RETURNS VOID AS $$
+DECLARE
+  -- 1. get id, field
+  _id    TEXT := _a->>'id';
+  _field TEXT := _a->>'field';
+  _oid   TEXT;
+BEGIN
+  -- 2. insert row into table
+  INSERT INTO "group" SELECT * FROM
+  jsonb_populate_record(NULL::"group", table_default('group')||_a);
+  -- 3. insert new field, if first group with that field
+  SELECT "id" INTO _oid FROM "group" WHERE "field"=_field AND "id"<>_id LIMIT 1;
+  IF _field IS NOT NULL AND _oid IS NULL THEN
+    PERFORM field_insertone(jsonb_build_object('id', _field,
+      'value', E'TEXT[] NOT NULL DEFAULT \'{}\'', 'index', 'jsonb_path_ops'));
+  END IF;
+  -- 4. create view and add value to field
+  PERFORM group_startone(_id);
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "group_deleteone" (_a JSONB)
+RETURNS VOID AS $$
+DECLARE
+  -- 1. get id, field
+  _id    TEXT := _a->>'id';
+  _field TEXT := _a->>'field';
+  _oid   TEXT;
+BEGIN
+  -- 2. drop view and remove value from field
+  PERFORM group_stopone(_id);
+  -- 3. delete field, if last group with that field
+  SELECT "id" INTO _oid FROM "group" WHERE "field"=_field AND "id"<>_id LIMIT 1;
+  IF _field IS NOT NULL AND _oid IS NULL THEN
+    PERFORM field_deleteone(jsonb_build_object('id', _field));
+  END IF;
+  -- 4. delete row
+  DELETE FROM "group" WHERE "id"=_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION "group_updateone" (_f JSONB, _t JSONB)
+RETURNS VOID AS $$
+DECLARE
+  _r JSONB := row_to_json(group_selectone(_f));
+  _z JSONB := _t||_r;
+BEGIN
+  -- 1. if update is pointless, just refresh
+  IF _r @> _z THEN
+    PERFORM group_stopone(_r->>'id');
+    PERFORM group_startone(_r->>'id');
+  -- 2. otherwise, update everything
+  ELSE
+    PERFORM group_deleteone(_r);
+    PERFORM group_insertone(_z);
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
