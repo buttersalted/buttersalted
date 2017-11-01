@@ -1,5 +1,6 @@
 CREATE OR REPLACE FUNCTION "real_get" (TEXT)
 RETURNS TEXT AS $$
+  -- 1. get real part of a text
   SELECT (regexp_matches($1, '[+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?'))[1];
 $$ LANGUAGE SQL STRICT IMMUTABLE;
 
