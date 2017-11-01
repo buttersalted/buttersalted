@@ -24,6 +24,21 @@ RETURNS REAL AS $$
 $$ LANGUAGE SQL STABLE;
 
 
+CREATE OR REPLACE FUNCTION "unit_toreal" (TEXT, TEXT, TEXT)
+RETURNS REAL AS $$
+  -- 1. convert text from one unit to another as number
+  SELECT unit_convert(real_get($1)::REAL,
+  coalesce(nullif(btrim(replace($1, real_get($1), '')), ''), $2), $3);
+$$ LANGUAGE SQL STABLE;
+
+
+CREATE OR REPLACE FUNCTION "unit_totext" (REAL, TEXT, TEXT)
+RETURNS TEXT AS $$
+  -- 1. convert number from one unit to another as text
+  SELECT (unit_convert($1, $2, $3)::TEXT)||$3;
+$$ LANGUAGE SQL STABLE;
+
+
 CREATE OR REPLACE FUNCTION "unit_selectone" (JSONB)
 RETURNS SETOF "unit" AS $$
   -- 1. select a row
