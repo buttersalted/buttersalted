@@ -63,13 +63,16 @@ RETURNS VOID AS $$
   -- 1. insert a row, if not exists
   INSERT INTO "unit" VALUES ($1, $2, $3) ON CONFLICT ("id") DO NOTHING;
 $$ LANGUAGE SQL;
+-- 1. empty unit
 SELECT x('', 1, 0);
+-- 2. short mass units
 SELECT x('ng', 1e-12, 0);
 SELECT x('μg', 1e-9, 0);
 SELECT x('mg', 1e-6, 0);
 SELECT x('g', 1e-3, 0);
 SELECT x('gm', 1e-3, 0);
 SELECT x('kg', 1, 0);
+-- 3. long mass units
 SELECT x('nanogram', 1e-12, 0);
 SELECT x('microgram', 1e-9, 0);
 SELECT x('milligram', 1e-6, 0);
