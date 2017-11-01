@@ -26,8 +26,8 @@
     <li><a class="pipe" href="#!/pipe">Pipe</a></li>
     <li><a class="food" href="#!/food">Food</a></li>
     <li><a class="group" href="#!/group">Group</a></li>
-    <li><a class="term" href="#!/term">Term</a></li>
-    <li><a class="type" href="#!/type">Type</a></li>
+    <li><a class="fillin" href="#!/fillin">Fillin</a></li>
+    <li><a class="field" href="#!/field">Field</a></li>
     <li><a class="unit" href="#!/unit">Unit</a></li>
   </ul>
 </label>
@@ -91,7 +91,7 @@
     <button type="submit" value="delete">Delete</button>
     <button type="reset">Reset</button>
   </p>
-  <datalist id="types"></datalist>
+  <datalist id="fields"></datalist>
 </form>
 </section>
 
@@ -105,16 +105,16 @@
     <input type="text" name="id" placeholder="Name of group, like: flavour_chocolate">
   </fieldset>
   <fieldset>
-    <label>key</label>
-    <input type="text" name="key" placeholder="Name of key, like: flavour">
-  </fieldset>
-  <fieldset>
-    <label>tag</label>
-    <input type="text" name="tag" placeholder="Name of tag, like: chocolate">
+    <label>field</label>
+    <input type="text" name="field" placeholder="Name of field, like: flavour">
   </fieldset>
   <fieldset>
     <label>value</label>
-    <input type="text" name="value" placeholder="SQL query, like: SELECT * FROM food WHERE Name LIKE '%chocolate%'">
+    <input type="text" name="value" placeholder="Name of value, like: chocolate">
+  </fieldset>
+  <fieldset>
+    <label>query</label>
+    <input type="text" name="query" placeholder="SQL query, like: SELECT * FROM food WHERE Name LIKE '%chocolate%'">
   </fieldset>
   </div>
   <p txt="c">
@@ -128,8 +128,8 @@
 </section>
 
 
-<!-- 5. term interface -->
-<section id="term">
+<!-- 5. fillin interface -->
+<section id="fillin">
 <form>
   <div class="inputs">
   <fieldset>
@@ -137,8 +137,8 @@
     <input type="text" name="id" placeholder="Name of term, like: carbs">
   </fieldset>
   <fieldset>
-    <label>value</label>
-    <input type="text" name="value" placeholder="Actual column name, like: Carbohydrate, by difference">
+    <label>field</label>
+    <input type="text" name="field" placeholder="Field name, like: Carbohydrate, by difference">
   </fieldset>
   </div>
   <p txt="c">
@@ -152,17 +152,21 @@
 </section>
 
 
-<!-- 6. type interface -->
-<section id="type">
+<!-- 6. field interface -->
+<section id="field">
 <form>
   <div class="inputs">
   <fieldset>
     <label>id</label>
-    <input type="text" name="id" placeholder="Name of column, like: Vitamin A">
+    <input type="text" name="id" placeholder="Name of field, like: Vitamin A">
   </fieldset>
   <fieldset>
-    <label>value</label>
-    <input type="text" name="value" placeholder="SQL datatype of column, like: REAL">
+    <label>type</label>
+    <input type="text" name="type" placeholder="SQL type of field, like: REAL">
+  </fieldset>
+  <fieldset>
+    <label>unit</label>
+    <input type="text" name="unit" placeholder="Storage unit of field, like: Vitamin A IU">
   </fieldset>
   </div>
   <p txt="c">
@@ -185,8 +189,12 @@
     <input type="text" name="id" placeholder="Name of unit, like: mg">
   </fieldset>
   <fieldset>
-    <label>value</label>
-    <input type="text" name="value" placeholder="Conversion value to base unit, like: 0.001">
+    <label>factor</label>
+    <input type="text" name="factor" placeholder="Conversion factor to base unit, like: 0.001">
+  </fieldset>
+  <fieldset>
+    <label>offset</label>
+    <input type="text" name="offset" placeholder="Conversion offset to base unit, like: 0">
   </fieldset>
   </div>
   <p txt="c">

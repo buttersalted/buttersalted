@@ -7,15 +7,15 @@ var Sections = document.querySelectorAll('section');
 var Thead = document.querySelector('#ans thead');
 var Tbody = document.querySelector('#ans tbody');
 var Tdiv = document.createElement('div');
-var Types = document.querySelector('#types');
+var Fields = document.querySelector('#fields');
 var FoodInputs = document.querySelector('#food form .inputs');
 var Forms = {
   'sql': document.querySelector('#sql form'),
   'pipe': document.querySelector('#pipe form'),
   'food': document.querySelector('#food form'),
   'group': document.querySelector('#group form'),
-  'term': document.querySelector('#term form'),
-  'type': document.querySelector('#type form'),
+  'fillin': document.querySelector('#fillin form'),
+  'field': document.querySelector('#field form'),
   'unit': document.querySelector('#unit form')
 };
 
@@ -250,7 +250,7 @@ function formJson() {
 function setupPage(e) {
   console.log('setupPage');
   // 1. define food key, value attributes
-  var katt = {'list': 'types', 'placeholder': 'Column name, like: Id'};
+  var katt = {'list': 'fields', 'placeholder': 'Column name, like: Id'};
   var vatt = {'type': 'text', 'placeholder': 'Value, like: 1001'};
   // 2. get path, prefix, and query
   var path = location.hash.replace(/#?\!?\/?/, '');
@@ -279,11 +279,11 @@ function setup() {
   var submit = document.querySelectorAll('form [type=submit]');
   for(var i=0, I=submit.length; i<I; i++)
     submit[i].onclick = function() { this.form.submitted = this.value; };
-  // 2. setup types data list
-  ajaxReq('GET', '/json/type').then(function(ans) {
+  // 2. setup fields data list
+  ajaxReq('GET', '/json/field').then(function(ans) {
     for(var i=0, z=[], I=ans.length; i<I; i++)
       z[i] = m('option', ans[i].id);
-    m.render(Types, z);
+    m.render(Fields, z);
   });
   // 3. setup ace editor
   Editor.setTheme('ace/theme/sqlserver');
