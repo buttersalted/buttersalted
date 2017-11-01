@@ -87,3 +87,10 @@ SELECT x('tbsp', 15e-3, 0);
 -- 5. long volume units
 SELECT x('millilitre', 1e-3, 0);
 SELECT x('litre', 1e-3, 0);
+SELECT x('teaspoon', 5e-3, 0);
+SELECT x('tablespoon', 15e-3, 0);
+SELECT x('fluid ounce', 3e-2, 0);
+SELECT x('cup', 24e-2, 0);
+SELECT x('pint', 48e-2, 0);
+SELECT x('quart', 96e-2, 0);
+SELECT x('gallon', 3.84, 0);
