@@ -68,6 +68,7 @@ SELECT x('ng', 1e-12, 0);
 SELECT x('μg', 1e-9, 0);
 SELECT x('mg', 1e-6, 0);
 SELECT x('g', 1e-3, 0);
+SELECT x('gm', 1e-3, 0);
 SELECT x('kg', 1, 0);
 SELECT x('nanogram', 1e-12, 0);
 SELECT x('microgram', 1e-9, 0);
