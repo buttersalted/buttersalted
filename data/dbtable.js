@@ -33,6 +33,7 @@ _.select = function(a, l) {
 
 _.insert = function(a) {
   a = rename(a, this._opt.rename||{});
+  console.log('insert', a);
   // 1. get columns and values (to insert)
   const p = [], c = format(a, '"%k"', ',', 1, p), v = format(a, '$%i', ',', 1);
   // 2. execute an insert query (lets fight)
@@ -41,6 +42,7 @@ _.insert = function(a) {
 
 _.delete = function(a) {
   a = rename(a, this._opt.rename||{});
+  console.log('delete', a);
   // 1. get where with like
   const p = [], w = format(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
   // 2. execute the query (ready for disaster?)
@@ -50,6 +52,7 @@ _.delete = function(a) {
 _.update = function(a, b) {
   a = rename(a, this._opt.rename||{});
   b = rename(b, this._opt.rename||{});
+  console.log('update', a, b);
   // 1. prepare the update conditions (where, set)
   const p = [], w = format(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
   const s = format(b, '"%k"=$%i', ' AND ', p.length+1, p);
@@ -68,6 +71,7 @@ _.selectOne = function(a) {
 
 _.insertOne = function(a) {
   a = rename(a, this._opt.rename||{});
+  console.log('insertOne', a);
   // 1. insert new row into the table
   return this._db.query(`SELECT ${this._id}_insertone($1)`, [a]).then((ans) => {
   // 2. if map exists, then add it there too
@@ -76,12 +80,14 @@ _.insertOne = function(a) {
   });
 };
 
-_.upsertOne = function(a) {
+_.updateOne = function(a, b) {
   a = rename(a, this._opt.rename||{});
+  b = rename(b, this._opt.rename||{});
+  console.log('updateOne', this._id, a, b);
   // 1. insert or update row to table
-  return this._db.query(`SELECT ${this._id}_upsertone($1)`, [a]).then((ans) => {
+  return this._db.query(`SELECT ${this._id}_updateone($1, $2)`, [a, b]).then((ans) => {
   // 2. if map exists, then add it there
-    if(this._map) this._map.set(a.id, a);
+    if(this._map) this._map.set(a.id, Object.assign(this._map.get(a.id), b));
     return ans;
   });
 };
