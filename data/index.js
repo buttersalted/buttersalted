@@ -47,8 +47,8 @@ _.setup = function() {
     this.unit.setup()).then(() =>
     this.field.setup()).then(() =>
     this.fillin.setup()).then(() =>
+    this.group.setup()).then(() =>
     //this.food.setup()).then(() =>
-    //this.group.setup()).then(() =>
     //this.values.setup()).then(() =>
   // 2. fill up the maps (order, uhunhh)
     this.unit.select({})).then(() =>

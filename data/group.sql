@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS "group" (
     ("field"=NULL OR "field"<>'') AND
     ("value"=NULL OR "value"<>'') AND
     "query" NOT LIKE '%;%'
-  )
-  FOREIGN KEY "field" REFERENCES "field" ("id")
+  ),
+  FOREIGN KEY ("field") REFERENCES "field" ("id")
   ON DELETE NO ACTION ON UPDATE CASCADE
 );
 CREATE INDEX IF NOT EXISTS "group_field_idx"
