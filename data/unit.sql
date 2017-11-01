@@ -82,3 +82,6 @@ SELECT x('kilogram', 1, 0);
 -- 4. short volume units
 SELECT x('ml', 1e-3, 0);
 SELECT x('l', 1, 0);
+-- 5. long volume units
+SELECT x('millilitre', 1e-3, 0);
+SELECT x('litre', 1e-3, 0);
