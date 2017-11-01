@@ -106,3 +106,7 @@ SELECT x('kilojoule', 1e+3, 0);
 SELECT x('calorie', 4.184, 0);
 SELECT x('kilocalorie', 4.184e+3, 0);
 SELECT x('Calorie', 4.184e+3, 0);
+--8. short temperature units
+SELECT x('k', 1, 0);
+SELECT x('°c', 1, 273.15);
+SELECT x('°f', 1.8, 255.372);
