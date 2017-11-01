@@ -206,7 +206,7 @@ function formPipe() {
   titleSet('pipe', data);
   // 3. if submit is post, render status (yay async again)
   if(sbt==='post') loopAsync(function(i) {
-    return ajaxReq('POST', url+i).then(function(ans) {
+    return ajaxReq('POST', url, {'id': i}).then(function(ans) {
       z.push({'id': i, 'status': ans});
       ansRender(z);
     }, function(err) {
