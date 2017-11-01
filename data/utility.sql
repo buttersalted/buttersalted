@@ -1,3 +1,9 @@
+CREATE OR REPLACE FUNCTION "real_get" (TEXT)
+RETURNS TEXT AS $$
+  SELECT (regexp_matches($1, '[+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?'))[1];
+$$ LANGUAGE SQL STRICT IMMUTABLE;
+
+
 CREATE OR REPLACE FUNCTION "array_sort" (ANYARRAY)
 RETURNS ANYARRAY AS $$
   -- 1. stealthily taken from postgresql mailing list
@@ -19,6 +25,14 @@ RETURNS TEXT[] AS $$
   -- 1. stealthily take from stackoverflow (Marth)
   SELECT array_agg(f) FROM
   (SELECT jsonb_object_keys($1) AS f) u;
+$$ LANGUAGE SQL STRICT IMMUTABLE;
+
+
+CREATE OR REPLACE FUNCTION "table_default" (TEXT)
+RETURNS JSONB AS $$
+  SELECT jsonb_object_agg(column_name, btrim(split_part(column_default,'::',1), E' \''))
+  FROM information_schema.columns
+  WHERE (table_schema, table_name) = ('public', $1);
 $$ LANGUAGE SQL STRICT IMMUTABLE;
 
 
@@ -56,18 +70,4 @@ RETURNS TEXT AS $$
   SELECT format('UPDATE %I%s%s', $1,
     query_format($2, ' SET ', '%I = %s', ', '),
     query_format($3, ' WHERE ', '%I LIKE %s', ' AND '));
-$$ LANGUAGE SQL STRICT IMMUTABLE;
-
-
-CREATE OR REPLACE FUNCTION "table_default" (TEXT)
-RETURNS JSONB AS $$
-  SELECT jsonb_object_agg(column_name, btrim(split_part(column_default,'::',1), E' \''))
-  FROM information_schema.columns
-  WHERE (table_schema, table_name) = ('public', $1);
-$$ LANGUAGE SQL STRICT IMMUTABLE;
-
-
-CREATE OR REPLACE FUNCTION "real_get" (TEXT)
-RETURNS TEXT AS $$
-  SELECT (regexp_matches($1, '[+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?'))[1];
 $$ LANGUAGE SQL STRICT IMMUTABLE;
