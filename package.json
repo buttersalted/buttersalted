@@ -1,6 +1,6 @@
 {
   "name": "foodsql",
-  "version": "0.0.757",
+  "version": "0.0.758",
   "description": "A new way to understand food through queries.",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,6 @@
     "flora-sql-parser": "^0.7.5",
     "is-stream": "^1.1.0",
     "object-format": "0.0.7",
-    "object-rename": "^0.1.1",
     "pg": "^7.3.0",
     "pg-connection-string": "^2.0.0",
     "stream-string": "^2.0.0",

@@ -2,8 +2,15 @@
 const stream = require('stream');
 stream.is = require('is-stream');
 stream.toString = require('stream-string');
-const rename = require('object-rename');
 const format = require('object-format');
+
+function rename(obj, key) {
+  // 1. rename object keys case insensitively
+  const z = {};
+  for(var k in obj)
+    z[key[k]||key[k.toLowerCase()]||k] = obj[k];
+  return z;
+};
 
 const $ = function DbTable(id, db, opt) {
   this._id = id;
