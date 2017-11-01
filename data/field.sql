@@ -14,10 +14,22 @@ CREATE INDEX IF NOT EXISTS "field_unit_idx"
 ON "field" ("unit");
 
 
+CREATE OR REPLACE FUNCTION "field_toreal" (TEXT, TEXT)
+RETURNS REAL AS $$
+  SELECT unit_toreal($1, "unit", "unit") FROM "field" WHERE "id"=$2;
+$$ LANGUAGE SQL STABLE;
+
+
+CREATE OR REPLACE FUNCTION "field_totext" (REAL, TEXT)
+RETURNS TEXT AS $$
+  SELECT unit_totext($1, "unit", "unit") FROM "field" WHERE "id"=$2;
+$$ LANGUAGE SQL STABLE;
+
+
 CREATE OR REPLACE FUNCTION "field_selectone" (JSONB)
 RETURNS SETOF "field" AS $$
   SELECT * FROM "field" WHERE "id"=$1->>'id';
-$$ LANGUAGE SQL;
+$$ LANGUAGE SQL STABLE;
 
 
 CREATE OR REPLACE FUNCTION "field_insertone" (_a JSONB)
