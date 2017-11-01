@@ -79,3 +79,6 @@ SELECT x('microgram', 1e-9, 0);
 SELECT x('milligram', 1e-6, 0);
 SELECT x('gram', 1e-3, 0);
 SELECT x('kilogram', 1, 0);
+-- 4. short volume units
+SELECT x('ml', 1e-3, 0);
+SELECT x('l', 1, 0);
