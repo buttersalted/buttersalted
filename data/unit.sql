@@ -100,3 +100,9 @@ SELECT x('kj', 1e+3, 0);
 SELECT x('cal', 4.184, 0);
 SELECT x('kcal', 4.184e+3, 0);
 SELECT x('Cal', 4.184e+3, 0)
+-- 7. long energy units
+SELECT x('joule', 1, 0);
+SELECT x('kilojoule', 1e+3, 0);
+SELECT x('calorie', 4.184, 0);
+SELECT x('kilocalorie', 4.184e+3, 0);
+SELECT x('Calorie', 4.184e+3, 0);
