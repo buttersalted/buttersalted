@@ -38,8 +38,8 @@ $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION "fillin_updateone" (JSONB, JSONB)
 RETURNS VOID AS $$
-  UPDATE "fillin" SET "id"=coalesce($2->>'id', r."id"),
+  UPDATE "fillin" u SET "id"=coalesce($2->>'id', r."id"),
   "field"=coalesce(($2->>'field'), r."field")
   FROM (SELECT * FROM "fillin" WHERE "id"=$1->>'id') r
-  WHERE "id"=$1->'id';
+  WHERE u."id"=$1->>'id';
 $$ LANGUAGE SQL;
