@@ -43,10 +43,3 @@ RETURNS VOID AS $$
   FROM (SELECT * FROM "fillin" WHERE "id"=$1->>'id') r
   WHERE "id"=$1->'id';
 $$ LANGUAGE SQL;
-
-
-CREATE OR REPLACE FUNCTION "fillin_insertoneifnotexists" (TEXT, TEXT)
-RETURNS VOID AS $$
-  SELECT fillin_insertone(jsonb_build_object('id', $1, 'value', $2))
-  WHERE NOT EXISTS (SELECT "id" FROM "fillin" WHERE "id"=$1);
-$$ LANGUAGE SQL;

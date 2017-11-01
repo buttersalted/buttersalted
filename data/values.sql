@@ -1,10 +1,73 @@
-/* TYPE */
-CREATE OR REPLACE FUNCTION "x" (TEXT, TEXT)
+-- I. UNIT
+-- 1. temporary unit inserter
+CREATE OR REPLACE FUNCTION x(TEXT, REAL, REAL)
 RETURNS VOID AS $$
-  SELECT type_insertoneifnotexists($1, $2);
+  INSERT INTO "unit" VALUES ($1, $2, $3) ON CONFLICT ("id") DO NOTHING;
 $$ LANGUAGE SQL;
-INSERT INTO "type" VALUES ('Id', 'INT NOT NULL')
+-- 1. empty unit
+SELECT x('', 1, 0);
+-- 2. short mass units
+SELECT x('ng', 1e-12, 0);
+SELECT x('μg', 1e-9, 0);
+SELECT x('ug', 1e-9, 0);
+SELECT x('mg', 1e-6, 0);
+SELECT x('g', 1e-3, 0);
+SELECT x('gm', 1e-3, 0);
+SELECT x('kg', 1, 0);
+-- 3. long mass units
+SELECT x('nanogram', 1e-12, 0);
+SELECT x('microgram', 1e-9, 0);
+SELECT x('milligram', 1e-6, 0);
+SELECT x('gram', 1e-3, 0);
+SELECT x('kilogram', 1, 0);
+-- 4. short volume units
+SELECT x('ml', 1e-3, 0);
+SELECT x('l', 1, 0);
+SELECT x('tsp', 5e-3, 0);
+SELECT x('tbsp', 15e-3, 0);
+-- 5. long volume units
+SELECT x('millilitre', 1e-3, 0);
+SELECT x('litre', 1e-3, 0);
+SELECT x('teaspoon', 0.00492892, 0);
+SELECT x('tablespoon', 0.0147868, 0);
+SELECT x('fluid ounce', 0.0295735, 0);
+SELECT x('cup', 0.24, 0);
+SELECT x('pint', 0.473176, 0);
+SELECT x('quart', 0.946353, 0);
+SELECT x('gallon', 3.78541, 0);
+-- 6. short energy units
+SELECT x('j', 1, 0);
+SELECT x('kj', 1e+3, 0);
+SELECT x('cal', 4.184, 0);
+SELECT x('kcal', 4.184e+3, 0);
+SELECT x('Cal', 4.184e+3, 0)
+-- 7. long energy units
+SELECT x('joule', 1, 0);
+SELECT x('kilojoule', 1e+3, 0);
+SELECT x('calorie', 4.184, 0);
+SELECT x('kilocalorie', 4.184e+3, 0);
+SELECT x('Calorie', 4.184e+3, 0);
+-- 8. short temperature units
+SELECT x('k', 1, 0);
+SELECT x('°c', 1, 273.15);
+SELECT x('°f', 1.8, 255.372);
+-- 9. long temperature units
+SELECT x('kelvin', 1, 0);
+SELECT x('celsius', 1, 273.15);
+SELECT x('fahrenheit', 1.8, 255.372);
+
+
+-- II. FIELD
+-- 1. temporary field inserter
+CREATE OR REPLACE FUNCTION "x" (TEXT, TEXT, TEXT)
+RETURNS VOID AS $$
+  SELECT field_insertone(jsonb_build_object('id', $1, 'type', $2, 'unit', $3))
+  WHERE NOT EXISTS (SELECT "id" FROM "field" WHERE "id"=$1);
+$$ LANGUAGE SQL;
+-- 2. Id exists by default, so just add it
+INSERT INTO "field" VALUES ('Id', 'INT NOT NULL')
 ON CONFLICT ("id") DO NOTHING;
+-- 3. insert fields
 SELECT x('Name', 'TEXT NOT NULL');
 SELECT x('Common Name', 'TEXT');
 SELECT x('Scientific Name', 'TEXT');
@@ -192,13 +255,17 @@ SELECT x('Refuse', 'REAL');
 SELECT x('Refuse Description', 'REAL');
 
 
-/* TERM */
+-- III. FILLIN
+-- 1. temporary fillin inserter
 CREATE OR REPLACE FUNCTION "x" (TEXT, TEXT)
 RETURNS VOID AS $$
-  SELECT term_insertoneifnotexists($1, $2);
+  SELECT fillin_insertone(jsonb_build_object('id', $1, 'field', $2))
+  WHERE NOT EXISTS (SELECT "id" FROM "fillin" WHERE "id"=$1);
 $$ LANGUAGE SQL;
+-- 2. id exists by default, so just add it
 INSERT INTO "term" VALUES ('id', 'Id')
 ON CONFLICT ("id") DO NOTHING;
+-- 3. insert fillins
 SELECT x('4:0', 'Butanoic acid');
 SELECT x('6:0', 'Hexanoic acid');
 SELECT x('8:0', 'Octanoic acid');

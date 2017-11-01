@@ -79,10 +79,3 @@ BEGIN
   END IF;
 END;
 $$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION "field_insertoneifnotexists" (TEXT, TEXT)
-RETURNS VOID AS $$
-  SELECT field_insertone(jsonb_build_object('id', $1, 'value', $2))
-  WHERE NOT EXISTS (SELECT "id" FROM "type" WHERE "id"=$1);
-$$ LANGUAGE SQL;
