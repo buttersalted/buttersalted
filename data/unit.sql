@@ -64,9 +64,9 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION "unit_updateone" (JSONB, JSONB)
 RETURNS VOID AS $$
   -- 1. update a row
-  UPDATE "unit" SET "id"=coalesce($2->>'id', r."id"),
+  UPDATE "unit" u SET "id"=coalesce($2->>'id', r."id"),
   "factor"=coalesce(($2->>'factor')::REAL, r."factor"),
   "offset"=coalesce(($2->>'offset')::REAL, r."offset")
   FROM (SELECT * FROM "unit" WHERE "id"=$1->>'id') r
-  WHERE "id"=$1->'id';
+  WHERE u."id"=$1->>'id';
 $$ LANGUAGE SQL;
