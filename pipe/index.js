@@ -1,7 +1,7 @@
 'use strict';
 const express = require('express');
-const foodcalories = require('myfitnesspal-foodcalories');
-const searchall = require('nutritionvalue-searchall');
+const foodcalories = require('./myfitnesspal-foodcalories');
+const searchall = require('./nutritionvalue-searchall');
 const ndb = require('./usda-ndb');
 
 module.exports = function(dst) {
