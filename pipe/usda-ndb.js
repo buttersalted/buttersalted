@@ -4,7 +4,7 @@ const ndb = require('usda-ndb');
 const body = (req) => Object.assign(req.body, req.query);
 
 const convert = function(a) {
-  // 1. get object key (id, name)
+  // 1. get object value
   const v = Object.values(a)[0];
   if(!v) return a;
   // 2. convert object to row format
