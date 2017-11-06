@@ -11,7 +11,7 @@ const convert = function(a) {
   const n = v.Name;
   const Id = parseInt(n.substring(0, n.indexOf(',')));
   const Name = n.substring(n.indexOf(',')+1).trim();
-  return Object.assign(v, {Id, Name});
+  return Object.assign({Id, Name}, v, {Name});
 };
 
 module.exports = function(dst) {
