@@ -62,6 +62,9 @@ fieldset {
   margin: 0;
   padding: 0;
 }
+input[mode=key] {
+  text-transform: uppercase;
+}
 html.query form fieldset {
   display: inline-block;
   width: 24%;
