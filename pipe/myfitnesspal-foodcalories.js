@@ -8,7 +8,7 @@ const convert = function(a) {
   const i = Object.keys(a)[0];
   if(!i) return a;
   // 2. convert object to row format
-  return Object.assign(a[k], {'Id': i});
+  return Object.assign(a[i], {'Id': i});
 };
 
 module.exports = function(dst) {
