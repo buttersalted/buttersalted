@@ -107,6 +107,10 @@ html.sql:not(.query) #logo {
 #ans th, #ans td {
   text-align: center;
 }
+table.fixedHeader-floating {
+  position: fixed;
+  background-color: white;
+}
 html:not(.query) #sql-value ~ button,
 html.query #sql p,
 html:not(.query) #ans {
