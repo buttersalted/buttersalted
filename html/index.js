@@ -86,7 +86,8 @@ function ansRender(ans) {
   m.render(Tbody, ans.length? zv : null);
   Tdiv.height = Thead.height;
   // 5. show toast message (if empty)
-  if(!ca.length) toast('warning', 'Empty Query', 'No values returned');
+  if(ca.length) $(Thead.parentElement).DataTable({order: []});
+  else toast('warning', 'Empty Query', 'No values returned');
 };
 
 function ansError(err) {
