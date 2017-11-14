@@ -98,18 +98,11 @@ html.sql:not(.query) #logo {
   right: 0;
   margin: 3rem 2rem;
 }
-#ans {
-  overflow-x: auto;
-}
 #ans th {
   border-bottom: 4px solid #679;
 }
 #ans th, #ans td {
   text-align: center;
-}
-table.fixedHeader-floating {
-  position: fixed;
-  background-color: white;
 }
 html:not(.query) #sql-value ~ button,
 html.query #sql p,
