@@ -290,13 +290,12 @@ function setup() {
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
   Editor.focus();
-  
-  // 5. setup sql interface
+  // 4. setup sql interface
   for(var k in Forms)
     Forms[k].onsubmit = formJson;
   Forms.sql.onsubmit = formSql;
   Forms.pipe.onsubmit = formPipe;
-  // 6. setup page
+  // 5. setup page
   window.onhashchange = setupPage;
   setupPage();
 };
