@@ -290,22 +290,7 @@ function setup() {
   Editor.setTheme('ace/theme/sqlserver');
   Editor.getSession().setMode('ace/mode/pgsql');
   Editor.focus();
-  // 4. enable sticky table head
-  var theadVis = false;
-  window.onscroll = function() {
-    var wny = window.pageYOffset, tby = Tbody.getBoundingClientRect().top;
-    if(wny>=tby && !theadVis) {
-      Thead.classList.add('sticky');
-      Thead.parentElement.insertBefore(Tdiv, Thead);
-      theadVis = true;
-    }
-    else if(wny<tby && theadVis) {
-      Thead.classList.remove('sticky');
-      Thead.parentElement.removeChild(Tdiv);
-      theadVis = false;
-    }
-  };
-  window.onscroll = null;
+  
   // 5. setup sql interface
   for(var k in Forms)
     Forms[k].onsubmit = formJson;
