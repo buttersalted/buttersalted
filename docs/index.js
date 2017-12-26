@@ -49,7 +49,7 @@ function titleSet(msg, val) {
   msg = msg? msg[0].toUpperCase()+msg.substring(1) : '';
   msg += msg && z? ': '+z : z;
   msg += msg? ' - ' : '';
-  document.title = msg+'FoodSQL';
+  document.title = msg+'ButterSalted';
 };
 
 function locationSet(hsh) {
