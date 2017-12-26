@@ -15,7 +15,7 @@ const Sql = require('./sql');
 // I. global variables
 const E = process.env;
 const X = express();
-const HTML = path.join(__dirname, 'html');
+const HTML = path.join(__dirname, 'docs');
 const server = http.createServer(X);
 const dbpool = new pg.Pool(pgconfig(E.DATABASE_URL));
 const data = new Data(dbpool);
