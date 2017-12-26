@@ -1,6 +1,6 @@
 {
-  "name": "foodsql",
-  "version": "0.0.779",
+  "name": "buttersalted",
+  "version": "0.1.0",
   "description": "A new way to understand food through queries.",
   "main": "index.js",
   "scripts": {
@@ -9,18 +9,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wolfram77/web-foodsql.git"
+    "url": "git+https://github.com/merferry/buttersalted.git"
   },
   "keywords": [
-    "food",
-    "sql"
+    "butter",
+    "salted"
   ],
   "author": "wolfram77@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wolfram77/web-foodsql/issues"
+    "url": "https://github.com/merferry/buttersalted/issues"
   },
-  "homepage": "https://github.com/wolfram77/web-foodsql#readme",
+  "homepage": "https://github.com/merferry/buttersalted#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
