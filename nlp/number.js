@@ -36,8 +36,7 @@ const NAMES = new Map([
   ['billion', 1e+9],
   ['trillion', 1e+12],
   ['infinity', Infinity],
-  ['infinite', Infinity],
-  ['negative', -1]
+  ['infinite', Infinity]
 ]);
 
 function isDigit(a) {
@@ -51,31 +50,48 @@ function isName(a) {
   return false;
 };
 
-function is(a) {
-  return isDigit(a)||isName(a);
-};
+function NlpNumber() {
+  var state = [], sign = -1;
 
-function update(v) {
-
-};
-20+4+(9*100+40+5)
-(5*100000+(9*100+40+2)*100+70+8)*10000000
-(5*100+90+4)*1000000+(2*100+70+8)*1000+(40+5)
-function NumberParser() {
-  var state = NaN, sign = 1;
-
-  function update(s) {
-    if(s<0) sign = -sign;
-    else if(state===NaN) state = s;
-    else if(s % 100===0) state *= s;
-
+  function value() {
+    var z = 0;
+    for(var i=0, I=state.length; i<I; i++)
+      z += state[i];
+    state.length = 0;
+    return z;
   };
-  function parse(a) {
-    var d = isDigit(a), n = isName(a);
-    if(!d && !n) processState();
-    if(a.startsWith('-')) { sign = -sign; a = a.substr(1); }
-    var s = d? parseFloat(a):NAMES.get(a);
-
+  function update(val) {
+    if(val<100 || state.length===0) return state.push(v);
+    for(var i=state.length-2, i>=0 && state[i]>state[i+1]*v; i--)
+      state[i] += state.pop();
+    state[++i] *= v;
   };
+  function parse(str) {
+    var d = isDigit(str), n = isName(str);
+    if(!d && !n) return state.length>0? value():null;
+    if(str.startsWith('-')) { sign = -sign; str = str.substr(1); }
+    update(d? parseFloat(str):NAMES.get(str));
+    return NaN;
+  };
+
   return {parse};
 };
+// 20+4+(9*100+40+5)
+// (5*100000+(9*100+40+2)*100+70+8)*10000000
+// (5*100+90+4)*1000000+(2*100+70+8)*1000+(40+5)
+
+/*
+CONCATENATION EXAMPLES:
+- two two = 22
+- twenty twenty = 2020
+- two hundred two hundred = 200200
+- two thousand two thousand = 20002000
+- two zero two != 22
+
+CONCATENATION INFERENCES:
+- done when numbers clash
+- zero if given also clash
+
+CONCATENATION CLASH CHECK:
+-
+*/
