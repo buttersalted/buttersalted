@@ -61,10 +61,11 @@ function NlpNumber() {
     return z;
   };
   function update(val) {
-    if(val<100 || state.length===0) return state.push(v);
-    for(var i=state.length-2, i>=0 && state[i]>state[i+1]*v; i--)
+    console.log(state);
+    if(val<100 || state.length===0) return state.push(val);
+    for(var i=state.length-2; i>=0 && state[i]<state[i+1]*val; i--)
       state[i] += state.pop();
-    state[++i] *= v;
+    state[++i] *= val;
   };
   function parse(str) {
     var d = isDigit(str), n = isName(str);
@@ -95,3 +96,4 @@ CONCATENATION INFERENCES:
 CONCATENATION CLASH CHECK:
 -
 */
+module.exports = NlpNumber;

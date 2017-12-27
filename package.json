@@ -1,6 +1,6 @@
 {
   "name": "buttersalted",
-  "version": "0.5.5",
+  "version": "0.5.7",
   "description": "A new way to understand food through queries.",
   "main": "index.js",
   "scripts": {
