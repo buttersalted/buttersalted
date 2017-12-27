@@ -35,13 +35,47 @@ const NAMES = new Map([
   ['crore', 1e+7],
   ['billion', 1e+9],
   ['trillion', 1e+12],
-  ['minus', -1],
+  ['infinity', Infinity],
+  ['infinite', Infinity],
   ['negative', -1]
 ]);
 
-function is(a) {
-  if(a.search(/^[\d\-\.]/)===0) return true;
+function isDigit(a) {
+  return a.search(/^-?\d(\.\d)?/)===0;
+};
+
+function isName(a) {
+  if(a.startsWith('-')) a = a.substr(1);
   for(var k of NAMES.keys())
-    if(a.startsWith(k)) return true;
+    if(a===k) return true;
   return false;
+};
+
+function is(a) {
+  return isDigit(a)||isName(a);
+};
+
+function update(v) {
+
+};
+20+4+(9*100+40+5)
+(5*100000+(9*100+40+2)*100+70+8)*10000000
+(5*100+90+4)*1000000+(2*100+70+8)*1000+(40+5)
+function NumberParser() {
+  var state = NaN, sign = 1;
+
+  function update(s) {
+    if(s<0) sign = -sign;
+    else if(state===NaN) state = s;
+    else if(s % 100===0) state *= s;
+
+  };
+  function parse(a) {
+    var d = isDigit(a), n = isName(a);
+    if(!d && !n) processState();
+    if(a.startsWith('-')) { sign = -sign; a = a.substr(1); }
+    var s = d? parseFloat(a):NAMES.get(a);
+
+  };
+  return {parse};
 };
