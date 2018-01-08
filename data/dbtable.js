@@ -2,7 +2,7 @@
 const stream = require('stream');
 stream.is = require('is-stream');
 stream.toString = require('stream-string');
-const format = require('object-format');
+const join = require('object-joinx');
 
 function rename(obj, key) {
   // 1. rename object keys case insensitively
@@ -25,7 +25,7 @@ const _ = $.prototype;
 _.select = function(a, l) {
   a = rename(a, this._opt.rename||{});
   // 1. get where with like, limit
-  const p = [], w = format(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
+  const p = [], w = join(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
   const q = (w? ' WHERE '+w : '')+(l!=null? ' LIMIT '+l : '');
   // 2. execute the query (if its still valid)
   return this._db.query(`SELECT * FROM "${this._id}"`+q, p).then((ans) => {
@@ -42,7 +42,7 @@ _.insert = function(a) {
   a = rename(a, this._opt.rename||{});
   console.log('insert', a);
   // 1. get columns and values (to insert)
-  const p = [], c = format(a, '"%k"', ',', 1, p), v = format(a, '$%i', ',', 1);
+  const p = [], c = join(a, '"%k"', ',', 1, p), v = join(a, '$%i', ',', 1);
   // 2. execute an insert query (lets fight)
   return this._db.query(`INSERT INTO "${this._id}" (${c}) VALUES (${v})`, p);
 };
@@ -51,7 +51,7 @@ _.delete = function(a) {
   a = rename(a, this._opt.rename||{});
   console.log('delete', a);
   // 1. get where with like
-  const p = [], w = format(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
+  const p = [], w = join(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
   // 2. execute the query (ready for disaster?)
   return this._db.query(`DELETE FROM "${this._id}"`+(w? ' WHERE '+w : ''), p);
 };
@@ -61,8 +61,8 @@ _.update = function(a, b) {
   b = rename(b, this._opt.rename||{});
   console.log('update', a, b);
   // 1. prepare the update conditions (where, set)
-  const p = [], w = format(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
-  const s = format(b, '"%k"=$%i', ' AND ', p.length+1, p);
+  const p = [], w = join(a, '"%k"::TEXT LIKE $%i::TEXT', ' AND ', 1, p);
+  const s = join(b, '"%k"=$%i', ' AND ', p.length+1, p);
   const q = (s? ' SET '+s : '')+(w? ' WHERE '+w : '');
   // 2. query to run (and possible do some valid update)
   return this._db.query(`UPDATE "${this._id}"`+q, p);
@@ -112,7 +112,7 @@ _.deleteOne = function(a) {
 
 _.call = function(fn, args) {
   // 1. generate argument list
-  const a = format(args||[], '$%i', ',', 1);
+  const a = join(args||[], '$%i', ',', 1);
   // 2. make a function call with arguments (for those extra secretives)
   return this._db.query(`SELECT ${this._id}_${fn}(${a})`, args||[]);
 };
