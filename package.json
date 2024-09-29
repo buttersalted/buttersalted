@@ -1,6 +1,6 @@
 {
   "name": "buttersalted",
-  "version": "0.5.12",
+  "version": "0.5.13",
   "description": "A new way to understand food through queries.",
   "main": "index.js",
   "scripts": {
@@ -22,14 +22,13 @@
   },
   "homepage": "https://github.com/merferry/buttersalted#readme",
   "dependencies": {
-    "body-parser": "^1.20.1",
-    "express": "^4.18.2",
+    "body-parser": "^1.20.3",
+    "express": "^4.21.0",
     "@florajs/sql-parser": "^2.0.0",
     "is-stream": "^3.0.0",
-    "object-joinx": "^0.1.2",
-    "pg": "^8.8.0",
-    "pg-connection-string": "^2.5.0",
-    "stream-string": "^2.0.3",
-    "uuid": "^9.0.0"
+    "pg": "^8.13.0",
+    "pg-connection-string": "^2.7.0",
+    "stream-string": "^2.0.4",
+    "uuid": "^9.0.1"
   }
 }
